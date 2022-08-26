@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">CurrencyApp</string>
+    <string name="currency_letter_code">Currency Code</string>
+    <string name="exchange_rate">rate(in UAH)</string>
+    <string name="difference">difference(in UAH)</string>
+    <string name="currency_full_name">Currency Full Name</string>
+</resources>
