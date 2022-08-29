@@ -1,10 +1,11 @@
-package com.example.currencyapp
+package com.example.currencyapp.ui.homeFragment
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.example.currencyapp.R
 import com.example.currencyapp.databinding.CurrenciesListItemBinding
 import com.example.currencyapp.model.CurrencyFluctuation
 

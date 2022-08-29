@@ -12,36 +12,7 @@ import kotlinx.coroutines.launch
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {
 
-    private var _currenciesList: LiveData<List<CurrencyFluctuation>> =
-        MainRepository.fetchDataFromLocalDB(application.applicationContext)
 
-    val currenciesList: LiveData<List<CurrencyFluctuation>>
-        get() = _currenciesList
-
-    val errorResult = MutableLiveData<Throwable>()
-
-    init {
-        fetchDataFromAPI()
-    }
-
-    private fun fetchDataFromAPI() {
-        MainRepository.makeCurrencyQuery(object : MainRepository.ResponseProcessor {
-            override fun process(result: Result<List<CurrencyFluctuation>>) {
-                val currencies = result.getOrNull()
-                if (currencies != null) {
-                    viewModelScope.launch(Dispatchers.IO) {
-                        MainRepository.saveDataToLocalDB(
-                            getApplication<Application>().applicationContext,
-                            currencies
-                        )
-                    }
-                } else {
-                    errorResult.value = result.exceptionOrNull()
-                }
-
-            }
-        })
-    }
 
 
 }
