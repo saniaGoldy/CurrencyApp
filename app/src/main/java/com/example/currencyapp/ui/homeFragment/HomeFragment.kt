@@ -65,14 +65,17 @@ class HomeFragment : Fragment() {
     private fun setupUsersList(): RecyclerView {
         return binding.rvCurrenciesList.apply {
 
-            currenciesListAdapter = CurrenciesListAdapter(object : CurrenciesListAdapter.ItemClickedAction{
-                override fun run(currencyFluctuation: CurrencyFluctuation) {
-                    binding.root.findNavController().navigate(
-                        HomeFragmentDirections.actionHomeFragmentToDetailsFragment(currencyFluctuation)
-                    )
-                }
+            currenciesListAdapter =
+                CurrenciesListAdapter(object : CurrenciesListAdapter.ItemClickedAction {
+                    override fun run(currencyFluctuation: CurrencyFluctuation) {
+                        binding.root.findNavController().navigate(
+                            HomeFragmentDirections.actionHomeFragmentToDetailsFragment(
+                                currencyFluctuation
+                            )
+                        )
+                    }
 
-            })
+                })
             adapter = currenciesListAdapter
         }
     }
@@ -82,9 +85,5 @@ class HomeFragment : Fragment() {
             requireContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val activeNetworkInfo = connectivityManager.activeNetworkInfo
         return activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting
-    }
-
-    companion object {
-        fun newInstance() = HomeFragment()
     }
 }

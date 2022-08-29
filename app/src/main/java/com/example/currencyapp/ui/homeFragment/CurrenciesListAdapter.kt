@@ -83,7 +83,7 @@ class CurrenciesListAdapter(val itemClickedAction: ItemClickedAction) :
                     )
                 )
 
-                setOnClickListener{
+                setOnClickListener {
                     itemClickedAction.run(item)
                 }
             }

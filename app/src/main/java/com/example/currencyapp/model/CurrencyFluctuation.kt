@@ -21,8 +21,7 @@ data class CurrencyFluctuation(
         parcel.readString()!!,
         parcel.readDouble(),
         parcel.readDouble()
-    ) {
-    }
+    )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(iso4217Alpha)
