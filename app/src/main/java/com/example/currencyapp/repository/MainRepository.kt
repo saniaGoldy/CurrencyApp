@@ -1,8 +1,10 @@
 package com.example.currencyapp.repository
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.icu.text.SimpleDateFormat
 import android.icu.util.Calendar
+import androidx.room.Room
 import com.example.currencyapp.currencyAPI.RetrofitInstance
 import com.example.currencyapp.currencyAPI.entities.CurrenciesFluctuationsResponse
 import com.example.currencyapp.model.Currencies
@@ -13,6 +15,8 @@ import retrofit2.Response
 import java.io.IOException
 
 object MainRepository {
+    private var database: LocalDB? = null
+
     private val baseCurrency: String = Currencies.UAH.name
 
     @SuppressLint("SimpleDateFormat")
@@ -58,6 +62,15 @@ object MainRepository {
             }
 
         })
+    }
+
+    fun getLocalDB(context: Context): LocalDB {
+        return database ?:
+        Room.databaseBuilder(
+            context.applicationContext,
+            LocalDB::class.java,
+            "currencyfluctuation"
+        ).build().also { database = it }
     }
 
     interface ResponseProcessor {

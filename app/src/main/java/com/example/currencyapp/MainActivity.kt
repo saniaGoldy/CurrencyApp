@@ -27,26 +27,23 @@ class MainActivity : AppCompatActivity() {
 
         setupUsersList()
         binding.progressBar.isVisible = true
-        viewModel.fetchDataFromRepo()
 
-        viewModel.currenciesAPIResponseResult.observe(this) { result ->
+        viewModel.currenciesList.observe(this) { currencies ->
             binding.progressBar.isVisible = false
+            currenciesListAdapter.currenciesList = currencies
+        }
 
-            if (result.isSuccess) {
-                currenciesListAdapter.currenciesList = result.getOrNull()!!
+        viewModel.errorResult.observe(this){
+            binding.progressBar.isVisible = false
+            Log.e(TAG, "observer: $it")
 
-            } else {
-
-                Log.e(TAG, "observer: ${result.exceptionOrNull()}")
-
-                Toast.makeText(
-                    this,
-                    if (checkConnectivity()) getString(R.string.standart_error_message) else getString(
-                        R.string.no_internet_connection_error_message
-                    ),
-                    Toast.LENGTH_LONG
-                ).show()
-            }
+            Toast.makeText(
+                this,
+                if (checkConnectivity()) getString(R.string.standart_error_message) else getString(
+                    R.string.no_internet_connection_error_message
+                ),
+                Toast.LENGTH_LONG
+            ).show()
         }
     }
 

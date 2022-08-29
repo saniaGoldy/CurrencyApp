@@ -6,7 +6,6 @@ import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.currencyapp.databinding.CurrenciesListItemBinding
-import com.example.currencyapp.model.Currencies
 import com.example.currencyapp.model.CurrencyFluctuation
 
 private const val ROUNDING_FORMAT: String ="%.3f"
@@ -59,7 +58,7 @@ class CurrenciesListAdapter : RecyclerView.Adapter<CurrenciesListAdapter.Currenc
         private val container = binding.itemContainer
 
         fun bind(item: CurrencyFluctuation, position: Int) {
-            tvFullName.text = Currencies.valueOf(item.iso4217Alpha).fullName
+            tvFullName.text = item.fullName
             tvCode.text = item.iso4217Alpha
             tvRate.text = String.format(ROUNDING_FORMAT, item.rate)
             tvDifference.text = String.format(ROUNDING_FORMAT, item.rateDifference)
