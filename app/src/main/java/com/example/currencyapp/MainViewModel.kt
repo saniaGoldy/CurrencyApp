@@ -27,9 +27,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private fun fetchDataFromAPI() {
         MainRepository.makeCurrencyQuery(object : MainRepository.ResponseProcessor {
             override fun process(result: Result<List<CurrencyFluctuation>>) {
-                viewModelScope.launch(Dispatchers.IO) {
-                    val currencies = result.getOrNull()
-                    if (currencies != null)
+                val currencies = result.getOrNull()
+                if (currencies != null) {
+                    viewModelScope.launch(Dispatchers.IO) {
                         MainRepository.getLocalDB(getApplication<Application>().applicationContext)
                             .currencyDao().insertAll(currencies).also {
                                 Log.d(
@@ -37,9 +37,11 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                                     "process: Saving data to local db..."
                                 )
                             }
-                    else
-                        errorResult.value = result.exceptionOrNull()
+                    }
+                } else {
+                    errorResult.value = result.exceptionOrNull()
                 }
+
             }
         })
     }
