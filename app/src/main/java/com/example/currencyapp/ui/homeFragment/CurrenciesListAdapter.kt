@@ -11,7 +11,8 @@ import com.example.currencyapp.model.CurrencyFluctuation
 
 private const val ROUNDING_FORMAT: String = "%.3f"
 
-class CurrenciesListAdapter : RecyclerView.Adapter<CurrenciesListAdapter.CurrencyViewHolder>() {
+class CurrenciesListAdapter(val itemClickedAction: ItemClickedAction) :
+    RecyclerView.Adapter<CurrenciesListAdapter.CurrencyViewHolder>() {
 
     private val diffCallback = object : DiffUtil.ItemCallback<CurrencyFluctuation>() {
 
@@ -71,15 +72,26 @@ class CurrenciesListAdapter : RecyclerView.Adapter<CurrenciesListAdapter.Currenc
                     R.drawable.decrease
                 }
             )
-            container.setBackgroundColor(
-                container.resources.getColor(
-                    if (position % 2 != 1) {
-                        R.color.grey
-                    } else {
-                        R.color.white
-                    }
+            container.apply {
+                setBackgroundColor(
+                    container.resources.getColor(
+                        if (position % 2 != 1) {
+                            R.color.grey
+                        } else {
+                            R.color.white
+                        }
+                    )
                 )
-            )
+
+                setOnClickListener{
+                    itemClickedAction.run(item)
+                }
+            }
+
         }
+    }
+
+    interface ItemClickedAction {
+        fun run(currencyFluctuation: CurrencyFluctuation)
     }
 }

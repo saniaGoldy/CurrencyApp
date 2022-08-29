@@ -11,19 +11,21 @@ import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.findNavController
+import androidx.recyclerview.widget.RecyclerView
 import com.example.currencyapp.R
 import com.example.currencyapp.TAG
 import com.example.currencyapp.databinding.FragmentHomeBinding
+import com.example.currencyapp.model.CurrencyFluctuation
 
 class HomeFragment : Fragment() {
+
+    private lateinit var currenciesListAdapter: CurrenciesListAdapter
 
     private val viewModel: HomeViewModel by viewModels()
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
-
-    private lateinit var currenciesListAdapter: CurrenciesListAdapter
-
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -60,9 +62,19 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun setupUsersList() = binding.rvCurrenciesList.apply {
-        currenciesListAdapter = CurrenciesListAdapter()
-        adapter = currenciesListAdapter
+    private fun setupUsersList(): RecyclerView {
+        return binding.rvCurrenciesList.apply {
+
+            currenciesListAdapter = CurrenciesListAdapter(object : CurrenciesListAdapter.ItemClickedAction{
+                override fun run(currencyFluctuation: CurrencyFluctuation) {
+                    binding.root.findNavController().navigate(
+                        HomeFragmentDirections.actionHomeFragmentToDetailsFragment(currencyFluctuation)
+                    )
+                }
+
+            })
+            adapter = currenciesListAdapter
+        }
     }
 
     private fun checkConnectivity(): Boolean {
