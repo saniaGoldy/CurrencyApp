@@ -1,7 +1,6 @@
 package com.example.currencyapp
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -13,7 +12,8 @@ import kotlinx.coroutines.launch
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {
 
-    private var _currenciesList: LiveData<List<CurrencyFluctuation>> = fetchDataFromLocalDB()
+    private var _currenciesList: LiveData<List<CurrencyFluctuation>> =
+        MainRepository.fetchDataFromLocalDB(application.applicationContext)
 
     val currenciesList: LiveData<List<CurrencyFluctuation>>
         get() = _currenciesList
@@ -30,13 +30,10 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 val currencies = result.getOrNull()
                 if (currencies != null) {
                     viewModelScope.launch(Dispatchers.IO) {
-                        MainRepository.getLocalDB(getApplication<Application>().applicationContext)
-                            .currencyDao().insertAll(currencies).also {
-                                Log.d(
-                                    TAG,
-                                    "process: Saving data to local db..."
-                                )
-                            }
+                        MainRepository.saveDataToLocalDB(
+                            getApplication<Application>().applicationContext,
+                            currencies
+                        )
                     }
                 } else {
                     errorResult.value = result.exceptionOrNull()
@@ -44,17 +41,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
             }
         })
-    }
-
-    private fun fetchDataFromLocalDB(): LiveData<List<CurrencyFluctuation>> {
-        return MainRepository.getLocalDB(getApplication<Application>().applicationContext)
-            .currencyDao().getAll().also {
-                Log.d(
-                    TAG,
-                    "fetchDataFromLocalDB"
-                )
-            }
-
     }
 
 

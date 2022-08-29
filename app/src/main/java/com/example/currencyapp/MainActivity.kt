@@ -33,7 +33,7 @@ class MainActivity : AppCompatActivity() {
             currenciesListAdapter.currenciesList = currencies
         }
 
-        viewModel.errorResult.observe(this){
+        viewModel.errorResult.observe(this) {
             binding.progressBar.isVisible = false
             Log.e(TAG, "observer: $it")
 

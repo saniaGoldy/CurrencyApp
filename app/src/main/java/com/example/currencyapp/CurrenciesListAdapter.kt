@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.currencyapp.databinding.CurrenciesListItemBinding
 import com.example.currencyapp.model.CurrencyFluctuation
 
-private const val ROUNDING_FORMAT: String ="%.3f"
+private const val ROUNDING_FORMAT: String = "%.3f"
 
 class CurrenciesListAdapter : RecyclerView.Adapter<CurrenciesListAdapter.CurrencyViewHolder>() {
 

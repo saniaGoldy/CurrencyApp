@@ -19,5 +19,5 @@ interface CurrencyDao {
     fun delete(currencyFluctuation: CurrencyFluctuation)
 
     @Update
-    fun updateTodo(currenciesList: List<CurrencyFluctuation>)
+    fun update(currenciesList: List<CurrencyFluctuation>)
 }
