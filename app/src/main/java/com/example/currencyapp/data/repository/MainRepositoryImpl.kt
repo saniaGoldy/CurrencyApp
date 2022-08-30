@@ -1,18 +1,22 @@
-package com.example.currencyapp.repository
+package com.example.currencyapp.data.repository
 
 import android.annotation.SuppressLint
 import android.icu.text.SimpleDateFormat
 import android.icu.util.Calendar
-import com.example.currencyapp.currencyAPI.RetrofitInstance
-import com.example.currencyapp.currencyAPI.entities.CurrenciesFluctuationsResponse
+import com.example.currencyapp.data.remote.CurrencyAPI
+import com.example.currencyapp.di.AppModule
+import com.example.currencyapp.data.remote.entities.CurrenciesFluctuationsResponse
+import com.example.currencyapp.domain.repository.IResponseProcessor
+import com.example.currencyapp.domain.repository.MainRepository
 import com.example.currencyapp.model.Currencies
 import com.example.currencyapp.model.CurrencyFluctuation
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.io.IOException
+import javax.inject.Inject
 
-object MainRepository {
+class MainRepositoryImpl @Inject constructor(private val currencyAPI: CurrencyAPI) : MainRepository {
     private val baseCurrency: String = Currencies.UAH.name
 
     @SuppressLint("SimpleDateFormat")
@@ -27,8 +31,8 @@ object MainRepository {
         }
 
 
-    fun makeCurrencyQuery(processor: ResponseProcessor) {
-        RetrofitInstance.currencyAPI.getCurrencyFluctuation(
+    override fun makeCurrencyQuery(processor: IResponseProcessor) {
+        currencyAPI.getCurrencyFluctuation(
             yesterdaysDate,
             currentDate,
             baseCurrency
@@ -59,9 +63,4 @@ object MainRepository {
 
         })
     }
-
-    interface ResponseProcessor {
-        fun process(result: Result<List<CurrencyFluctuation>>)
-    }
-
 }

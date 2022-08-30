@@ -1,4 +1,4 @@
-package com.example.currencyapp.currencyAPI.entities
+package com.example.currencyapp.data.remote.entities
 
 data class Currency(val change: Double,
                     val change_pct: Double,
