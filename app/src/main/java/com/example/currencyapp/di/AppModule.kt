@@ -1,5 +1,8 @@
 package com.example.currencyapp.di
 
+import android.app.Application
+import androidx.room.Room
+import com.example.currencyapp.data.local.LocalDB
 import com.example.currencyapp.data.remote.CurrencyAPI
 import dagger.Module
 import dagger.Provides
@@ -27,5 +30,15 @@ object AppModule {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create()
+    }
+
+    @Provides
+    @Singleton
+    fun provideLocalDB(context: Application): LocalDB{
+        return Room.databaseBuilder(
+            context.applicationContext,
+            LocalDB::class.java,
+            "currencyfluctuation"
+        ).build()
     }
 }

@@ -1,4 +1,4 @@
-package com.example.currencyapp.repository
+package com.example.currencyapp.data.local
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
