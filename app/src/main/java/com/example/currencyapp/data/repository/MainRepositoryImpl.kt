@@ -1,6 +1,7 @@
 package com.example.currencyapp.data.repository
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.icu.text.SimpleDateFormat
 import android.icu.util.Calendar
 import com.example.currencyapp.data.remote.CurrencyAPI
@@ -8,6 +9,12 @@ import com.example.currencyapp.di.AppModule
 import com.example.currencyapp.data.remote.entities.CurrenciesFluctuationsResponse
 import com.example.currencyapp.domain.repository.IResponseProcessor
 import com.example.currencyapp.domain.repository.MainRepository
+import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.room.Room
+import com.example.currencyapp.TAG
+import com.example.currencyapp.currencyAPI.RetrofitInstance
+import com.example.currencyapp.currencyAPI.entities.CurrenciesFluctuationsResponse
 import com.example.currencyapp.model.Currencies
 import com.example.currencyapp.model.CurrencyFluctuation
 import retrofit2.Call
@@ -17,6 +24,8 @@ import java.io.IOException
 import javax.inject.Inject
 
 class MainRepositoryImpl @Inject constructor(private val currencyAPI: CurrencyAPI) : MainRepository {
+
+    private var database: LocalDB? = null
     private val baseCurrency: String = Currencies.UAH.name
 
     @SuppressLint("SimpleDateFormat")
@@ -63,4 +72,33 @@ class MainRepositoryImpl @Inject constructor(private val currencyAPI: CurrencyAP
 
         })
     }
+
+    private fun getLocalDB(context: Context): LocalDB {
+        return database ?: Room.databaseBuilder(
+            context.applicationContext,
+            LocalDB::class.java,
+            "currencyfluctuation"
+        ).build().also { database = it }
+    }
+
+    fun fetchDataFromLocalDB(context: Context): LiveData<List<CurrencyFluctuation>> {
+        return getLocalDB(context.applicationContext)
+            .currencyDao().getAll().also {
+                Log.d(
+                    TAG,
+                    "fetchDataFromLocalDB"
+                )
+            }
+    }
+
+    fun saveDataToLocalDB(context: Context, currencies: List<CurrencyFluctuation>) {
+        getLocalDB(context.applicationContext)
+            .currencyDao().insertAll(currencies).also {
+                Log.d(
+                    TAG,
+                    "Saving data to local db..."
+                )
+            }
+    }
+
 }

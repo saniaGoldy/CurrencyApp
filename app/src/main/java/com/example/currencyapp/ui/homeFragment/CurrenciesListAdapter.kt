@@ -1,17 +1,18 @@
-package com.example.currencyapp
+package com.example.currencyapp.ui.homeFragment
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.example.currencyapp.R
 import com.example.currencyapp.databinding.CurrenciesListItemBinding
-import com.example.currencyapp.model.Currencies
 import com.example.currencyapp.model.CurrencyFluctuation
 
-private const val ROUNDING_FORMAT: String ="%.3f"
+private const val ROUNDING_FORMAT: String = "%.3f"
 
-class CurrenciesListAdapter : RecyclerView.Adapter<CurrenciesListAdapter.CurrencyViewHolder>() {
+class CurrenciesListAdapter(val itemClickedAction: ItemClickedAction) :
+    RecyclerView.Adapter<CurrenciesListAdapter.CurrencyViewHolder>() {
 
     private val diffCallback = object : DiffUtil.ItemCallback<CurrencyFluctuation>() {
 
@@ -59,7 +60,7 @@ class CurrenciesListAdapter : RecyclerView.Adapter<CurrenciesListAdapter.Currenc
         private val container = binding.itemContainer
 
         fun bind(item: CurrencyFluctuation, position: Int) {
-            tvFullName.text = Currencies.valueOf(item.iso4217Alpha).fullName
+            tvFullName.text = item.fullName
             tvCode.text = item.iso4217Alpha
             tvRate.text = String.format(ROUNDING_FORMAT, item.rate)
             tvDifference.text = String.format(ROUNDING_FORMAT, item.rateDifference)
@@ -71,15 +72,26 @@ class CurrenciesListAdapter : RecyclerView.Adapter<CurrenciesListAdapter.Currenc
                     R.drawable.decrease
                 }
             )
-            container.setBackgroundColor(
-                container.resources.getColor(
-                    if (position % 2 != 1) {
-                        R.color.grey
-                    } else {
-                        R.color.white
-                    }
+            container.apply {
+                setBackgroundColor(
+                    container.resources.getColor(
+                        if (position % 2 != 1) {
+                            R.color.grey
+                        } else {
+                            R.color.white
+                        }
+                    )
                 )
-            )
+
+                setOnClickListener {
+                    itemClickedAction.run(item)
+                }
+            }
+
         }
+    }
+
+    interface ItemClickedAction {
+        fun run(currencyFluctuation: CurrencyFluctuation)
     }
 }

@@ -5,6 +5,8 @@
       <map>
         <entry key="..\:/Sania/Projects/AndroidStudio/CurrencyApp/app/src/main/res/layout/activity_main.xml" value="0.23854166666666668" />
         <entry key="..\:/Sania/Projects/AndroidStudio/CurrencyApp/app/src/main/res/layout/currencies_list_item.xml" value="0.4" />
+        <entry key="..\:/Sania/Projects/AndroidStudio/CurrencyApp/app/src/main/res/layout/fragment_details.xml" value="0.20989583333333334" />
+        <entry key="..\:/Sania/Projects/AndroidStudio/CurrencyApp/app/src/main/res/layout/fragment_home.xml" value="0.25416666666666665" />
       </map>
     </option>
   </component>

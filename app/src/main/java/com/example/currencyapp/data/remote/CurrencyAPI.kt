@@ -11,7 +11,7 @@ interface CurrencyAPI {
 
     @GET("/exchangerates_data/fluctuation")
     fun getCurrencyFluctuation(
-        @Query("start_date") startDate:String,
+        @Query("start_date") startDate: String,
         @Query("end_date") endDate: String,
         @Query("base") base: String
     ): Call<CurrenciesFluctuationsResponse>
