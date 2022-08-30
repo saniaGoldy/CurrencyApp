@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.currencyapp.R
 import com.example.currencyapp.databinding.CurrenciesListItemBinding
-import com.example.currencyapp.model.CurrencyFluctuation
+import com.example.currencyapp.domain.model.CurrencyFluctuation
 
 private const val ROUNDING_FORMAT: String = "%.3f"
 

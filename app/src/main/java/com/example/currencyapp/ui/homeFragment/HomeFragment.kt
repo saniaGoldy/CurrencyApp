@@ -16,8 +16,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.currencyapp.R
 import com.example.currencyapp.TAG
 import com.example.currencyapp.databinding.FragmentHomeBinding
-import com.example.currencyapp.model.CurrencyFluctuation
+import com.example.currencyapp.domain.model.CurrencyFluctuation
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class HomeFragment : Fragment() {
 
     private lateinit var currenciesListAdapter: CurrenciesListAdapter

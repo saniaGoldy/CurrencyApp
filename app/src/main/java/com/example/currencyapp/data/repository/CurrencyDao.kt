@@ -2,7 +2,7 @@ package com.example.currencyapp.repository
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
-import com.example.currencyapp.model.CurrencyFluctuation
+import com.example.currencyapp.domain.model.CurrencyFluctuation
 
 @Dao
 interface CurrencyDao {

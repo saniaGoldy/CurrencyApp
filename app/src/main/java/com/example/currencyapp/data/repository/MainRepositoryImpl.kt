@@ -1,29 +1,32 @@
 package com.example.currencyapp.data.repository
 
 import android.annotation.SuppressLint
+import android.app.Application
 import android.content.Context
 import android.icu.text.SimpleDateFormat
 import android.icu.util.Calendar
-import com.example.currencyapp.data.remote.CurrencyAPI
-import com.example.currencyapp.di.AppModule
-import com.example.currencyapp.data.remote.entities.CurrenciesFluctuationsResponse
-import com.example.currencyapp.domain.repository.IResponseProcessor
-import com.example.currencyapp.domain.repository.MainRepository
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.room.Room
 import com.example.currencyapp.TAG
-import com.example.currencyapp.currencyAPI.RetrofitInstance
-import com.example.currencyapp.currencyAPI.entities.CurrenciesFluctuationsResponse
-import com.example.currencyapp.model.Currencies
-import com.example.currencyapp.model.CurrencyFluctuation
+import com.example.currencyapp.data.remote.CurrencyAPI
+import com.example.currencyapp.data.remote.entities.CurrenciesFluctuationsResponse
+import com.example.currencyapp.domain.model.Currencies
+import com.example.currencyapp.domain.model.CurrencyFluctuation
+import com.example.currencyapp.domain.repository.IResponseProcessor
+import com.example.currencyapp.domain.repository.MainRepository
+import com.example.currencyapp.repository.LocalDB
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.io.IOException
 import javax.inject.Inject
 
-class MainRepositoryImpl @Inject constructor(private val currencyAPI: CurrencyAPI) : MainRepository {
+class MainRepositoryImpl @Inject constructor(
+    private val currencyAPI: CurrencyAPI,
+    private val appContext: Application
+) :
+    MainRepository {
 
     private var database: LocalDB? = null
     private val baseCurrency: String = Currencies.UAH.name
@@ -81,8 +84,8 @@ class MainRepositoryImpl @Inject constructor(private val currencyAPI: CurrencyAP
         ).build().also { database = it }
     }
 
-    fun fetchDataFromLocalDB(context: Context): LiveData<List<CurrencyFluctuation>> {
-        return getLocalDB(context.applicationContext)
+    override fun fetchDataFromLocalDB(): LiveData<List<CurrencyFluctuation>> {
+        return getLocalDB(appContext.applicationContext)
             .currencyDao().getAll().also {
                 Log.d(
                     TAG,
@@ -91,8 +94,8 @@ class MainRepositoryImpl @Inject constructor(private val currencyAPI: CurrencyAP
             }
     }
 
-    fun saveDataToLocalDB(context: Context, currencies: List<CurrencyFluctuation>) {
-        getLocalDB(context.applicationContext)
+    override fun saveDataToLocalDB(currencies: List<CurrencyFluctuation>) {
+        getLocalDB(appContext.applicationContext)
             .currencyDao().insertAll(currencies).also {
                 Log.d(
                     TAG,

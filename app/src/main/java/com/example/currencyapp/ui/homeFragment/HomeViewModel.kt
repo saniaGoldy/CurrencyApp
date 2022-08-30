@@ -1,19 +1,22 @@
 package com.example.currencyapp.ui.homeFragment
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.currencyapp.model.CurrencyFluctuation
-import com.example.currencyapp.repository.MainRepository
+import com.example.currencyapp.domain.model.CurrencyFluctuation
+import com.example.currencyapp.domain.repository.IResponseProcessor
+import com.example.currencyapp.domain.repository.MainRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class HomeViewModel(application: Application) : AndroidViewModel(application) {
+@HiltViewModel
+class HomeViewModel @Inject constructor(private val repository: MainRepository) : ViewModel() {
 
     private var _currenciesList: LiveData<List<CurrencyFluctuation>> =
-        MainRepository.fetchDataFromLocalDB(application.applicationContext)
+        repository.fetchDataFromLocalDB()
 
     val currenciesList: LiveData<List<CurrencyFluctuation>>
         get() = _currenciesList
@@ -25,7 +28,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     private fun fetchDataFromAPI() {
-        MainRepository.makeCurrencyQuery(object : MainRepository.ResponseProcessor {
+        repository.makeCurrencyQuery(object : IResponseProcessor {
 
             override fun process(result: Result<List<CurrencyFluctuation>>) {
 
@@ -33,10 +36,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
 
                 if (currencies != null) {
                     viewModelScope.launch(Dispatchers.IO) {
-                        MainRepository.saveDataToLocalDB(
-                            getApplication<Application>().applicationContext,
-                            currencies
-                        )
+                        repository.saveDataToLocalDB(currencies)
                     }
                 } else {
                     errorResult.value = result.exceptionOrNull()

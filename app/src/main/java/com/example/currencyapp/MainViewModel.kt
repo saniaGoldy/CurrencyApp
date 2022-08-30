@@ -4,7 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.currencyapp.domain.repository.IResponseProcessor
 import com.example.currencyapp.domain.repository.MainRepository
-import com.example.currencyapp.model.CurrencyFluctuation
+import com.example.currencyapp.domain.model.CurrencyFluctuation
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 

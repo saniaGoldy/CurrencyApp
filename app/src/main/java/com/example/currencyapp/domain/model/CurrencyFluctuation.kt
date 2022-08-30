@@ -1,4 +1,4 @@
-package com.example.currencyapp.model
+package com.example.currencyapp.domain.model
 
 import android.os.Parcel
 import android.os.Parcelable
