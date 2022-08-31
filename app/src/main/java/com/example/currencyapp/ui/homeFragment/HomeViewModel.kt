@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.currencyapp.domain.model.CurrencyFluctuation
-import com.example.currencyapp.domain.repository.IResponseProcessor
+import com.example.currencyapp.domain.repository.APIResponseProcessor
 import com.example.currencyapp.domain.repository.MainRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -24,11 +24,11 @@ class HomeViewModel @Inject constructor(private val repository: MainRepository) 
     val errorResult = MutableLiveData<Throwable>()
 
     init {
-        fetchDataFromAPI()
+        fetchCurrenciesDataFromAPI()
     }
 
-    private fun fetchDataFromAPI() {
-        repository.makeCurrencyQuery(object : IResponseProcessor {
+    private fun fetchCurrenciesDataFromAPI() {
+        repository.makeCurrencyQuery(object : APIResponseProcessor<List<CurrencyFluctuation>> {
 
             override fun process(result: Result<List<CurrencyFluctuation>>) {
 

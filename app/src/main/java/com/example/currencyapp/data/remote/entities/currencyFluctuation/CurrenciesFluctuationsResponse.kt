@@ -1,4 +1,4 @@
-package com.example.currencyapp.data.remote.entities
+package com.example.currencyapp.data.remote.entities.currencyFluctuation
 
 data class CurrenciesFluctuationsResponse(
     val base: String,

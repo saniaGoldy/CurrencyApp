@@ -2,9 +2,9 @@ package com.example.currencyapp
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.currencyapp.domain.repository.IResponseProcessor
 import com.example.currencyapp.domain.repository.MainRepository
 import com.example.currencyapp.domain.model.CurrencyFluctuation
+import com.example.currencyapp.domain.repository.APIResponseProcessor
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -17,7 +17,7 @@ class MainViewModel @Inject constructor(private val repository: MainRepository) 
         get() = _currenciesAPIResponseResult
 
     fun fetchDataFromRepo() {
-        repository.makeCurrencyQuery(object : IResponseProcessor {
+        repository.makeCurrencyQuery(object : APIResponseProcessor<List<CurrencyFluctuation>> {
             override fun process(result: Result<List<CurrencyFluctuation>>) {
                 _currenciesAPIResponseResult.value = result
             }

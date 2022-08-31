@@ -8,10 +8,12 @@ import androidx.lifecycle.LiveData
 import com.example.currencyapp.TAG
 import com.example.currencyapp.data.local.LocalDB
 import com.example.currencyapp.data.remote.CurrencyAPI
-import com.example.currencyapp.data.remote.entities.CurrenciesFluctuationsResponse
+import com.example.currencyapp.data.remote.entities.currencyFluctuation.CurrenciesFluctuationsResponse
+import com.example.currencyapp.data.remote.entities.news.Data
+import com.example.currencyapp.data.remote.entities.news.NewsResponse
 import com.example.currencyapp.domain.model.Currencies
 import com.example.currencyapp.domain.model.CurrencyFluctuation
-import com.example.currencyapp.domain.repository.IResponseProcessor
+import com.example.currencyapp.domain.repository.APIResponseProcessor
 import com.example.currencyapp.domain.repository.MainRepository
 import retrofit2.Call
 import retrofit2.Callback
@@ -38,7 +40,7 @@ class MainRepositoryImpl @Inject constructor(
         }
 
 
-    override fun makeCurrencyQuery(processor: IResponseProcessor) {
+    override fun makeCurrencyQuery(processor: APIResponseProcessor<List<CurrencyFluctuation>>) {
         currencyAPI.getCurrencyFluctuation(
             yesterdaysDate,
             currentDate,
@@ -70,6 +72,29 @@ class MainRepositoryImpl @Inject constructor(
 
         })
     }
+
+    override fun makeNewsQuery(processor: APIResponseProcessor<List<Data>>) {
+        currencyAPI.getCurrencyNews("UAH", "Exchange rate")
+            .enqueue(object :
+                Callback<NewsResponse> {
+                override fun onResponse(
+                    call: Call<NewsResponse>,
+                    response: Response<NewsResponse>
+                ) {
+                    if (response.isSuccessful && response.body() != null) {
+                        processor.process(Result.success(response.body()!!.data))
+                    } else {
+                        processor.process(Result.failure(IOException(response.errorBody().toString())))
+                    }
+                }
+
+                override fun onFailure(call: Call<NewsResponse>, t: Throwable) {
+                    processor.process(Result.failure(t))
+                }
+
+            })
+    }
+
 
     override fun fetchDataFromLocalDB(): LiveData<List<CurrencyFluctuation>> {
         return localDB
