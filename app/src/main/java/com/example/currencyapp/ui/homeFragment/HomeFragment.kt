@@ -16,6 +16,7 @@ import com.example.currencyapp.R
 import com.example.currencyapp.TAG
 import com.example.currencyapp.databinding.FragmentHomeBinding
 import com.example.currencyapp.domain.model.CurrencyFluctuation
+import com.example.currencyapp.domain.services.ConnectivityObserver
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -27,6 +28,8 @@ class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
+
+    private var connectivityStatus = ConnectivityObserver.Status.Available
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -44,6 +47,11 @@ class HomeFragment : Fragment() {
 
         binding.progressBar.isVisible = true
 
+        viewModel.networkStatus.observe(viewLifecycleOwner){ status ->
+            connectivityStatus = status.also { Log.d(TAG, "ConnectivityStatus: $it") }
+            binding.tvNoInternetConnection.isVisible = status != ConnectivityObserver.Status.Available
+        }
+
         viewModel.currenciesList.observe(viewLifecycleOwner) { currencies ->
             binding.progressBar.isVisible = false
             currenciesListAdapter.currenciesList = currencies
@@ -55,7 +63,7 @@ class HomeFragment : Fragment() {
 
             Toast.makeText(
                 this.requireContext(),
-                if (checkConnectivity()) getString(R.string.standart_error_message) else getString(
+                if (connectivityStatus == ConnectivityObserver.Status.Available) getString(R.string.standart_error_message) else getString(
                     R.string.no_internet_connection_error_message
                 ),
                 Toast.LENGTH_LONG
@@ -76,12 +84,5 @@ class HomeFragment : Fragment() {
             })
 
         binding.rvCurrenciesList.adapter = currenciesListAdapter
-    }
-
-    private fun checkConnectivity(): Boolean {
-        val connectivityManager =
-            requireContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        val activeNetworkInfo = connectivityManager.activeNetworkInfo
-        return activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting
     }
 }
