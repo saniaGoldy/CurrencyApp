@@ -13,6 +13,10 @@ import com.example.currencyapp.domain.model.Currencies
 import com.example.currencyapp.domain.model.CurrencyFluctuation
 import com.example.currencyapp.domain.repository.IResponseProcessor
 import com.example.currencyapp.domain.repository.MainRepository
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -38,7 +42,7 @@ class MainRepositoryImpl @Inject constructor(
         }
 
 
-    override fun makeCurrencyQuery(processor: IResponseProcessor) {
+    /*override fun makeCurrencyQuery(processor: IResponseProcessor) {
         currencyAPI.getCurrencyFluctuation(
             yesterdaysDate,
             currentDate,
@@ -69,9 +73,9 @@ class MainRepositoryImpl @Inject constructor(
             }
 
         })
-    }
+    }*/
 
-    override fun fetchDataFromLocalDB(): LiveData<List<CurrencyFluctuation>> {
+    override suspend fun fetchDataFromLocalDB(): List<CurrencyFluctuation> {
         return localDB
             .currencyDao().getAll().also {
                 Log.d(
@@ -81,14 +85,17 @@ class MainRepositoryImpl @Inject constructor(
             }
     }
 
+    @OptIn(DelicateCoroutinesApi::class)
     override fun saveDataToLocalDB(currencies: List<CurrencyFluctuation>) {
-        localDB
-            .currencyDao().insertAll(currencies).also {
-                Log.d(
-                    TAG,
-                    "Saving data to local db..."
-                )
-            }
+        GlobalScope.launch(Dispatchers.IO) {
+            localDB
+                .currencyDao().insertAll(currencies).also {
+                    Log.d(
+                        TAG,
+                        "Saving data to local db..."
+                    )
+                }
+        }
     }
 
 }

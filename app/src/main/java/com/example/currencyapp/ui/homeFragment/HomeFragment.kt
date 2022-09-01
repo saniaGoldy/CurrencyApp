@@ -12,7 +12,6 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
-import androidx.recyclerview.widget.RecyclerView
 import com.example.currencyapp.R
 import com.example.currencyapp.TAG
 import com.example.currencyapp.databinding.FragmentHomeBinding
@@ -64,22 +63,19 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun setupUsersList(): RecyclerView {
-        return binding.rvCurrenciesList.apply {
-
-            currenciesListAdapter =
-                CurrenciesListAdapter(object : CurrenciesListAdapter.ItemClickedAction {
-                    override fun run(currencyFluctuation: CurrencyFluctuation) {
-                        binding.root.findNavController().navigate(
-                            HomeFragmentDirections.actionHomeFragmentToDetailsFragment(
-                                currencyFluctuation
-                            )
+    private fun setupUsersList() {
+        currenciesListAdapter =
+            CurrenciesListAdapter(object : CurrenciesListAdapter.ItemClickedAction {
+                override fun run(currencyFluctuation: CurrencyFluctuation) {
+                    binding.root.findNavController().navigate(
+                        HomeFragmentDirections.actionHomeFragmentToDetailsFragment(
+                            currencyFluctuation
                         )
-                    }
+                    )
+                }
+            })
 
-                })
-            adapter = currenciesListAdapter
-        }
+        binding.rvCurrenciesList.adapter = currenciesListAdapter
     }
 
     private fun checkConnectivity(): Boolean {

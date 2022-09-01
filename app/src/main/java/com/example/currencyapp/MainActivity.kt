@@ -6,8 +6,6 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.currencyapp.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
 
-const val TAG = "MyApp"
-
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 

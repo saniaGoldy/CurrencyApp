@@ -7,10 +7,10 @@ import com.example.currencyapp.domain.model.CurrencyFluctuation
 @Dao
 interface CurrencyDao {
     @Query("SELECT * FROM currencyfluctuation")
-    fun getAll(): LiveData<List<CurrencyFluctuation>>
+    suspend fun getAll(): List<CurrencyFluctuation>
 
     @Query("SELECT * FROM currencyfluctuation WHERE iso4217Alpha LIKE :iso4217Alpha")
-    fun findById(iso4217Alpha: String): CurrencyFluctuation
+    suspend fun findById(iso4217Alpha: String): CurrencyFluctuation
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insertAll(currenciesList: List<CurrencyFluctuation>)

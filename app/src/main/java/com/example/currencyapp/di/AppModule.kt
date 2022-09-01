@@ -34,7 +34,7 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideLocalDB(context: Application): LocalDB{
+    fun provideLocalDB(context: Application): LocalDB {
         return Room.databaseBuilder(
             context.applicationContext,
             LocalDB::class.java,
