@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.example.currencyapp.R
 import com.example.currencyapp.data.remote.entities.news.Data
 import com.example.currencyapp.databinding.NewsListItemBinding
 
@@ -51,6 +52,14 @@ class NewsListAdapter :
                 tvSource.text = item.source
                 tvTimeStamp.text = item.publishedAt
                 tvTags.text = item.tags.toString()
+                itemContainer.setBackgroundColor(
+                    itemContainer.resources.getColor(
+                        if (position % 2 != 1)
+                            R.color.grey
+                        else
+                            R.color.white
+                    )
+                )
             }
         }
     }

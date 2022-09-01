@@ -3,10 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:expandableTextView="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/itemContainer"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
-
-    <!--  ExpandableTextView Container -->
 
     <TextView
         android:id="@+id/tvSource"
@@ -17,6 +16,7 @@
         android:layout_marginBottom="8dp"
         android:gravity="start"
         android:text="@string/source"
+        android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/tvTimeStamp"
         app:layout_constraintHorizontal_bias="0.0"
@@ -31,6 +31,7 @@
         android:layout_marginBottom="8dp"
         android:gravity="end"
         android:text="@string/publication_date_amp_time"
+        android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -41,6 +42,7 @@
         android:layout_margin="5dp"
         android:text="@string/title"
         android:textAlignment="center"
+        android:textColor="@color/black"
         android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/tvTags"
         app:layout_constraintEnd_toEndOf="parent"
@@ -56,6 +58,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:text="@string/tags_list"
+        android:textColor="@color/black"
         android:textSize="12sp"
         app:layout_constraintBottom_toTopOf="@+id/tvTimeStamp"
         app:layout_constraintEnd_toEndOf="parent"

@@ -1,6 +1,7 @@
 package com.example.currencyapp.ui.newsFragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,8 +10,10 @@ import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.navArgs
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.example.currencyapp.TAG
 import com.example.currencyapp.databinding.FragmentNewsBinding
 import com.example.currencyapp.ui.newsFragment.newsListFragment.NewsListFragment
+import com.example.currencyapp.ui.newsFragment.searchSettingsFragment.SearchSettingsFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -43,8 +46,15 @@ class NewsFragment : Fragment() {
 
 
     private inner class ScreenSlidePagerAdapter(fa: FragmentActivity) : FragmentStateAdapter(fa) {
-        override fun getItemCount(): Int = 1
+        override fun getItemCount(): Int = 2
 
-        override fun createFragment(position: Int): Fragment = NewsListFragment.newInstance()
+        override fun createFragment(position: Int): Fragment {
+            Log.d(TAG, "createFragment: $position")
+            return when(position){
+                0 -> SearchSettingsFragment.newInstance()
+                1 -> NewsListFragment.newInstance()
+                else -> SearchSettingsFragment.newInstance()
+            }
+        }
     }
 }

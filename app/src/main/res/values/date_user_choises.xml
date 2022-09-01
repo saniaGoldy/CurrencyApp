@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="news_api_date_options">
+        <item>today</item>
+        <item>thisweek</item>
+        <item>thismonth</item>
+        <item>last7days</item>
+        <item>last30days</item>
+        <item>last3months</item>
+        <item>yeartodate</item>
+        <item>YYYY-MM-DD</item>
+        <item>YYYY-MM-DD,YYYY-MM-DD</item>
+    </string-array>
+</resources>
