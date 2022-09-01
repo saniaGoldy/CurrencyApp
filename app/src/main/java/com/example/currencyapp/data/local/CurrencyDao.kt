@@ -1,6 +1,5 @@
 package com.example.currencyapp.data.local
 
-import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.example.currencyapp.domain.model.CurrencyFluctuation
 

@@ -5,13 +5,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.currencyapp.domain.model.CurrencyFluctuation
-import com.example.currencyapp.domain.repository.IResponseProcessor
 import com.example.currencyapp.domain.repository.MainRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-@OptIn(DelicateCoroutinesApi::class)
 @HiltViewModel
 class HomeViewModel @Inject constructor(private val repository: MainRepository) : ViewModel() {
 
@@ -29,9 +28,9 @@ class HomeViewModel @Inject constructor(private val repository: MainRepository) 
             }
 
             val result = repository.makeCurrencyQuery()
-            if (result.isSuccess){
+            if (result.isSuccess) {
                 repository.saveDataToLocalDB(result.getOrNull()!!)
-            }else{
+            } else {
                 errorResult.postValue(result.exceptionOrNull())
             }
 
