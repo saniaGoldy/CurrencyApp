@@ -1,10 +1,14 @@
 package com.example.currencyapp.data.remote.entities
 
+import com.google.gson.annotations.SerializedName
+
 data class CurrenciesFluctuationsResponse(
     val base: String,
-    val end_date: String,
+    @SerializedName("end_date")
+    val endDate: String,
     val fluctuation: Boolean,
     val rates: Map<String, Currency>,
-    val start_date: String,
+    @SerializedName("start_date")
+    val startDate: String,
     val success: Boolean
 )

@@ -7,7 +7,6 @@ import android.util.Log
 import com.example.currencyapp.TAG
 import com.example.currencyapp.data.local.LocalDB
 import com.example.currencyapp.data.remote.CurrencyAPI
-import com.example.currencyapp.data.remote.entities.CurrenciesFluctuationsResponse
 import com.example.currencyapp.domain.model.Currencies
 import com.example.currencyapp.domain.model.CurrencyFluctuation
 import com.example.currencyapp.domain.repository.MainRepository
@@ -15,9 +14,6 @@ import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import java.io.IOException
 import javax.inject.Inject
 
@@ -52,8 +48,8 @@ class MainRepositoryImpl @Inject constructor(
                 response.body()!!.rates.entries.map {
                     CurrencyFluctuation(
                         it.key,
-                        1 / it.value.end_rate,
-                        1 / it.value.end_rate - 1 / it.value.start_rate
+                        1 / it.value.endRate,
+                        1 / it.value.endRate - 1 / it.value.startRate
                     )
                 }
 
