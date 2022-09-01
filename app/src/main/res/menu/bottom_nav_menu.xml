@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_currencies"
+        android:icon="@drawable/save_money"
+        android:title="@string/title_currencies" />
+
+    <item
+        android:id="@+id/navigation_news"
+        android:icon="@drawable/news__1_"
+        android:title="@string/title_news" />
+
+</menu>

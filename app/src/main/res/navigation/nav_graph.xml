@@ -3,25 +3,25 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/homeFragment">
+    app:startDestination="@id/navigation_currencies">
 
     <fragment
-        android:id="@+id/homeFragment"
+        android:id="@+id/navigation_currencies"
         android:name="com.example.currencyapp.ui.homeFragment.HomeFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" >
         <action
             android:id="@+id/action_homeFragment_to_detailsFragment"
-            app:destination="@id/detailsFragment" />
+            app:destination="@id/navigation_news" />
     </fragment>
     <fragment
-        android:id="@+id/detailsFragment"
-        android:name="com.example.currencyapp.ui.currencyDetailsFragment.DetailsFragment"
+        android:id="@+id/navigation_news"
+        android:name="com.example.currencyapp.ui.newsFragment.NewsFragment"
         android:label="fragment_details"
-        tools:layout="@layout/fragment_details" >
+        tools:layout="@layout/fragment_news" >
         <action
             android:id="@+id/action_detailsFragment_to_homeFragment"
-            app:destination="@id/homeFragment" />
+            app:destination="@id/navigation_currencies" />
         <argument
             android:name="currency"
             app:argType="com.example.currencyapp.domain.model.CurrencyFluctuation" />

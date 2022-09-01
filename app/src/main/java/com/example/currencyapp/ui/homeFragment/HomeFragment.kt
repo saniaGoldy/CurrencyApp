@@ -15,6 +15,7 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.currencyapp.R
 import com.example.currencyapp.TAG
+import com.example.currencyapp.data.MyConnectivityManager
 import com.example.currencyapp.databinding.FragmentHomeBinding
 import com.example.currencyapp.domain.model.CurrencyFluctuation
 import dagger.hilt.android.AndroidEntryPoint
@@ -56,7 +57,7 @@ class HomeFragment : Fragment() {
 
             Toast.makeText(
                 this.requireContext(),
-                if (checkConnectivity()) getString(R.string.standart_error_message) else getString(
+                if (MyConnectivityManager.checkConnectivity(requireContext())) getString(R.string.standart_error_message) else getString(
                     R.string.no_internet_connection_error_message
                 ),
                 Toast.LENGTH_LONG
@@ -80,12 +81,5 @@ class HomeFragment : Fragment() {
                 })
             adapter = currenciesListAdapter
         }
-    }
-
-    private fun checkConnectivity(): Boolean {
-        val connectivityManager =
-            requireContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        val activeNetworkInfo = connectivityManager.activeNetworkInfo
-        return activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting
     }
 }

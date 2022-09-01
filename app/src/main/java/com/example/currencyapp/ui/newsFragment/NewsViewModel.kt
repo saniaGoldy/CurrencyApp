@@ -1,4 +1,4 @@
-package com.example.currencyapp.ui.currencyDetailsFragment
+package com.example.currencyapp.ui.newsFragment
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -10,7 +10,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class DetailsViewModel @Inject constructor(private val repository: MainRepository) : ViewModel() {
+class NewsViewModel @Inject constructor(private val repository: MainRepository) : ViewModel() {
 
     private val _news = MutableLiveData<Result<List<Data>>>()
     val news: LiveData<Result<List<Data>>>
