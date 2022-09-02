@@ -19,4 +19,6 @@
     <string name="from_date_input_hint">FromDate(YYYY-MM-DD)</string>
     <string name="to_date_input_hint">toDate(YYYY-MM-DD)</string>
     <string name="date_placeholder">date</string>
+    <string name="search">Search</string>
+    <string name="time_gap">Time Gap</string>
 </resources>

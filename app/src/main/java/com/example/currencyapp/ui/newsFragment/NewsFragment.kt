@@ -24,7 +24,7 @@ class NewsFragment : Fragment() {
     }
 
     private val viewModel: NewsViewModel by activityViewModels()
-    private val args: NewsFragmentArgs by navArgs()
+
 
     private var _binding: FragmentNewsBinding? = null
     private val binding get() = _binding!!
