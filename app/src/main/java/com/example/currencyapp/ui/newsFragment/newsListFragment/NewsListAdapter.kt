@@ -52,14 +52,6 @@ class NewsListAdapter :
                 tvSource.text = item.source
                 tvTimeStamp.text = item.publishedAt
                 tvTags.text = item.tags.toString()
-                itemContainer.setBackgroundColor(
-                    itemContainer.resources.getColor(
-                        if (position % 2 != 1)
-                            R.color.grey
-                        else
-                            R.color.white
-                    )
-                )
             }
         }
     }
