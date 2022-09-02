@@ -1,4 +1,4 @@
-package com.example.currencyapp.ui.newsFragment.searchSettingsFragment
+package com.example.currencyapp.ui.news.searchSettingsFragment
 
 import android.os.Bundle
 import android.util.Log
@@ -14,8 +14,8 @@ import com.example.currencyapp.R
 import com.example.currencyapp.TAG
 import com.example.currencyapp.data.remote.entities.news.NewsApiRequestOptions
 import com.example.currencyapp.databinding.FragmentSearchSettingsBinding
-import com.example.currencyapp.ui.newsFragment.NewsViewModel
-import com.example.currencyapp.ui.newsFragment.mоdel.SearchSettings
+import com.example.currencyapp.ui.news.NewsViewModel
+import com.example.currencyapp.ui.news.mоdel.SearchSettings
 
 //TODO: Validation
 class SearchSettingsFragment : Fragment() {

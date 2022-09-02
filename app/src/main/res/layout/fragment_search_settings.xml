@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:outlineProvider="none"
-    tools:context=".ui.newsFragment.searchSettingsFragment.SearchSettingsFragment">
+    tools:context=".ui.news.searchSettingsFragment.SearchSettingsFragment">
 
     <TextView
         android:id="@+id/tvTagsTitle"

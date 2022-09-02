@@ -1,4 +1,4 @@
-package com.example.currencyapp.ui.newsFragment.newsListFragment
+package com.example.currencyapp.ui.news.newsListFragment
 
 import android.os.Bundle
 import android.util.Log
@@ -13,7 +13,7 @@ import com.example.currencyapp.R
 import com.example.currencyapp.TAG
 import com.example.currencyapp.data.MyConnectivityManager
 import com.example.currencyapp.databinding.FragmentNewsListBinding
-import com.example.currencyapp.ui.newsFragment.NewsViewModel
+import com.example.currencyapp.ui.news.NewsViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

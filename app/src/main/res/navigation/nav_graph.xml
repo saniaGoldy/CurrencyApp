@@ -16,7 +16,7 @@
     </fragment>
     <fragment
         android:id="@+id/navigation_news"
-        android:name="com.example.currencyapp.ui.newsFragment.newsListFragment.NewsListFragment"
+        android:name="com.example.currencyapp.ui.news.newsListFragment.NewsListFragment"
         android:label="fragment_details"
         tools:layout="@layout/fragment_news_list">
         <action
@@ -30,7 +30,7 @@
     </fragment>
     <fragment
         android:id="@+id/searchSettingsFragment"
-        android:name="com.example.currencyapp.ui.newsFragment.searchSettingsFragment.SearchSettingsFragment"
+        android:name="com.example.currencyapp.ui.news.searchSettingsFragment.SearchSettingsFragment"
         android:label="fragment_search_settings"
         tools:layout="@layout/fragment_search_settings" >
         <action

@@ -1,4 +1,4 @@
-package com.example.currencyapp.ui.newsFragment
+package com.example.currencyapp.ui.news
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import com.example.currencyapp.data.remote.entities.news.Data
 import com.example.currencyapp.domain.repository.APIResponseProcessor
 import com.example.currencyapp.domain.repository.MainRepository
-import com.example.currencyapp.ui.newsFragment.mоdel.SearchSettings
+import com.example.currencyapp.ui.news.mоdel.SearchSettings
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
