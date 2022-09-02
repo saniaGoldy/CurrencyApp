@@ -84,7 +84,13 @@ class MainRepositoryImpl @Inject constructor(
                     if (response.isSuccessful && response.body() != null) {
                         processor.process(Result.success(response.body()!!.data))
                     } else {
-                        processor.process(Result.failure(IOException(response.errorBody().toString())))
+                        processor.process(
+                            Result.failure(
+                                IOException(
+                                    response.errorBody().toString()
+                                )
+                            )
+                        )
                     }
                 }
 

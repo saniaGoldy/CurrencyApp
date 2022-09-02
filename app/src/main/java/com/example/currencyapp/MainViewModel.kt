@@ -2,9 +2,9 @@ package com.example.currencyapp
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.currencyapp.domain.repository.MainRepository
 import com.example.currencyapp.domain.model.CurrencyFluctuation
 import com.example.currencyapp.domain.repository.APIResponseProcessor
+import com.example.currencyapp.domain.repository.MainRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 

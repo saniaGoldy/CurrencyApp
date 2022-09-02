@@ -43,11 +43,11 @@ class NewsListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.rvNewsList.adapter = adapter
 
-        viewModel.news.observe(viewLifecycleOwner){
+        viewModel.news.observe(viewLifecycleOwner) {
             val dataList = it.getOrNull()
-            if (it.isSuccess && dataList!=null)
+            if (it.isSuccess && dataList != null)
                 adapter.newsList = dataList
-            else{
+            else {
                 Log.e(TAG, "observer: $it")
 
                 Toast.makeText(
@@ -61,7 +61,8 @@ class NewsListFragment : Fragment() {
         }
 
         binding.settingsImageButton.setOnClickListener {
-            binding.root.findNavController().navigate(NewsListFragmentDirections.actionNavigationNewsToSearchSettingsFragment())
+            binding.root.findNavController()
+                .navigate(NewsListFragmentDirections.actionNavigationNewsToSearchSettingsFragment())
         }
     }
 }

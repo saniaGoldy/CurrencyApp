@@ -19,11 +19,11 @@ class NewsViewModel @Inject constructor(private val repository: MainRepository) 
     val news: LiveData<Result<List<Data>>>
         get() = _news
 
-    init{
+    init {
         fetchNewsData()
     }
 
-    private fun fetchNewsData(){
+    private fun fetchNewsData() {
         repository.makeNewsQuery(object : APIResponseProcessor<List<Data>> {
             override fun process(result: Result<List<Data>>) {
                 _news.value = result

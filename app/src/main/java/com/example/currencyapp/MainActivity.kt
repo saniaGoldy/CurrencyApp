@@ -1,7 +1,6 @@
 package com.example.currencyapp
 
 import android.os.Bundle
-import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
@@ -29,12 +28,13 @@ class MainActivity : AppCompatActivity() {
 
         val navController = findNavController(R.id.nav_host_fragment)
         val appBarConfiguration = AppBarConfiguration(
-        setOf(
-            R.id.navigation_currencies, R.id.navigation_news
-        )
+            setOf(
+                R.id.navigation_currencies, R.id.navigation_news
+            )
         )
 
         setupActionBarWithNavController(navController, appBarConfiguration)
         binding.navView.setupWithNavController(navController)
     }
+
 }

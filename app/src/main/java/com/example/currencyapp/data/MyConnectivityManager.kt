@@ -2,7 +2,6 @@ package com.example.currencyapp.data
 
 import android.content.Context
 import android.net.ConnectivityManager
-import androidx.core.content.ContentProviderCompat.requireContext
 
 object MyConnectivityManager {
     fun checkConnectivity(context: Context): Boolean {
