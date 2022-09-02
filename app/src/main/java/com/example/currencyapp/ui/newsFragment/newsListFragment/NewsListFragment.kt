@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.findNavController
 import com.example.currencyapp.R
 import com.example.currencyapp.TAG
 import com.example.currencyapp.data.MyConnectivityManager
@@ -57,6 +58,10 @@ class NewsListFragment : Fragment() {
                     Toast.LENGTH_LONG
                 ).show()
             }
+        }
+
+        binding.settingsImageButton.setOnClickListener {
+            binding.root.findNavController().navigate(NewsListFragmentDirections.actionNavigationNewsToSearchSettingsFragment())
         }
     }
 }

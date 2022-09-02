@@ -67,9 +67,7 @@ class HomeFragment : Fragment() {
             CurrenciesListAdapter(object : CurrenciesListAdapter.ItemClickedAction {
                 override fun run(currencyFluctuation: CurrencyFluctuation) {
                     binding.root.findNavController().navigate(
-                        HomeFragmentDirections.actionHomeFragmentToDetailsFragment(
-                            currencyFluctuation
-                        )
+                        HomeFragmentDirections.actionHomeFragmentToDetailsFragment()
                     )
                 }
 

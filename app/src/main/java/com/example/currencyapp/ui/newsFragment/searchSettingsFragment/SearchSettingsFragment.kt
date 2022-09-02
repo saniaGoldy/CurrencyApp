@@ -32,6 +32,7 @@ class SearchSettingsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentSearchSettingsBinding.inflate(inflater, container, false)
+
         return binding.root
     }
 

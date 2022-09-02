@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Sania/Projects/AndroidStudio/CurrencyApp/app/src/main/res/drawable/ic_baseline_settings_24.xml" value="0.1165" />
         <entry key="..\:/Sania/Projects/AndroidStudio/CurrencyApp/app/src/main/res/layout/activity_main.xml" value="0.23854166666666668" />
         <entry key="..\:/Sania/Projects/AndroidStudio/CurrencyApp/app/src/main/res/layout/currencies_list_item.xml" value="0.4" />
         <entry key="..\:/Sania/Projects/AndroidStudio/CurrencyApp/app/src/main/res/layout/fragment_details.xml" value="0.20989583333333334" />

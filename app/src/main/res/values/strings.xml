@@ -11,7 +11,7 @@
     <string name="publication_date_amp_time"><![CDATA[publication date & time]]></string>
     <string name="title">Title</string>
     <string name="title_currencies">rates</string>
-    <string name="title_news">news</string>
+    <string name="title_news">Financial News</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="keywords_input_hint">new bitcoin news 2021,money,-etherium</string>
@@ -19,6 +19,9 @@
     <string name="from_date_input_hint">FromDate(YYYY-MM-DD)</string>
     <string name="to_date_input_hint">toDate(YYYY-MM-DD)</string>
     <string name="date_placeholder">date</string>
-    <string name="search">Search</string>
+    <string name="apply">Apply</string>
     <string name="time_gap">Time Gap</string>
+    <string name="keywords">Keywords</string>
+    <string name="tags">Tags</string>
+    <string name="cancel">Cancel</string>
 </resources>
