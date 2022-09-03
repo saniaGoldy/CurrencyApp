@@ -15,9 +15,9 @@ import androidx.navigation.findNavController
 import com.example.currencyapp.R
 import com.example.currencyapp.TAG
 import com.example.currencyapp.data.remote.entities.news.NewsApiRequestOptions
+import com.example.currencyapp.data.remote.entities.news.SearchSettings
 import com.example.currencyapp.databinding.FragmentSearchSettingsBinding
 import com.example.currencyapp.ui.news.NewsViewModel
-import com.example.currencyapp.data.remote.entities.news.SearchSettings
 import com.google.android.material.textfield.TextInputLayout
 
 private const val TAGS_REGEX = " *-?[\\w ]+(?:, *-?(?:\\w+ *)+)*"
@@ -66,10 +66,12 @@ class SearchSettingsFragment : Fragment() {
 
                 val date =
                     "${textInputDateFrom.editText?.text},${textInputDateTo.editText?.text}"
-                if (date != "")
+                if (date != ",")
                     settings.timeGap = date
 
                 Log.d(TAG, "onViewCreated: $settings")
+
+                viewModel.setSearchSettings(settings)
 
                 root.findNavController()
                     .popBackStack()

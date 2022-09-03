@@ -3,17 +3,13 @@ package com.example.currencyapp.ui.homeFragment
 import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.currencyapp.domain.model.CurrencyFluctuation
 import com.example.currencyapp.domain.repository.MainRepository
 import com.example.currencyapp.domain.services.ConnectivityObserver
-import com.example.currencyapp.domain.services.NetworkConnectivityObserver
 import com.example.currencyapp.ui.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -37,7 +33,7 @@ class HomeViewModel @Inject constructor(
                 _currenciesList.postValue(repository.fetchDataFromLocalDB())
             }
 
-            if (networkStatus.value == ConnectivityObserver.Status.Available){
+            if (networkStatus.value == ConnectivityObserver.Status.Available) {
                 val result = repository.makeCurrencyQuery()
                 if (result.isSuccess) {
                     repository.saveDataToLocalDB(result.getOrNull()!!)

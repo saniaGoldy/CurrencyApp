@@ -1,8 +1,8 @@
 package com.example.currencyapp.domain.repository
 
 import com.example.currencyapp.data.remote.entities.news.Data
-import com.example.currencyapp.domain.model.CurrencyFluctuation
 import com.example.currencyapp.data.remote.entities.news.SearchSettings
+import com.example.currencyapp.domain.model.CurrencyFluctuation
 
 interface MainRepository {
     suspend fun makeCurrencyQuery(): Result<List<CurrencyFluctuation>>

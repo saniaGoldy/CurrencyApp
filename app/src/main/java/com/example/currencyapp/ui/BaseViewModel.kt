@@ -10,7 +10,7 @@ import com.example.currencyapp.domain.services.NetworkConnectivityObserver
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
-open class BaseViewModel(context: Context): ViewModel() {
+open class BaseViewModel(context: Context) : ViewModel() {
     private val _networkStatus = MutableLiveData(ConnectivityObserver.Status.Unavailable)
 
     val networkStatus: LiveData<ConnectivityObserver.Status>

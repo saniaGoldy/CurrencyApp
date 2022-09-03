@@ -45,12 +45,6 @@ class HomeFragment : Fragment() {
 
         binding.progressBar.isVisible = true
 
-        viewModel.networkStatus.observe(viewLifecycleOwner) { status ->
-            connectivityStatus = status.also { Log.d(TAG, "ConnectivityStatus: $it") }
-            binding.tvNoInternetConnection.isVisible =
-                status != ConnectivityObserver.Status.Available
-        }
-
         viewModel.currenciesList.observe(viewLifecycleOwner) { currencies ->
             binding.progressBar.isVisible = false
             currenciesListAdapter.currenciesList = currencies

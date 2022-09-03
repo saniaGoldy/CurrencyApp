@@ -8,10 +8,10 @@ import com.example.currencyapp.TAG
 import com.example.currencyapp.data.local.LocalDB
 import com.example.currencyapp.data.remote.CurrencyAPI
 import com.example.currencyapp.data.remote.entities.news.Data
+import com.example.currencyapp.data.remote.entities.news.SearchSettings
 import com.example.currencyapp.domain.model.Currencies
 import com.example.currencyapp.domain.model.CurrencyFluctuation
 import com.example.currencyapp.domain.repository.MainRepository
-import com.example.currencyapp.data.remote.entities.news.SearchSettings
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -68,9 +68,9 @@ class MainRepositoryImpl @Inject constructor(
             settings.timeGap
         )
 
-        return if (response.isSuccessful){
+        return if (response.isSuccessful) {
             Result.success(response.body()!!.data)
-        }else{
+        } else {
             Result.failure(IOException(response.errorBody().toString()))
         }
     }

@@ -145,6 +145,9 @@ dependencies {
     //Expandable text view
     implementation 'com.ms-square:expandableTextView:0.1.4'
 
+    // Preferences DataStore (SharedPreferences like APIs)
+    implementation "androidx.datastore:datastore-preferences:1.0.0"
+
 }
 
 kapt {
