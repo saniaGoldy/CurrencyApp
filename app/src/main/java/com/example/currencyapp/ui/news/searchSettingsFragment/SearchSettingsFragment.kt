@@ -17,7 +17,7 @@ import com.example.currencyapp.TAG
 import com.example.currencyapp.data.remote.entities.news.NewsApiRequestOptions
 import com.example.currencyapp.databinding.FragmentSearchSettingsBinding
 import com.example.currencyapp.ui.news.NewsViewModel
-import com.example.currencyapp.ui.news.mоdel.SearchSettings
+import com.example.currencyapp.data.remote.entities.news.SearchSettings
 import com.google.android.material.textfield.TextInputLayout
 
 private const val TAGS_REGEX = " *-?[\\w ]+(?:, *-?(?:\\w+ *)+)*"
@@ -29,7 +29,7 @@ class SearchSettingsFragment : Fragment() {
 
     private var _binding: FragmentSearchSettingsBinding? = null
     private val binding get() = _binding!!
-    private val settings = SearchSettings(null, null, null)
+    private val settings = SearchSettings()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -64,12 +64,11 @@ class SearchSettingsFragment : Fragment() {
                 settings.keywords = editTextKeywords.text.toString()
                 settings.tags = textInputTags.editText?.text.toString()
 
-                if (settings.timeGap == null)
-                    settings.timeGap =
-                        "${textInputDateFrom.editText?.text},${textInputDateTo.editText?.text}"
+                val date =
+                    "${textInputDateFrom.editText?.text},${textInputDateTo.editText?.text}"
+                if (date != "")
+                    settings.timeGap = date
 
-
-                viewModel.searchSettings.value = settings
                 Log.d(TAG, "onViewCreated: $settings")
 
                 root.findNavController()
@@ -107,13 +106,10 @@ class SearchSettingsFragment : Fragment() {
                         when (position) {
                             7 -> {
                                 textInputDateFrom.isVisible = true
-                                settings.timeGap = null
                             }
                             8 -> {
                                 textInputDateFrom.isVisible = true
                                 textInputDateTo.isVisible = true
-
-                                settings.timeGap = null
                             }
                             else -> {
                                 textInputDateFrom.isVisible = false

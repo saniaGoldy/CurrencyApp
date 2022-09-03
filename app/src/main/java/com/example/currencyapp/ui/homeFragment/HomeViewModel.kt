@@ -6,10 +6,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.currencyapp.domain.model.CurrencyFluctuation
-import com.example.currencyapp.domain.repository.APIResponseProcessor
 import com.example.currencyapp.domain.repository.MainRepository
 import com.example.currencyapp.domain.services.ConnectivityObserver
 import com.example.currencyapp.domain.services.NetworkConnectivityObserver
+import com.example.currencyapp.ui.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.launchIn
@@ -21,7 +21,7 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     private val repository: MainRepository,
     context: Application
-) : ViewModel() {
+) : BaseViewModel(context) {
 
     private var _currenciesList: MutableLiveData<List<CurrencyFluctuation>> = MutableLiveData()
 
@@ -30,28 +30,23 @@ class HomeViewModel @Inject constructor(
 
     val errorResult = MutableLiveData<Throwable>()
 
-    private val _networkState = MutableLiveData(ConnectivityObserver.Status.Unavailable)
-
-    val networkStatus: LiveData<ConnectivityObserver.Status>
-        get() = _networkState
-
     init {
+
         viewModelScope.launch(Dispatchers.IO) {
             launch {
                 _currenciesList.postValue(repository.fetchDataFromLocalDB())
             }
 
-            val result = repository.makeCurrencyQuery()
-            if (result.isSuccess) {
-                repository.saveDataToLocalDB(result.getOrNull()!!)
-            } else {
-                errorResult.postValue(result.exceptionOrNull())
+            if (networkStatus.value == ConnectivityObserver.Status.Available){
+                val result = repository.makeCurrencyQuery()
+                if (result.isSuccess) {
+                    repository.saveDataToLocalDB(result.getOrNull()!!)
+                } else {
+                    errorResult.postValue(result.exceptionOrNull())
+                }
             }
         }
 
-        NetworkConnectivityObserver(context).observe().onEach {
-            _networkState.value = it
-        }.launchIn(viewModelScope)
     }
 
 }

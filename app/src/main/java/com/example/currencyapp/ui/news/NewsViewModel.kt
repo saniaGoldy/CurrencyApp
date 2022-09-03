@@ -1,33 +1,43 @@
 package com.example.currencyapp.ui.news
 
+import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.currencyapp.data.remote.entities.news.Data
-import com.example.currencyapp.domain.repository.APIResponseProcessor
+import com.example.currencyapp.data.remote.entities.news.SearchSettings
 import com.example.currencyapp.domain.repository.MainRepository
-import com.example.currencyapp.ui.news.mоdel.SearchSettings
+import com.example.currencyapp.domain.services.ConnectivityObserver
+import com.example.currencyapp.ui.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class NewsViewModel @Inject constructor(private val repository: MainRepository) : ViewModel() {
+class NewsViewModel @Inject constructor(
+    private val repository: MainRepository,
+    context: Application
+) : BaseViewModel(context) {
 
-    val searchSettings = MutableLiveData(SearchSettings(null, null, null))
+    val searchSettings = MutableLiveData<SearchSettings>()
+
 
     private val _news = MutableLiveData<Result<List<Data>>>()
+
     val news: LiveData<Result<List<Data>>>
         get() = _news
 
+
     init {
-        fetchNewsData()
+        fetchNews()
     }
 
-    private fun fetchNewsData() {
-        repository.makeNewsQuery(object : APIResponseProcessor<List<Data>> {
-            override fun process(result: Result<List<Data>>) {
-                _news.value = result
+    fun fetchNews() {
+        if (networkStatus.value == ConnectivityObserver.Status.Available)
+            viewModelScope.launch(Dispatchers.IO) {
+                _news.postValue(repository.makeNewsQuery(searchSettings.value ?: SearchSettings()))
             }
-        })
     }
+
 }

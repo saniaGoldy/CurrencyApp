@@ -11,8 +11,8 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.findNavController
 import com.example.currencyapp.R
 import com.example.currencyapp.TAG
-import com.example.currencyapp.data.MyConnectivityManager
 import com.example.currencyapp.databinding.FragmentNewsListBinding
+import com.example.currencyapp.domain.services.ConnectivityObserver
 import com.example.currencyapp.ui.news.NewsViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -52,7 +52,7 @@ class NewsListFragment : Fragment() {
 
                 Toast.makeText(
                     this.requireContext(),
-                    if (MyConnectivityManager.checkConnectivity(requireContext())) getString(R.string.standart_error_message) else getString(
+                    if (viewModel.networkStatus.value == ConnectivityObserver.Status.Available ) getString(R.string.standart_error_message) else getString(
                         R.string.no_internet_connection_error_message
                     ),
                     Toast.LENGTH_LONG

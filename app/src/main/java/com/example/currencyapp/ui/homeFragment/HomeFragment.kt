@@ -16,7 +16,6 @@ import com.example.currencyapp.databinding.FragmentHomeBinding
 import com.example.currencyapp.domain.model.CurrencyFluctuation
 import com.example.currencyapp.domain.services.ConnectivityObserver
 import dagger.hilt.android.AndroidEntryPoint
-import com.example.currencyapp.data.MyConnectivityManager
 
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
