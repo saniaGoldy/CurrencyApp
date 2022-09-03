@@ -142,6 +142,9 @@ dependencies {
     testImplementation 'com.google.dagger:hilt-android-testing:2.43.2'
     kaptTest 'com.google.dagger:hilt-compiler:2.43.2'
 
+    //Expandable text view
+    implementation 'com.ms-square:expandableTextView:0.1.4'
+
 }
 
 kapt {

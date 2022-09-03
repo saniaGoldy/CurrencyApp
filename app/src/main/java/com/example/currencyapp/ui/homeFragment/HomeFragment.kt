@@ -1,7 +1,5 @@
 package com.example.currencyapp.ui.homeFragment
 
-import android.content.Context
-import android.net.ConnectivityManager
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -18,6 +16,7 @@ import com.example.currencyapp.databinding.FragmentHomeBinding
 import com.example.currencyapp.domain.model.CurrencyFluctuation
 import com.example.currencyapp.domain.services.ConnectivityObserver
 import dagger.hilt.android.AndroidEntryPoint
+import com.example.currencyapp.data.MyConnectivityManager
 
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
@@ -47,9 +46,10 @@ class HomeFragment : Fragment() {
 
         binding.progressBar.isVisible = true
 
-        viewModel.networkStatus.observe(viewLifecycleOwner){ status ->
+        viewModel.networkStatus.observe(viewLifecycleOwner) { status ->
             connectivityStatus = status.also { Log.d(TAG, "ConnectivityStatus: $it") }
-            binding.tvNoInternetConnection.isVisible = status != ConnectivityObserver.Status.Available
+            binding.tvNoInternetConnection.isVisible =
+                status != ConnectivityObserver.Status.Available
         }
 
         viewModel.currenciesList.observe(viewLifecycleOwner) { currencies ->
@@ -76,9 +76,7 @@ class HomeFragment : Fragment() {
             CurrenciesListAdapter(object : CurrenciesListAdapter.ItemClickedAction {
                 override fun run(currencyFluctuation: CurrencyFluctuation) {
                     binding.root.findNavController().navigate(
-                        HomeFragmentDirections.actionHomeFragmentToDetailsFragment(
-                            currencyFluctuation
-                        )
+                        HomeFragmentDirections.actionHomeFragmentToDetailsFragment()
                     )
                 }
             })

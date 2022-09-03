@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.currencyapp.domain.model.CurrencyFluctuation
+import com.example.currencyapp.domain.repository.APIResponseProcessor
 import com.example.currencyapp.domain.repository.MainRepository
 import com.example.currencyapp.domain.services.ConnectivityObserver
 import com.example.currencyapp.domain.services.NetworkConnectivityObserver

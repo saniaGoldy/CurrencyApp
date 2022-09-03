@@ -7,6 +7,9 @@ import android.util.Log
 import com.example.currencyapp.TAG
 import com.example.currencyapp.data.local.LocalDB
 import com.example.currencyapp.data.remote.CurrencyAPI
+import com.example.currencyapp.data.remote.entities.currencyFluctuation.CurrenciesFluctuationsResponse
+import com.example.currencyapp.data.remote.entities.news.Data
+import com.example.currencyapp.data.remote.entities.news.NewsResponse
 import com.example.currencyapp.domain.model.Currencies
 import com.example.currencyapp.domain.model.CurrencyFluctuation
 import com.example.currencyapp.domain.repository.MainRepository

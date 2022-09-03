@@ -1,4 +1,4 @@
-package com.example.currencyapp.data.remote.entities
+package com.example.currencyapp.data.remote.entities.currencyFluctuation
 
 import com.google.gson.annotations.SerializedName
 
