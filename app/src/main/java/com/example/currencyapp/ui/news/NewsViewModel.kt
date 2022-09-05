@@ -9,6 +9,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.currencyapp.TAG
 import com.example.currencyapp.data.remote.entities.news.Data
+import com.example.currencyapp.data.remote.entities.news.NewsApiRequestOptions
 import com.example.currencyapp.data.remote.entities.news.SearchSettings
 import com.example.currencyapp.dataStore
 import com.example.currencyapp.domain.repository.MainRepository
@@ -57,7 +58,23 @@ class NewsViewModel @Inject constructor(
         }
     }
 
-    fun setSearchSettings(settings: SearchSettings) {
+    fun setSearchSettings(
+        keywords: String,
+        tags: String,
+        timeGap: NewsApiRequestOptions,
+        from: String,
+        to: String
+    ) {
+        val settings = SearchSettings(
+            keywords,
+            tags,
+            when (timeGap) {
+                NewsApiRequestOptions.DateFrom -> from
+                NewsApiRequestOptions.DateFromTo -> "$from,$to"
+                else -> timeGap.queryParam
+            }
+        )
+
         if (searchSettings.value != settings) {
             searchSettings.value = settings
             areNewsUpToDate.value = false

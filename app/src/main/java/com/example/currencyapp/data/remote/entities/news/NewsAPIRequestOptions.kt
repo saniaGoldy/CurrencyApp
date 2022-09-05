@@ -1,15 +1,13 @@
 package com.example.currencyapp.data.remote.entities.news
 
-object NewsApiRequestOptions {
-    val date = listOf(
-        "today",
-        "thisweek",
-        "thismonth",
-        "last7days",
-        "last30days",
-        "last3months",
-        "yeartodate",
-        "YYYY-MM-DD",
-        "YYYY-MM-DD,YYYY-MM-DD"
-    )
+enum class NewsApiRequestOptions(val queryParam: String) {
+    Today("today"),
+    ThisWeek("thisweek"),
+    ThisMonth("thismonth"),
+    Last7Days("last7days"),
+    Last30Days("last30days"),
+    Last3Months("last3months"),
+    YearToDate("yeartodate"),
+    DateFrom("YYYY-MM-DD"),
+    DateFromTo("YYYY-MM-DD,YYYY-MM-DD")
 }

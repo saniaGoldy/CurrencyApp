@@ -15,7 +15,6 @@ import androidx.navigation.findNavController
 import com.example.currencyapp.R
 import com.example.currencyapp.TAG
 import com.example.currencyapp.data.remote.entities.news.NewsApiRequestOptions
-import com.example.currencyapp.data.remote.entities.news.SearchSettings
 import com.example.currencyapp.databinding.FragmentSearchSettingsBinding
 import com.example.currencyapp.ui.news.NewsViewModel
 import com.google.android.material.textfield.TextInputLayout
@@ -29,7 +28,8 @@ class SearchSettingsFragment : Fragment() {
 
     private var _binding: FragmentSearchSettingsBinding? = null
     private val binding get() = _binding!!
-    private val settings = SearchSettings()
+
+    private lateinit var spinnerItems: MutableList<NewsApiRequestOptions>
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -37,12 +37,15 @@ class SearchSettingsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentSearchSettingsBinding.inflate(inflater, container, false)
-
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        NewsApiRequestOptions.values().forEach { option ->
+            spinnerItems.add(option)
+        }
 
         setupDropDownList()
 
@@ -61,17 +64,14 @@ class SearchSettingsFragment : Fragment() {
             )
 
             buttonApply.setOnClickListener {
-                settings.keywords = editTextKeywords.text.toString()
-                settings.tags = textInputTags.editText?.text.toString()
 
-                val date =
-                    "${textInputDateFrom.editText?.text},${textInputDateTo.editText?.text}"
-                if (date != ",")
-                    settings.timeGap = date
-
-                Log.d(TAG, "onViewCreated: $settings")
-
-                viewModel.setSearchSettings(settings)
+                viewModel.setSearchSettings(
+                    editTextKeywords.text.toString(),
+                    textInputTags.editText?.text.toString(),
+                    spinnerItems[spinner.selectedItemPosition],
+                    textInputDateFrom.editText?.text.toString(),
+                    textInputDateTo.editText?.text.toString()
+                )
 
                 root.findNavController()
                     .popBackStack()
@@ -106,18 +106,16 @@ class SearchSettingsFragment : Fragment() {
                     Log.d(TAG, "onItemSelected: $position")
                     with(binding) {
                         when (position) {
-                            7 -> {
+                            DATE_INPUT_FROM -> {
                                 textInputDateFrom.isVisible = true
                             }
-                            8 -> {
+                            DATE_INPUT_FROM_TO -> {
                                 textInputDateFrom.isVisible = true
                                 textInputDateTo.isVisible = true
                             }
                             else -> {
                                 textInputDateFrom.isVisible = false
                                 textInputDateTo.isVisible = false
-
-                                settings.timeGap = NewsApiRequestOptions.date[position]
                             }
                         }
                     }
@@ -142,7 +140,10 @@ class SearchSettingsFragment : Fragment() {
         }
     }
 
+
     companion object {
+        private const val DATE_INPUT_FROM = 7
+        private const val DATE_INPUT_FROM_TO = 8
         fun newInstance() = SearchSettingsFragment()
     }
 }
