@@ -44,6 +44,15 @@ class NewsListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.rvNewsList.adapter = adapter
 
+        setupObservers()
+
+        binding.settingsImageButton.setOnClickListener {
+            binding.root.findNavController()
+                .navigate(NewsListFragmentDirections.actionNavigationNewsToSearchSettingsFragment())
+        }
+    }
+
+    private fun setupObservers() {
         viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
             binding.newsProgressBar.isVisible = isLoading
         }
@@ -73,11 +82,6 @@ class NewsListFragment : Fragment() {
                     Toast.LENGTH_LONG
                 ).show()
             }
-        }
-
-        binding.settingsImageButton.setOnClickListener {
-            binding.root.findNavController()
-                .navigate(NewsListFragmentDirections.actionNavigationNewsToSearchSettingsFragment())
         }
     }
 }

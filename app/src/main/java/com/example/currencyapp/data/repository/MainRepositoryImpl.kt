@@ -1,27 +1,37 @@
 package com.example.currencyapp.data.repository
 
 import android.annotation.SuppressLint
+import android.app.Application
+import android.content.Context
 import android.icu.text.SimpleDateFormat
 import android.icu.util.Calendar
 import android.util.Log
+import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.stringPreferencesKey
+import androidx.lifecycle.viewModelScope
 import com.example.currencyapp.TAG
 import com.example.currencyapp.data.local.LocalDB
 import com.example.currencyapp.data.remote.CurrencyAPI
 import com.example.currencyapp.data.remote.entities.news.Data
 import com.example.currencyapp.data.remote.entities.news.SearchSettings
+import com.example.currencyapp.dataStore
 import com.example.currencyapp.domain.model.Currencies
 import com.example.currencyapp.domain.model.CurrencyFluctuation
 import com.example.currencyapp.domain.repository.MainRepository
+import com.example.currencyapp.ui.news.NewsViewModel
+import com.google.gson.Gson
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import java.io.IOException
 import javax.inject.Inject
 
 class MainRepositoryImpl @Inject constructor(
     private val currencyAPI: CurrencyAPI,
-    private val localDB: LocalDB
+    private val localDB: LocalDB,
+    private val context: Application
 ) : MainRepository {
 
     private val baseCurrency: String = Currencies.UAH.name
@@ -98,4 +108,34 @@ class MainRepositoryImpl @Inject constructor(
         }
     }
 
+    private val gson = Gson()
+
+    override suspend fun loadSettingsFromPrefs(): SearchSettings {
+        var settingsJson = ""
+        Log.d(TAG, "loadSettingsFromPrefs")
+
+        context.dataStore.data.map { settingsPref ->
+            settingsJson = settingsPref[SETTINGS_PREF_KEY] ?: ""
+            Log.d(TAG, "loadSettingsFromPrefs map: $settingsJson")
+        }.collect { Log.d(TAG, "loadSettingsFromPrefs collect: $it") }
+
+        Log.d(TAG, "loadSettingsFromPrefs: $settingsJson")
+        return (gson.fromJson(settingsJson, SearchSettings::class.java))
+    }
+
+
+    @OptIn(DelicateCoroutinesApi::class)
+    override fun saveSettingsToPrefs(settings: SearchSettings) {
+        Log.d(TAG, "saveSettingsToPrefs")
+        GlobalScope.launch(Dispatchers.IO) {
+            context.dataStore.edit {
+                it[SETTINGS_PREF_KEY] = gson.toJson(settings)
+                Log.d(TAG, "saveSettingsToPrefs: ${it[SETTINGS_PREF_KEY]}")
+            }
+        }
+    }
+
+    companion object {
+        private val SETTINGS_PREF_KEY = stringPreferencesKey("searchSettings")
+    }
 }

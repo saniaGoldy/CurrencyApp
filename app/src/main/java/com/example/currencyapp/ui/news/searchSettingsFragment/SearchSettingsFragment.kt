@@ -29,7 +29,7 @@ class SearchSettingsFragment : Fragment() {
     private var _binding: FragmentSearchSettingsBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var spinnerItems: MutableList<NewsApiRequestOptions>
+    private var spinnerItems: MutableList<NewsApiRequestOptions> = mutableListOf()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -50,42 +50,69 @@ class SearchSettingsFragment : Fragment() {
         setupDropDownList()
 
         with(binding) {
-            textInputTags.setupErrorHandling(
+            setupInputTextFields()
+
+            setupButtons()
+        }
+    }
+
+    private fun FragmentSearchSettingsBinding.setupButtons() {
+        buttonApply.setOnClickListener {
+
+            viewModel.setSearchSettings(
+                editTextKeywords.text.toString(),
+                textInputTags.editText?.text.toString(),
+                spinnerItems[spinner.selectedItemPosition],
+                textInputDateFrom.editText?.text.toString(),
+                textInputDateTo.editText?.text.toString()
+            )
+
+            root.findNavController()
+                .popBackStack()
+        }
+
+        buttonCancel.setOnClickListener {
+            root.findNavController()
+                .popBackStack()
+        }
+    }
+
+    private fun FragmentSearchSettingsBinding.setupInputTextFields() {
+
+        editTextKeywords.setText(viewModel.searchSettings.value?.keywords)
+
+        textInputTags.apply {
+            setupErrorHandling(
                 Regex(TAGS_REGEX),
                 getString(R.string.edit_text_error_message)
             )
-            textInputDateFrom.setupErrorHandling(
+
+            editText?.setText(viewModel.searchSettings.value?.tags.also {
+                Log.d(
+                    TAG,
+                    "setupInputTextFieldsSetup: $it"
+                ) })
+        }
+        textInputDateFrom.apply {
+            setupErrorHandling(
                 Regex(DATE_REGEX),
                 getString(R.string.edit_text_error_message)
             )
-            textInputDateTo.setupErrorHandling(
+
+            editText?.setText(viewModel.searchSettings.value?.timeGap?.substringBefore(","))
+        }
+        textInputDateTo.apply {
+            setupErrorHandling(
                 Regex(DATE_REGEX),
                 getString(R.string.edit_text_error_message)
             )
 
-            buttonApply.setOnClickListener {
-
-                viewModel.setSearchSettings(
-                    editTextKeywords.text.toString(),
-                    textInputTags.editText?.text.toString(),
-                    spinnerItems[spinner.selectedItemPosition],
-                    textInputDateFrom.editText?.text.toString(),
-                    textInputDateTo.editText?.text.toString()
-                )
-
-                root.findNavController()
-                    .popBackStack()
-            }
-
-            buttonCancel.setOnClickListener {
-                root.findNavController()
-                    .popBackStack()
-            }
+            editText?.setText(viewModel.searchSettings.value?.timeGap?.substringAfter(","))
         }
     }
 
 
-    private fun setupDropDownList() {
+    private fun setupDropDownList() = with(binding) {
 
         ArrayAdapter.createFromResource(
             requireContext(),
@@ -95,8 +122,8 @@ class SearchSettingsFragment : Fragment() {
             // Specify the layout to use when the list of choices appears
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             // Apply the adapter to the spinner
-            binding.spinner.adapter = adapter
-            binding.spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            spinner.adapter = adapter
+            spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(
                     parent: AdapterView<*>?,
                     view: View?,
@@ -104,19 +131,18 @@ class SearchSettingsFragment : Fragment() {
                     id: Long
                 ) {
                     Log.d(TAG, "onItemSelected: $position")
-                    with(binding) {
-                        when (position) {
-                            DATE_INPUT_FROM -> {
-                                textInputDateFrom.isVisible = true
-                            }
-                            DATE_INPUT_FROM_TO -> {
-                                textInputDateFrom.isVisible = true
-                                textInputDateTo.isVisible = true
-                            }
-                            else -> {
-                                textInputDateFrom.isVisible = false
-                                textInputDateTo.isVisible = false
-                            }
+
+                    when (position) {
+                        DATE_INPUT_FROM -> {
+                            textInputDateFrom.isVisible = true
+                        }
+                        DATE_INPUT_FROM_TO -> {
+                            textInputDateFrom.isVisible = true
+                            textInputDateTo.isVisible = true
+                        }
+                        else -> {
+                            textInputDateFrom.isVisible = false
+                            textInputDateTo.isVisible = false
                         }
                     }
                 }
@@ -124,9 +150,11 @@ class SearchSettingsFragment : Fragment() {
                 override fun onNothingSelected(parent: AdapterView<*>?) {
                     Log.d(TAG, "onNothingSelected")
                 }
-
             }
         }
+
+        spinner.setSelection(spinnerItems.indexOf(viewModel.searchSettings.value?.timeGapMode))
+
     }
 
     private fun TextInputLayout.setupErrorHandling(regex: Regex, errorMessage: String) {

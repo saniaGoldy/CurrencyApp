@@ -12,4 +12,8 @@ interface MainRepository {
     suspend fun fetchDataFromLocalDB(): List<CurrencyFluctuation>
 
     fun saveDataToLocalDB(currencies: List<CurrencyFluctuation>)
+
+    suspend fun loadSettingsFromPrefs(): SearchSettings
+
+    fun saveSettingsToPrefs(settings: SearchSettings)
 }

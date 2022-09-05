@@ -21,7 +21,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
 
-        <EditText
+        <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/editTextKeywords"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -47,7 +47,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textInputKeywords" >
 
-        <EditText
+        <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -85,7 +85,7 @@
         app:layout_constraintVertical_bias="0.56"
         tools:visibility="visible">
 
-        <EditText
+        <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="15dp"
@@ -112,7 +112,7 @@
         app:layout_constraintTop_toBottomOf="@+id/spinner"
         tools:visibility="visible">
 
-        <EditText
+        <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="15dp"
