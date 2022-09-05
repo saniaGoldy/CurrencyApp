@@ -6,7 +6,9 @@
     android:layout_height="wrap_content"
     android:layout_margin="5dp"
 
-    app:cardCornerRadius="20dp">
+    app:cardBackgroundColor="#2C3339"
+    app:cardCornerRadius="20dp"
+    app:cardElevation="15dp">
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -21,7 +23,7 @@
             android:layout_margin="5dp"
             android:gravity="start"
             android:text="@string/source"
-            android:textColor="?android:attr/textColorSecondary"
+            android:textColor="@color/grey"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="@+id/guideline4"
             app:layout_constraintTop_toBottomOf="@+id/tvTags" />
@@ -33,7 +35,7 @@
             android:layout_margin="10dp"
             android:gravity="end"
             android:text="@string/publication_date_amp_time"
-            android:textColor="?android:attr/textColorSecondary"
+            android:textColor="@color/grey"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -59,7 +61,7 @@
             android:layout_marginEnd="8dp"
             android:maxLines="1"
             android:text="@string/tags_list"
-            android:textColor="?android:attr/textColorSecondary"
+            android:textColor="@color/grey"
             android:textSize="12sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/guideline4"

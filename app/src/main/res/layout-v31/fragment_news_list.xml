@@ -5,7 +5,7 @@
     android:id="@+id/constraintLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#1F193A"
+    android:background="@android:color/system_accent3_900"
     tools:context=".ui.news.newsListFragment.NewsListFragment">
 
     <androidx.recyclerview.widget.RecyclerView
@@ -45,7 +45,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/title_news"
-        android:textColor="@color/white"
+        android:textColor="@color/grey"
         android:textSize="34sp"
         app:layout_constraintBottom_toTopOf="@+id/guideline6"
         app:layout_constraintEnd_toStartOf="@+id/settingsImageButton"
