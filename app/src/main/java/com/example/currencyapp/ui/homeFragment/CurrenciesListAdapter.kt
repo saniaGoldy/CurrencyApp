@@ -11,7 +11,7 @@ import com.example.currencyapp.domain.model.CurrencyFluctuation
 
 private const val ROUNDING_FORMAT: String = "%.3f"
 
-class CurrenciesListAdapter(val itemClickedAction: ItemClickedAction) :
+class CurrenciesListAdapter(val onListItemClickedActionCallback: ItemClickedAction) :
     RecyclerView.Adapter<CurrenciesListAdapter.CurrencyViewHolder>() {
 
     private val diffCallback = object : DiffUtil.ItemCallback<CurrencyFluctuation>() {
@@ -84,7 +84,7 @@ class CurrenciesListAdapter(val itemClickedAction: ItemClickedAction) :
                 )
 
                 setOnClickListener {
-                    itemClickedAction.run(item)
+                    onListItemClickedActionCallback.run(item)
                 }
             }
 

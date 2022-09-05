@@ -91,7 +91,8 @@ class SearchSettingsFragment : Fragment() {
                 Log.d(
                     TAG,
                     "setupInputTextFieldsSetup: $it"
-                ) })
+                )
+            })
         }
         textInputDateFrom.apply {
             setupErrorHandling(

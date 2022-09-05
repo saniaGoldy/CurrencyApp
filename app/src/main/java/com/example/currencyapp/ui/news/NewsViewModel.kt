@@ -14,8 +14,9 @@ import com.example.currencyapp.domain.services.ConnectivityObserver
 import com.example.currencyapp.ui.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import java.net.SocketTimeoutException
 import javax.inject.Inject
 
 @HiltViewModel
@@ -30,11 +31,7 @@ class NewsViewModel @Inject constructor(
     init {
         viewModelScope.launch(Dispatchers.IO) {
             Log.d(TAG, "loadSettings: start")
-            searchSettings.postValue(repository.loadSettingsFromPrefs().also {
-                Log.d(
-                    TAG,
-                    "settingsLoading: $it"
-                ) })
+            _searchSettings.postValue(repository.loadSettings())
         }
     }
 
@@ -44,20 +41,25 @@ class NewsViewModel @Inject constructor(
         get() = _news
 
 
-    val isLoading = MutableLiveData(false)
+    private val _isLoading = MutableLiveData(false)
+    val isLoading: LiveData<Boolean>
+        get() = _isLoading
 
-    val areNewsUpToDate = MutableLiveData(false)
+    private val _areNewsUpToDate = MutableLiveData(false)
+    val areNewsUpToDate: LiveData<Boolean>
+        get() = _areNewsUpToDate
+
+    fun updateLoadingStatus() {
+        _isLoading.value = false
+        _areNewsUpToDate.value = true
+    }
 
     fun fetchNews() {
         if (networkStatus.value == ConnectivityObserver.Status.Available)
-            isLoading.value = true
+            _isLoading.value = true
 
-        try {
-            viewModelScope.launch(Dispatchers.IO) {
-                _news.postValue(repository.makeNewsQuery(_searchSettings.value ?: SearchSettings()))
-            }
-        } catch (e: SocketTimeoutException) {
-            Log.e(TAG, "fetchNews: ${e.printStackTrace()}")
+        viewModelScope.launch(Dispatchers.IO) {
+            _news.postValue(repository.fetchNewsList(_searchSettings.value ?: SearchSettings()))
         }
     }
 
@@ -82,9 +84,8 @@ class NewsViewModel @Inject constructor(
 
         if (_searchSettings.value != settings) {
             _searchSettings.value = settings
-            areNewsUpToDate.value = false
-            repository.saveSettingsToPrefs(settings)
+            _areNewsUpToDate.value = false
+            repository.saveSettings(settings, viewModelScope)
         }
     }
-
 }

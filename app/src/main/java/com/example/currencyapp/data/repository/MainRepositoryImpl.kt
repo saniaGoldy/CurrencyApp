@@ -2,13 +2,11 @@ package com.example.currencyapp.data.repository
 
 import android.annotation.SuppressLint
 import android.app.Application
-import android.content.Context
 import android.icu.text.SimpleDateFormat
 import android.icu.util.Calendar
 import android.util.Log
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
-import androidx.lifecycle.viewModelScope
 import com.example.currencyapp.TAG
 import com.example.currencyapp.data.local.LocalDB
 import com.example.currencyapp.data.remote.CurrencyAPI
@@ -18,13 +16,11 @@ import com.example.currencyapp.dataStore
 import com.example.currencyapp.domain.model.Currencies
 import com.example.currencyapp.domain.model.CurrencyFluctuation
 import com.example.currencyapp.domain.repository.MainRepository
-import com.example.currencyapp.ui.news.NewsViewModel
 import com.google.gson.Gson
-import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.launch
 import java.io.IOException
 import javax.inject.Inject
 
@@ -48,7 +44,7 @@ class MainRepositoryImpl @Inject constructor(
         }
 
 
-    override suspend fun makeCurrencyQuery(): Result<List<CurrencyFluctuation>> {
+    override suspend fun fetchCurrencyList(): Result<List<CurrencyFluctuation>> {
         val response = currencyAPI.getCurrencyFluctuation(
             yesterdaysDate,
             currentDate,
@@ -71,7 +67,7 @@ class MainRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun makeNewsQuery(settings: SearchSettings): Result<List<Data>> {
+    override suspend fun fetchNewsList(settings: SearchSettings): Result<List<Data>> {
         val response = currencyAPI.getCurrencyNews(
             settings.tags,
             settings.keywords,
@@ -85,19 +81,19 @@ class MainRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun fetchDataFromLocalDB(): List<CurrencyFluctuation> {
+    override suspend fun fetchCurrenciesList(): List<CurrencyFluctuation> {
         return localDB
             .currencyDao().getAll().also {
                 Log.d(
                     TAG,
-                    "fetchDataFromLocalDB"
+                    "fetchCurrenciesList"
                 )
             }
     }
 
-    @OptIn(DelicateCoroutinesApi::class)
-    override fun saveDataToLocalDB(currencies: List<CurrencyFluctuation>) {
-        GlobalScope.launch(Dispatchers.IO) {
+
+    override fun saveCurrenciesList(currencies: List<CurrencyFluctuation>, scope: CoroutineScope) {
+        scope.launch(Dispatchers.IO) {
             localDB
                 .currencyDao().insertAll(currencies).also {
                     Log.d(
@@ -110,27 +106,18 @@ class MainRepositoryImpl @Inject constructor(
 
     private val gson = Gson()
 
-    override suspend fun loadSettingsFromPrefs(): SearchSettings {
-        var settingsJson = ""
-        Log.d(TAG, "loadSettingsFromPrefs")
-
-        context.dataStore.data.map { settingsPref ->
-            settingsJson = settingsPref[SETTINGS_PREF_KEY] ?: ""
-            Log.d(TAG, "loadSettingsFromPrefs map: $settingsJson")
-        }.collect { Log.d(TAG, "loadSettingsFromPrefs collect: $it") }
-
-        Log.d(TAG, "loadSettingsFromPrefs: $settingsJson")
-        return (gson.fromJson(settingsJson, SearchSettings::class.java))
+    override suspend fun loadSettings(): SearchSettings {
+        val settingsJson = context.dataStore.data.first()[SETTINGS_PREF_KEY] ?: ""
+        return gson.fromJson(settingsJson, SearchSettings::class.java)
     }
 
 
-    @OptIn(DelicateCoroutinesApi::class)
-    override fun saveSettingsToPrefs(settings: SearchSettings) {
-        Log.d(TAG, "saveSettingsToPrefs")
-        GlobalScope.launch(Dispatchers.IO) {
+    override fun saveSettings(settings: SearchSettings, scope:CoroutineScope) {
+        Log.d(TAG, "saveSettings")
+        scope.launch(Dispatchers.IO) {
             context.dataStore.edit {
                 it[SETTINGS_PREF_KEY] = gson.toJson(settings)
-                Log.d(TAG, "saveSettingsToPrefs: ${it[SETTINGS_PREF_KEY]}")
+                Log.d(TAG, "saveSettings: ${it[SETTINGS_PREF_KEY]}")
             }
         }
     }

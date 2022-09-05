@@ -3,17 +3,19 @@ package com.example.currencyapp.domain.repository
 import com.example.currencyapp.data.remote.entities.news.Data
 import com.example.currencyapp.data.remote.entities.news.SearchSettings
 import com.example.currencyapp.domain.model.CurrencyFluctuation
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.Flow
 
 interface MainRepository {
-    suspend fun makeCurrencyQuery(): Result<List<CurrencyFluctuation>>
+    suspend fun fetchCurrencyList(): Result<List<CurrencyFluctuation>>
 
-    suspend fun makeNewsQuery(settings: SearchSettings): Result<List<Data>>
+    suspend fun fetchNewsList(settings: SearchSettings): Result<List<Data>>
 
-    suspend fun fetchDataFromLocalDB(): List<CurrencyFluctuation>
+    suspend fun fetchCurrenciesList(): List<CurrencyFluctuation>
 
-    fun saveDataToLocalDB(currencies: List<CurrencyFluctuation>)
+    fun saveCurrenciesList(currencies: List<CurrencyFluctuation>, scope: CoroutineScope)
 
-    suspend fun loadSettingsFromPrefs(): SearchSettings
+    suspend fun loadSettings(): SearchSettings
 
-    fun saveSettingsToPrefs(settings: SearchSettings)
+    fun saveSettings(settings: SearchSettings, scope: CoroutineScope)
 }

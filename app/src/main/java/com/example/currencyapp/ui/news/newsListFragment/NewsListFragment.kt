@@ -63,8 +63,7 @@ class NewsListFragment : Fragment() {
         }
 
         viewModel.news.observe(viewLifecycleOwner) {
-            viewModel.isLoading.value = false
-            viewModel.areNewsUpToDate.value = true
+            viewModel.updateLoadingStatus()
 
             val dataList = it.getOrNull()
             if (it.isSuccess && dataList != null)

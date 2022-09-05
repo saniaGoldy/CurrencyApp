@@ -9,7 +9,6 @@ import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.findNavController
 import com.example.currencyapp.R
 import com.example.currencyapp.TAG
 import com.example.currencyapp.databinding.FragmentHomeBinding
@@ -41,10 +40,14 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setupUsersList()
+        setupCurrenciesList()
 
         binding.progressBar.isVisible = true
 
+        setupObservers()
+    }
+
+    private fun setupObservers() {
         viewModel.currenciesList.observe(viewLifecycleOwner) { currencies ->
             binding.progressBar.isVisible = false
             currenciesListAdapter.currenciesList = currencies
@@ -64,15 +67,15 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun setupUsersList() {
+    private fun setupCurrenciesList() {
         currenciesListAdapter =
-            CurrenciesListAdapter(object : CurrenciesListAdapter.ItemClickedAction {
-                override fun run(currencyFluctuation: CurrencyFluctuation) {
-                    binding.root.findNavController().navigate(
-                        HomeFragmentDirections.actionHomeFragmentToDetailsFragment()
-                    )
+            CurrenciesListAdapter(
+                object : CurrenciesListAdapter.ItemClickedAction{
+                    override fun run(currencyFluctuation: CurrencyFluctuation) {
+                        Log.d(TAG, "currenciesItemClicked: $currencyFluctuation")
+                    }
                 }
-            })
+            )
 
         binding.rvCurrenciesList.adapter = currenciesListAdapter
     }

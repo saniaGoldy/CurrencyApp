@@ -19,7 +19,7 @@ class HomeViewModel @Inject constructor(
     context: Application
 ) : BaseViewModel(context) {
 
-    private var _currenciesList: MutableLiveData<List<CurrencyFluctuation>> = MutableLiveData()
+    private val _currenciesList: MutableLiveData<List<CurrencyFluctuation>> = MutableLiveData()
 
     val currenciesList: LiveData<List<CurrencyFluctuation>>
         get() = _currenciesList
@@ -30,13 +30,13 @@ class HomeViewModel @Inject constructor(
 
         viewModelScope.launch(Dispatchers.IO) {
             launch {
-                _currenciesList.postValue(repository.fetchDataFromLocalDB())
+                _currenciesList.postValue(repository.fetchCurrenciesList())
             }
 
             if (networkStatus.value == ConnectivityObserver.Status.Available) {
-                val result = repository.makeCurrencyQuery()
+                val result = repository.fetchCurrencyList()
                 if (result.isSuccess) {
-                    repository.saveDataToLocalDB(result.getOrNull()!!)
+                    repository.saveCurrenciesList(result.getOrNull()!!, viewModelScope)
                 } else {
                     errorResult.postValue(result.exceptionOrNull())
                 }
