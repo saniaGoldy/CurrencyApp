@@ -27,14 +27,22 @@
             app:destination="@id/searchSettingsFragment"
             app:enterAnim="@android:anim/slide_in_left"
             app:exitAnim="@android:anim/slide_out_right" />
+        <action
+            android:id="@+id/action_navigation_news_to_webViewActivity"
+            app:destination="@id/webViewActivity" />
     </fragment>
     <fragment
         android:id="@+id/searchSettingsFragment"
         android:name="com.example.currencyapp.ui.news.searchSettingsFragment.SearchSettingsFragment"
         android:label="fragment_search_settings"
-        tools:layout="@layout/fragment_search_settings" >
-        <action
-            android:id="@+id/action_searchSettingsFragment_to_navigation_news"
-            app:destination="@id/navigation_news" />
-    </fragment>
+        tools:layout="@layout/fragment_search_settings" />
+    <activity
+        android:id="@+id/webViewActivity"
+        android:name="com.example.currencyapp.ui.news.webPageFragment.WebViewActivity"
+        android:label="activity_web_view"
+        tools:layout="@layout/activity_web_view" >
+        <argument
+            android:name="url"
+            app:argType="string" />
+    </activity>
 </navigation>

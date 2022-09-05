@@ -2,6 +2,7 @@ package com.example.currencyapp.ui.news.newsListFragment
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -38,19 +39,24 @@ class NewsListAdapter :
         )
 
     override fun onBindViewHolder(holder: NewsViewHolder, position: Int) =
-        holder.bind(newsList[position], position)
+        holder.bind(newsList[position])
 
     override fun getItemCount(): Int = newsList.size
 
     inner class NewsViewHolder(private val binding: NewsListItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: Data, position: Int) {
+        fun bind(item: Data) {
             with(binding) {
                 tvTitle.text = item.title
                 tvSource.text = item.source
                 tvTimeStamp.text = item.publishedAt
                 tvTags.text = item.tags.toString()
+                itemContainer.setOnClickListener {
+                    root.findNavController().navigate(
+                        NewsListFragmentDirections.actionNavigationNewsToWebViewActivity(item.url)
+                    )
+                }
             }
         }
     }
