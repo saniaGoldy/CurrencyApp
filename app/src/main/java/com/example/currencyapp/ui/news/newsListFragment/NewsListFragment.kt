@@ -13,6 +13,7 @@ import androidx.navigation.findNavController
 import com.example.currencyapp.R
 import com.example.currencyapp.TAG
 import com.example.currencyapp.databinding.FragmentNewsListBinding
+import com.example.currencyapp.domain.repository.MainRepository.DataState.*
 import com.example.currencyapp.domain.services.ConnectivityObserver
 import com.example.currencyapp.ui.news.NewsViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -53,33 +54,26 @@ class NewsListFragment : Fragment() {
     }
 
     private fun setupObservers() {
-        viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
-            binding.newsProgressBar.isVisible = isLoading
-        }
+        viewModel.newsDataState.observe(viewLifecycleOwner) { dataState ->
+            binding.newsProgressBar.isVisible = dataState is Loading
+            when (dataState) {
+                is Success -> {
+                    adapter.newsList = dataState.result
+                }
+                is Failure -> {
+                    Log.e(TAG, "NewsStateObserver Failure: ${dataState.errorInfo}")
 
-        viewModel.areNewsUpToDate.observe(viewLifecycleOwner) { upToDate ->
-            if (!upToDate)
-                viewModel.fetchNews()
-        }
-
-        viewModel.news.observe(viewLifecycleOwner) {
-            viewModel.updateLoadingStatus()
-
-            val dataList = it.getOrNull()
-            if (it.isSuccess && dataList != null)
-                adapter.newsList = dataList
-            else {
-                Log.e(TAG, "observer: $it")
-
-                Toast.makeText(
-                    this.requireContext(),
-                    if (viewModel.networkStatus.value == ConnectivityObserver.Status.Available) getString(
-                        R.string.standart_error_message
-                    ) else getString(
-                        R.string.no_internet_connection_error_message
-                    ),
-                    Toast.LENGTH_LONG
-                ).show()
+                    Toast.makeText(
+                        this.requireContext(),
+                        if (viewModel.networkStatus.value == ConnectivityObserver.Status.Available) getString(
+                            R.string.standart_error_message
+                        ) else getString(
+                            R.string.no_internet_connection_error_message
+                        ),
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+                else -> Log.d(TAG, "NewsStateObserver : $dataState")
             }
         }
     }

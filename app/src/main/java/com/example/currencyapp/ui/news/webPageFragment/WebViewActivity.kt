@@ -20,8 +20,9 @@ import com.example.currencyapp.R
 import com.example.currencyapp.databinding.ActivityWebViewBinding
 import com.example.currencyapp.domain.services.ConnectivityObserver
 import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class WebViewActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityWebViewBinding
@@ -30,7 +31,6 @@ class WebViewActivity : AppCompatActivity() {
     private var progress: Progress? = null
     private var isLoaded: Boolean = false
     private var doubleBackToExitPressedOnce = false
-    //private var webURL = "https://www.geeklabs.co.in/" // Change it with your URL
 
     private val args: WebViewActivityArgs by navArgs()
 
@@ -44,7 +44,7 @@ class WebViewActivity : AppCompatActivity() {
         with(binding) {
 
             viewModel.networkStatus.observe(this@WebViewActivity) {
-                if (it == ConnectivityObserver.Status.Available) {
+                if (it != ConnectivityObserver.Status.Available) {
                     showToast(getString(R.string.no_internet_connection_error_message))
                     infoTV.text = getString(R.string.no_internet_connection_error_message)
                     showNoNetSnackBar()

@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.currencyapp.domain.model.CurrencyFluctuation
 import com.example.currencyapp.domain.repository.MainRepository
-import com.example.currencyapp.domain.services.ConnectivityObserver
+import com.example.currencyapp.domain.repository.MainRepository.DataState
 import com.example.currencyapp.ui.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -19,30 +19,33 @@ class HomeViewModel @Inject constructor(
     context: Application
 ) : BaseViewModel(context) {
 
-    private val _currenciesList: MutableLiveData<List<CurrencyFluctuation>> = MutableLiveData()
-
-    val currenciesList: LiveData<List<CurrencyFluctuation>>
-        get() = _currenciesList
-
-    val errorResult = MutableLiveData<Throwable>()
+    private val _ratesDataState =
+        MutableLiveData<DataState<List<CurrencyFluctuation>>>(DataState.Default)
+    val ratesDataState: LiveData<DataState<List<CurrencyFluctuation>>>
+        get() = _ratesDataState
 
     init {
+        _ratesDataState.value = DataState.Loading
 
         viewModelScope.launch(Dispatchers.IO) {
-            launch {
-                _currenciesList.postValue(repository.fetchCurrenciesList())
+            repository.fetchCurrenciesList().let { dataState ->
+                if (dataState is DataState.Success)
+                    _ratesDataState.postValue(dataState)
             }
-
-            if (networkStatus.value == ConnectivityObserver.Status.Available) {
-                val result = repository.fetchCurrencyList()
-                if (result.isSuccess) {
-                    repository.saveCurrenciesList(result.getOrNull()!!, viewModelScope)
-                } else {
-                    errorResult.postValue(result.exceptionOrNull())
-                }
-            }
+            updateDataState()
         }
+    }
 
+    private suspend fun updateDataState() {
+        _ratesDataState.postValue(DataState.Loading)
+
+        val result = repository.loadCurrencyList()
+        if (result is DataState.Success) {
+            repository.saveCurrenciesList(result.result, viewModelScope)
+            _ratesDataState.postValue(result)
+        } else if (result is DataState.Failure) {
+            _ratesDataState.postValue(result)
+        }
     }
 
 }

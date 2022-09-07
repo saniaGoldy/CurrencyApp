@@ -13,6 +13,7 @@ import com.example.currencyapp.R
 import com.example.currencyapp.TAG
 import com.example.currencyapp.databinding.FragmentHomeBinding
 import com.example.currencyapp.domain.model.CurrencyFluctuation
+import com.example.currencyapp.domain.repository.MainRepository.DataState.*
 import com.example.currencyapp.domain.services.ConnectivityObserver
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -42,35 +43,38 @@ class HomeFragment : Fragment() {
 
         setupCurrenciesList()
 
-        binding.progressBar.isVisible = true
-
         setupObservers()
     }
 
     private fun setupObservers() {
-        viewModel.currenciesList.observe(viewLifecycleOwner) { currencies ->
-            binding.progressBar.isVisible = false
-            currenciesListAdapter.currenciesList = currencies
+
+        viewModel.ratesDataState.observe(viewLifecycleOwner){ dataState ->
+            binding.progressBar.isVisible = dataState is Loading
+            when(dataState){
+                is Success ->{
+                    currenciesListAdapter.currenciesList = dataState.result
+                }
+                is Failure -> {
+                    Log.e(TAG, "dataStateObserver Failure: ${dataState.errorInfo}")
+
+                    Toast.makeText(
+                        this.requireContext(),
+                        if (connectivityStatus == ConnectivityObserver.Status.Available) getString(R.string.standart_error_message) else getString(
+                            R.string.no_internet_connection_error_message
+                        ),
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+                else -> {}
+            }
         }
 
-        viewModel.errorResult.observe(viewLifecycleOwner) {
-            binding.progressBar.isVisible = false
-            Log.e(TAG, "observer: $it")
-
-            Toast.makeText(
-                this.requireContext(),
-                if (connectivityStatus == ConnectivityObserver.Status.Available) getString(R.string.standart_error_message) else getString(
-                    R.string.no_internet_connection_error_message
-                ),
-                Toast.LENGTH_LONG
-            ).show()
-        }
     }
 
     private fun setupCurrenciesList() {
         currenciesListAdapter =
             CurrenciesListAdapter(
-                object : CurrenciesListAdapter.ItemClickedAction{
+                object : CurrenciesListAdapter.ItemClickedAction {
                     override fun run(currencyFluctuation: CurrencyFluctuation) {
                         Log.d(TAG, "currenciesItemClicked: $currencyFluctuation")
                     }

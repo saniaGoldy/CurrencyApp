@@ -10,12 +10,10 @@ import com.example.currencyapp.data.remote.entities.news.Data
 import com.example.currencyapp.data.remote.entities.news.NewsApiRequestOptions
 import com.example.currencyapp.data.remote.entities.news.SearchSettings
 import com.example.currencyapp.domain.repository.MainRepository
-import com.example.currencyapp.domain.services.ConnectivityObserver
+import com.example.currencyapp.domain.repository.MainRepository.DataState
 import com.example.currencyapp.ui.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -28,40 +26,32 @@ class NewsViewModel @Inject constructor(
     private val _searchSettings = MutableLiveData<SearchSettings>()
     val searchSettings get() = _searchSettings
 
+    private val _newsDataState: MutableLiveData<DataState<List<Data>>> = MutableLiveData(DataState.Default)
+    val newsDataState: LiveData<DataState<List<Data>>>
+        get() = _newsDataState
+
     init {
         viewModelScope.launch(Dispatchers.IO) {
             Log.d(TAG, "loadSettings: start")
             _searchSettings.postValue(repository.loadSettings())
         }
+
+        fetchNews()
     }
 
-    private val _news = MutableLiveData<Result<List<Data>>>()
-
-    val news: LiveData<Result<List<Data>>>
-        get() = _news
-
-
-    private val _isLoading = MutableLiveData(false)
-    val isLoading: LiveData<Boolean>
-        get() = _isLoading
-
-    private val _areNewsUpToDate = MutableLiveData(false)
-    val areNewsUpToDate: LiveData<Boolean>
-        get() = _areNewsUpToDate
-
-    fun updateLoadingStatus() {
-        _isLoading.value = false
-        _areNewsUpToDate.value = true
-    }
-
-    fun fetchNews() {
-        if (networkStatus.value == ConnectivityObserver.Status.Available)
-            _isLoading.value = true
+    private fun fetchNews() {
+        Log.d(TAG, "fetchNews")
+        _newsDataState.value = DataState.Loading
 
         viewModelScope.launch(Dispatchers.IO) {
-            _news.postValue(repository.fetchNewsList(_searchSettings.value ?: SearchSettings()))
+            _newsDataState.postValue(
+                repository.fetchNewsList(
+                    _searchSettings.value ?: SearchSettings()
+                )
+            )
         }
     }
+
 
     fun setSearchSettings(
         keywords: String,
@@ -84,7 +74,10 @@ class NewsViewModel @Inject constructor(
 
         if (_searchSettings.value != settings) {
             _searchSettings.value = settings
-            _areNewsUpToDate.value = false
+
+            //load news with new settings
+            fetchNews()
+
             repository.saveSettings(settings, viewModelScope)
         }
     }

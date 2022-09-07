@@ -16,11 +16,12 @@ import com.example.currencyapp.dataStore
 import com.example.currencyapp.domain.model.Currencies
 import com.example.currencyapp.domain.model.CurrencyFluctuation
 import com.example.currencyapp.domain.repository.MainRepository
+import com.example.currencyapp.domain.repository.MainRepository.DataState
 import com.google.gson.Gson
-import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 import java.io.IOException
 import javax.inject.Inject
 
@@ -44,7 +45,7 @@ class MainRepositoryImpl @Inject constructor(
         }
 
 
-    override suspend fun fetchCurrencyList(): Result<List<CurrencyFluctuation>> {
+    override suspend fun loadCurrencyList(): DataState<List<CurrencyFluctuation>> {
         val response = currencyAPI.getCurrencyFluctuation(
             yesterdaysDate,
             currentDate,
@@ -61,13 +62,13 @@ class MainRepositoryImpl @Inject constructor(
                     )
                 }
 
-            Result.success(currencies)
+            DataState.Success(currencies)
         } else {
-            Result.failure(IOException(response.errorBody().toString()))
+            DataState.Failure(response.errorBody().toString())
         }
     }
 
-    override suspend fun fetchNewsList(settings: SearchSettings): Result<List<Data>> {
+    override suspend fun fetchNewsList(settings: SearchSettings): DataState<List<Data>> {
         val response = currencyAPI.getCurrencyNews(
             settings.tags,
             settings.keywords,
@@ -75,20 +76,16 @@ class MainRepositoryImpl @Inject constructor(
         )
 
         return if (response.isSuccessful) {
-            Result.success(response.body()!!.data)
+            DataState.Success(response.body()!!.data)
         } else {
-            Result.failure(IOException(response.errorBody().toString()))
+            DataState.Failure(response.errorBody().toString())
         }
     }
 
-    override suspend fun fetchCurrenciesList(): List<CurrencyFluctuation> {
-        return localDB
-            .currencyDao().getAll().also {
-                Log.d(
-                    TAG,
-                    "fetchCurrenciesList"
-                )
-            }
+    override suspend fun fetchCurrenciesList(): DataState<List<CurrencyFluctuation>> {
+        val currencies = localDB
+            .currencyDao().getAll()
+        return if (currencies.isEmpty()) DataState.Failure() else DataState.Success(currencies)
     }
 
 
@@ -112,7 +109,7 @@ class MainRepositoryImpl @Inject constructor(
     }
 
 
-    override fun saveSettings(settings: SearchSettings, scope:CoroutineScope) {
+    override fun saveSettings(settings: SearchSettings, scope: CoroutineScope) {
         Log.d(TAG, "saveSettings")
         scope.launch(Dispatchers.IO) {
             context.dataStore.edit {
