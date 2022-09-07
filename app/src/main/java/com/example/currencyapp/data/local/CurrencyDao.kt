@@ -1,22 +1,22 @@
 package com.example.currencyapp.data.local
 
 import androidx.room.*
-import com.example.currencyapp.domain.model.CurrencyFluctuation
+import com.example.currencyapp.data.local.entities.CurrencyDataEntity
 
 @Dao
 interface CurrencyDao {
-    @Query("SELECT * FROM currencyfluctuation")
-    suspend fun getAll(): List<CurrencyFluctuation>
+    @Query("SELECT * FROM currencydataentity")
+    suspend fun getAll(): List<CurrencyDataEntity>
 
-    @Query("SELECT * FROM currencyfluctuation WHERE iso4217Alpha LIKE :iso4217Alpha")
-    suspend fun findById(iso4217Alpha: String): CurrencyFluctuation
+    @Query("SELECT * FROM currencydataentity WHERE iso4217Alpha LIKE :iso4217Alpha")
+    suspend fun findById(iso4217Alpha: String): CurrencyDataEntity
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun insertAll(currenciesList: List<CurrencyFluctuation>)
+    fun insertAll(currenciesList: List<CurrencyDataEntity>)
 
     @Delete
-    fun delete(currencyFluctuation: CurrencyFluctuation)
+    fun delete(currencyData: CurrencyDataEntity)
 
     @Update
-    fun update(currenciesList: List<CurrencyFluctuation>)
+    fun update(currenciesList: List<CurrencyDataEntity>)
 }

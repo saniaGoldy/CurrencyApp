@@ -1,7 +1,7 @@
 package com.example.currencyapp.di
 
-import com.example.currencyapp.data.repository.MainRepositoryImpl
 import com.example.currencyapp.domain.repository.MainRepository
+import com.example.currencyapp.domain.repository.RepositoryUseCase
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -15,6 +15,6 @@ abstract class MainRepositoryModule {
     @Binds
     @Singleton
     abstract fun bindMyRepository(
-        myRepositoryImpl: MainRepositoryImpl
+        myRepositoryImpl: RepositoryUseCase
     ): MainRepository
 }

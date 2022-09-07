@@ -4,7 +4,7 @@ import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.example.currencyapp.domain.model.CurrencyFluctuation
+import com.example.currencyapp.domain.model.CurrencyData
 import com.example.currencyapp.domain.repository.MainRepository
 import com.example.currencyapp.domain.repository.MainRepository.DataState
 import com.example.currencyapp.ui.BaseViewModel
@@ -20,15 +20,17 @@ class HomeViewModel @Inject constructor(
 ) : BaseViewModel(context) {
 
     private val _ratesDataState =
-        MutableLiveData<DataState<List<CurrencyFluctuation>>>(DataState.Default)
-    val ratesDataState: LiveData<DataState<List<CurrencyFluctuation>>>
+        MutableLiveData<DataState<List<CurrencyData>>>(DataState.Default)
+    val ratesDataState: LiveData<DataState<List<CurrencyData>>>
         get() = _ratesDataState
 
     init {
         _ratesDataState.value = DataState.Loading
 
+        viewModelScope.launch { updateDataState() }
+
         viewModelScope.launch(Dispatchers.IO) {
-            repository.fetchCurrenciesList().let { dataState ->
+            repository.fetchCurrenciesList(this).let { dataState ->
                 if (dataState is DataState.Success)
                     _ratesDataState.postValue(dataState)
             }
@@ -39,13 +41,8 @@ class HomeViewModel @Inject constructor(
     private suspend fun updateDataState() {
         _ratesDataState.postValue(DataState.Loading)
 
-        val result = repository.loadCurrencyList()
-        if (result is DataState.Success) {
-            repository.saveCurrenciesList(result.result, viewModelScope)
-            _ratesDataState.postValue(result)
-        } else if (result is DataState.Failure) {
-            _ratesDataState.postValue(result)
-        }
-    }
+        val result = repository.fetchCurrenciesList(viewModelScope)
 
+        _ratesDataState.postValue(result)
+    }
 }

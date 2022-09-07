@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "67e5405fa2a6f11624224ebc3af96742",
+    "identityHash": "8882d5b931c6e78324c250ee31de2463",
     "entities": [
       {
-        "tableName": "CurrencyFluctuation",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`iso4217Alpha` TEXT NOT NULL, `rate` REAL NOT NULL, `rateDifference` REAL NOT NULL, PRIMARY KEY(`iso4217Alpha`))",
+        "tableName": "CurrencyDataEntity",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`iso4217Alpha` TEXT NOT NULL, `rate` REAL NOT NULL, `rateStory` TEXT NOT NULL, PRIMARY KEY(`iso4217Alpha`))",
         "fields": [
           {
             "fieldPath": "iso4217Alpha",
@@ -21,9 +21,9 @@
             "notNull": true
           },
           {
-            "fieldPath": "rateDifference",
-            "columnName": "rateDifference",
-            "affinity": "REAL",
+            "fieldPath": "rateStory",
+            "columnName": "rateStory",
+            "affinity": "TEXT",
             "notNull": true
           }
         ],
@@ -40,7 +40,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '67e5405fa2a6f11624224ebc3af96742')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '8882d5b931c6e78324c250ee31de2463')"
     ]
   }
 }

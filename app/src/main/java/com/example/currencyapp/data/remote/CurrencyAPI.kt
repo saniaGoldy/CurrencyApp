@@ -1,6 +1,7 @@
 package com.example.currencyapp.data.remote
 
 import com.example.currencyapp.data.remote.entities.currencyFluctuation.CurrenciesFluctuationsResponse
+import com.example.currencyapp.data.remote.entities.currencyRateStory.CurrenciesRateStory
 import com.example.currencyapp.data.remote.entities.news.NewsResponse
 import retrofit2.Response
 import retrofit2.http.GET
@@ -21,6 +22,14 @@ interface CurrencyAPI {
         @Query("base") base: String
     ): Response<CurrenciesFluctuationsResponse>
 
+    @Headers("apikey: VN1OrfB9k7ytPwwPR5rQzJmgJhxGBAM0")
+    @GET("/exchangerates_data/timeseries")
+    suspend fun getCurrencyRates(
+        @Query("start_date") startDate: String,
+        @Query("end_date") endDate: String,
+        @Query("base") base: String
+    ): Response<CurrenciesRateStory>
+
 
     /**
     @param [tags] Use this parameter to search for tags by which news are tagged.
@@ -36,4 +45,6 @@ interface CurrencyAPI {
         @Query("keywords") keywords: String,
         @Query("date") date: String
     ): Response<NewsResponse>
+
+
 }

@@ -12,7 +12,7 @@ import androidx.fragment.app.viewModels
 import com.example.currencyapp.R
 import com.example.currencyapp.TAG
 import com.example.currencyapp.databinding.FragmentHomeBinding
-import com.example.currencyapp.domain.model.CurrencyFluctuation
+import com.example.currencyapp.domain.model.CurrencyData
 import com.example.currencyapp.domain.repository.MainRepository.DataState.*
 import com.example.currencyapp.domain.services.ConnectivityObserver
 import dagger.hilt.android.AndroidEntryPoint
@@ -26,8 +26,6 @@ class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
-
-    private var connectivityStatus = ConnectivityObserver.Status.Available
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -48,10 +46,10 @@ class HomeFragment : Fragment() {
 
     private fun setupObservers() {
 
-        viewModel.ratesDataState.observe(viewLifecycleOwner){ dataState ->
+        viewModel.ratesDataState.observe(viewLifecycleOwner) { dataState ->
             binding.progressBar.isVisible = dataState is Loading
-            when(dataState){
-                is Success ->{
+            when (dataState) {
+                is Success -> {
                     currenciesListAdapter.currenciesList = dataState.result
                 }
                 is Failure -> {
@@ -59,7 +57,9 @@ class HomeFragment : Fragment() {
 
                     Toast.makeText(
                         this.requireContext(),
-                        if (connectivityStatus == ConnectivityObserver.Status.Available) getString(R.string.standart_error_message) else getString(
+                        if (viewModel.networkStatus.value == ConnectivityObserver.Status.Available) getString(
+                            R.string.standart_error_message
+                        ) else getString(
                             R.string.no_internet_connection_error_message
                         ),
                         Toast.LENGTH_LONG
@@ -75,8 +75,8 @@ class HomeFragment : Fragment() {
         currenciesListAdapter =
             CurrenciesListAdapter(
                 object : CurrenciesListAdapter.ItemClickedAction {
-                    override fun run(currencyFluctuation: CurrencyFluctuation) {
-                        Log.d(TAG, "currenciesItemClicked: $currencyFluctuation")
+                    override fun run(currencyData: CurrencyData) {
+                        Log.d(TAG, "currenciesItemClicked: $currencyData")
                     }
                 }
             )

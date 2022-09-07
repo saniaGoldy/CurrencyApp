@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.room.Room
 import com.example.currencyapp.data.local.LocalDB
 import com.example.currencyapp.data.remote.CurrencyAPI
+import com.example.currencyapp.data.repository.PreferencesRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -39,6 +40,12 @@ object AppModule {
             context.applicationContext,
             LocalDB::class.java,
             "currencyfluctuation"
-        ).build()
+        ).fallbackToDestructiveMigration().build()
+    }
+
+    @Provides
+    @Singleton
+    fun providePreferencesRepository(context: Application): PreferencesRepository {
+        return PreferencesRepository(context)
     }
 }
