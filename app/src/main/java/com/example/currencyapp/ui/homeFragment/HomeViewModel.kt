@@ -1,14 +1,17 @@
 package com.example.currencyapp.ui.homeFragment
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.example.currencyapp.TAG
 import com.example.currencyapp.domain.model.CurrencyData
 import com.example.currencyapp.domain.repository.MainRepository
 import com.example.currencyapp.domain.repository.MainRepository.DataState
 import com.example.currencyapp.ui.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -24,18 +27,15 @@ class HomeViewModel @Inject constructor(
     val ratesDataState: LiveData<DataState<List<CurrencyData>>>
         get() = _ratesDataState
 
+    private val exceptionHandler = CoroutineExceptionHandler { context, error ->
+        Log.d(TAG, error.toString())
+        _ratesDataState.postValue(DataState.Failure())
+    }
+
     init {
         _ratesDataState.value = DataState.Loading
 
-        viewModelScope.launch { updateDataState() }
-
-        viewModelScope.launch(Dispatchers.IO) {
-            repository.fetchCurrenciesList(this).let { dataState ->
-                if (dataState is DataState.Success)
-                    _ratesDataState.postValue(dataState)
-            }
-            updateDataState()
-        }
+        viewModelScope.launch(exceptionHandler) { updateDataState() }
     }
 
     private suspend fun updateDataState() {

@@ -1,4 +1,4 @@
-package com.example.currencyapp.ui.news.webPageFragment
+package com.example.currencyapp.ui.news.webPageActivity
 
 import android.app.Application
 import com.example.currencyapp.ui.BaseViewModel

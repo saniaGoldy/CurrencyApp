@@ -38,7 +38,7 @@
         tools:layout="@layout/fragment_search_settings" />
     <activity
         android:id="@+id/webViewActivity"
-        android:name="com.example.currencyapp.ui.news.webPageFragment.WebViewActivity"
+        android:name="com.example.currencyapp.ui.news.webPageActivity.WebViewActivity"
         android:label="activity_web_view"
         tools:layout="@layout/activity_web_view" >
         <argument

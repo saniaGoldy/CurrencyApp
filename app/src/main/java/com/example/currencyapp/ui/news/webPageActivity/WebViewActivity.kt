@@ -1,4 +1,4 @@
-package com.example.currencyapp.ui.news.webPageFragment
+package com.example.currencyapp.ui.news.webPageActivity
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -48,14 +48,11 @@ class WebViewActivity : AppCompatActivity() {
                     showToast(getString(R.string.no_internet_connection_error_message))
                     infoTV.text = getString(R.string.no_internet_connection_error_message)
                     showNoNetSnackBar()
+                }else if (!isLoaded){
+                    loadWebView()
                 }
             }
         }
-    }
-
-    override fun onResume() {
-        if (viewModel.networkStatus.value == ConnectivityObserver.Status.Available && !isLoaded) loadWebView()
-        super.onResume()
     }
 
     private fun loadWebView() = with(binding) {

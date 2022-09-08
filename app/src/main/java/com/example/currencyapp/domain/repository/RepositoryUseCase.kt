@@ -12,6 +12,7 @@ import com.example.currencyapp.data.repository.PreferencesRepository
 import com.example.currencyapp.data.repository.RemoteRepository
 import com.example.currencyapp.domain.model.CurrencyData
 import com.example.currencyapp.domain.repository.MainRepository.DataState
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import javax.inject.Inject
 

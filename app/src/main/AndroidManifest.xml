@@ -18,7 +18,7 @@
         android:theme="@style/Theme.CurrencyApp"
         tools:targetApi="31">
         <activity
-            android:name=".ui.news.webPageFragment.WebViewActivity"
+            android:name=".ui.news.webPageActivity.WebViewActivity"
             android:exported="false" />
         <activity
             android:name=".ui.mainActivity.MainActivity"
