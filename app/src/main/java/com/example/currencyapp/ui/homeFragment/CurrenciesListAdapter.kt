@@ -69,10 +69,10 @@ class CurrenciesListAdapter(val onListItemClickedActionCallback: ItemClickedActi
             val rateDiff = item.getRateDifference()
             val rateDiffText = String.format(ROUNDING_FORMAT, rateDiff)
 
-            if (rateDiff >= 0){
+            if (rateDiff >= 0) {
                 tvDifference.text = "+$rateDiffText"
                 indicatorImage.setImageResource(R.drawable.increase)
-            }else{
+            } else {
                 R.drawable.decrease
             }
 

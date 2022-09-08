@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.SearchView
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -13,6 +14,7 @@ import com.example.currencyapp.R
 import com.example.currencyapp.TAG
 import com.example.currencyapp.databinding.FragmentHomeBinding
 import com.example.currencyapp.domain.model.CurrencyData
+import com.example.currencyapp.domain.repository.MainRepository
 import com.example.currencyapp.domain.repository.MainRepository.DataState.*
 import com.example.currencyapp.domain.services.ConnectivityObserver
 import dagger.hilt.android.AndroidEntryPoint
@@ -41,7 +43,34 @@ class HomeFragment : Fragment() {
 
         setupCurrenciesList()
 
+        with(binding.searchView) {
+            setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(query: String?): Boolean {
+                    return false
+                }
+
+                override fun onQueryTextChange(newText: String?): Boolean {
+                    filter(newText)
+                    return true
+                }
+
+            })
+        }
+
         setupObservers()
+    }
+
+    fun filter(keyword: String?) {
+        val cashedListState = viewModel.ratesDataState.value
+
+        if(cashedListState is Success){
+            currenciesListAdapter.currenciesList = if (!keyword.isNullOrEmpty() )
+                cashedListState.result.filter {
+                    it.iso4217Alpha.contains(keyword, true) || it.fullName.contains(keyword, true)
+                }
+            else
+                cashedListState.result
+        }
     }
 
     private fun setupObservers() {
