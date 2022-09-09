@@ -7,12 +7,15 @@
 
     <fragment
         android:id="@+id/navigation_currencies"
-        android:name="com.example.currencyapp.ui.homeFragment.HomeFragment"
+        android:name="com.example.currencyapp.ui.ratesList.homeFragment.HomeFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" >
         <action
             android:id="@+id/action_homeFragment_to_detailsFragment"
             app:destination="@id/navigation_news" />
+        <action
+            android:id="@+id/action_navigation_currencies_to_currencyInfoFragment"
+            app:destination="@id/currencyInfoFragment" />
     </fragment>
     <fragment
         android:id="@+id/navigation_news"
@@ -45,4 +48,13 @@
             android:name="url"
             app:argType="string" />
     </activity>
+    <fragment
+        android:id="@+id/currencyInfoFragment"
+        android:name="com.example.currencyapp.ui.ratesList.currencyInfoFragment.CurrencyInfoFragment"
+        android:label="fragment_currency_info"
+        tools:layout="@layout/fragment_currency_info" >
+        <argument
+            android:name="currencyCode"
+            app:argType="string" />
+    </fragment>
 </navigation>

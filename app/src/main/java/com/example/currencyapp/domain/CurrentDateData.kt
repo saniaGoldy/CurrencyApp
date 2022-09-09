@@ -1,4 +1,4 @@
-package com.example.currencyapp.data.repository
+package com.example.currencyapp.domain
 
 import android.annotation.SuppressLint
 import android.icu.text.SimpleDateFormat
@@ -24,4 +24,15 @@ object CurrentDateData {
             val calendar = Calendar.getInstance().apply { add(Calendar.DATE, -OBSERVED_TIME_GAP) }
             return dataFormat.format(calendar.time)
         }
+
+
+    /**
+     * @param date in format "yyyy-MM-dd"
+     * @return date in format "dd.MM"
+     */
+    fun formatToSimpleDate(date: String): String {
+        date.split('-').apply {
+            return "${this[2]}.${this[1]}"
+        }
+    }
 }

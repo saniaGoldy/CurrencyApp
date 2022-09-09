@@ -1,4 +1,4 @@
-package com.example.currencyapp.ui.homeFragment
+package com.example.currencyapp.ui.ratesList.homeFragment
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
@@ -73,6 +73,7 @@ class CurrenciesListAdapter(val onListItemClickedActionCallback: ItemClickedActi
                 tvDifference.text = "+$rateDiffText"
                 indicatorImage.setImageResource(R.drawable.increase)
             } else {
+                tvDifference.text = rateDiffText
                 R.drawable.decrease
             }
 

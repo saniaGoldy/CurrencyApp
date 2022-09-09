@@ -7,6 +7,7 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import com.example.currencyapp.TAG
 import com.example.currencyapp.data.remote.entities.news.SearchSettings
 import com.example.currencyapp.dataStore
+import com.example.currencyapp.domain.CurrentDateData
 import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

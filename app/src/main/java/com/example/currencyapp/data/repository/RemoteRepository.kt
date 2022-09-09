@@ -5,12 +5,12 @@ import com.example.currencyapp.TAG
 import com.example.currencyapp.data.remote.CurrencyAPI
 import com.example.currencyapp.data.remote.entities.news.Data
 import com.example.currencyapp.data.remote.entities.news.SearchSettings
+import com.example.currencyapp.domain.CurrentDateData
 import com.example.currencyapp.domain.model.Currencies
 import com.example.currencyapp.domain.model.CurrencyData
 import com.example.currencyapp.domain.repository.MainRepository.DataState
-import javax.inject.Inject
 
-class RemoteRepository (
+class RemoteRepository(
     private val currencyAPI: CurrencyAPI,
 ) {
 
@@ -38,13 +38,11 @@ class RemoteRepository (
 
                 rates.forEach { date ->
                     date.second[currencyData.iso4217Alpha]?.let { rate ->
-                        dateToRateMap[date.first] = rate
+                        dateToRateMap[date.first] = 1 / rate
                     }
                 }
 
                 currencyData.rateStory = dateToRateMap
-                /*currencyData.rateDifference =
-                    dateToRateMap.toList().let { it[0].second - it[1].second }*/
             }
 
             Log.d(TAG, "loadCurrencyList: $currenciesData")

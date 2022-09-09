@@ -1,4 +1,4 @@
-package com.example.currencyapp.ui.homeFragment
+package com.example.currencyapp.ui.ratesList.homeFragment
 
 import android.os.Bundle
 import android.util.Log
@@ -10,11 +10,11 @@ import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.findNavController
 import com.example.currencyapp.R
 import com.example.currencyapp.TAG
 import com.example.currencyapp.databinding.FragmentHomeBinding
 import com.example.currencyapp.domain.model.CurrencyData
-import com.example.currencyapp.domain.repository.MainRepository
 import com.example.currencyapp.domain.repository.MainRepository.DataState.*
 import com.example.currencyapp.domain.services.ConnectivityObserver
 import dagger.hilt.android.AndroidEntryPoint
@@ -63,8 +63,8 @@ class HomeFragment : Fragment() {
     fun filter(keyword: String?) {
         val cashedListState = viewModel.ratesDataState.value
 
-        if(cashedListState is Success){
-            currenciesListAdapter.currenciesList = if (!keyword.isNullOrEmpty() )
+        if (cashedListState is Success) {
+            currenciesListAdapter.currenciesList = if (!keyword.isNullOrEmpty())
                 cashedListState.result.filter {
                     it.iso4217Alpha.contains(keyword, true) || it.fullName.contains(keyword, true)
                 }
@@ -105,7 +105,11 @@ class HomeFragment : Fragment() {
             CurrenciesListAdapter(
                 object : CurrenciesListAdapter.ItemClickedAction {
                     override fun run(currencyData: CurrencyData) {
-                        Log.d(TAG, "currenciesItemClicked: $currencyData")
+                        binding.root.findNavController().navigate(
+                            HomeFragmentDirections.actionNavigationCurrenciesToCurrencyInfoFragment(
+                                currencyData.iso4217Alpha
+                            )
+                        )
                     }
                 }
             )

@@ -1,4 +1,4 @@
-package com.example.currencyapp.ui.homeFragment
+package com.example.currencyapp.ui.ratesList.homeFragment
 
 import android.app.Application
 import android.util.Log
@@ -12,7 +12,6 @@ import com.example.currencyapp.domain.repository.MainRepository.DataState
 import com.example.currencyapp.ui.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
