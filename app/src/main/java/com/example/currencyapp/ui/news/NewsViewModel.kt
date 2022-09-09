@@ -14,7 +14,6 @@ import com.example.currencyapp.domain.repository.MainRepository.DataState
 import com.example.currencyapp.ui.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -27,7 +26,8 @@ class NewsViewModel @Inject constructor(
     private val _searchSettings = MutableLiveData<SearchSettings>()
     val searchSettings get() = _searchSettings
 
-    private val _newsDataState: MutableLiveData<DataState<List<Data>>> = MutableLiveData(DataState.Default)
+    private val _newsDataState: MutableLiveData<DataState<List<Data>>> =
+        MutableLiveData(DataState.Default)
     val newsDataState: LiveData<DataState<List<Data>>>
         get() = _newsDataState
 
@@ -49,13 +49,13 @@ class NewsViewModel @Inject constructor(
         Log.d(TAG, "fetchNews")
         _newsDataState.value = DataState.Loading
 
-            viewModelScope.launch(exceptionHandler) {
-                _newsDataState.postValue(
-                    repository.fetchNewsList(
-                        _searchSettings.value ?: SearchSettings()
-                    )
+        viewModelScope.launch(exceptionHandler) {
+            _newsDataState.postValue(
+                repository.fetchNewsList(
+                    _searchSettings.value ?: SearchSettings()
                 )
-            }
+            )
+        }
     }
 
 

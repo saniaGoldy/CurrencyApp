@@ -1,4 +1,4 @@
-package com.example.currencyapp.ui.currencyInfoFragment
+package com.example.currencyapp.ui.ratesList.currencyInfoFragment
 
 import android.app.Application
 import com.example.currencyapp.domain.repository.MainRepository
@@ -10,6 +10,4 @@ import javax.inject.Inject
 class CurrencyInfoViewModel @Inject constructor(
     private val repository: MainRepository,
     context: Application
-) : BaseViewModel(context) {
-
-}
+) : BaseViewModel(context)

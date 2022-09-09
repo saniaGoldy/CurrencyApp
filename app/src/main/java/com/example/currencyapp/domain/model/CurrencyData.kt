@@ -1,6 +1,5 @@
 package com.example.currencyapp.domain.model
 
-import com.example.currencyapp.data.repository.CurrentDateData
 
 data class CurrencyData(
     val iso4217Alpha: String,
@@ -11,11 +10,12 @@ data class CurrencyData(
     val fullName: String = Currencies.valueOf(iso4217Alpha).fullName
 
     fun getRateDifference(): Double {
-        val startRate = rateStory?.get(CurrentDateData.yesterdaysDate)
-        val endRate = rateStory?.get(CurrentDateData.currentDate)
+        val rates = rateStory?.values?.toList()
+        val startRate = rates?.get(0)
+        val endRate = rates?.get(1)
         return if (startRate != null && endRate != null) {
-            val diff = endRate - startRate
-            diff
+            endRate - startRate
         } else 0.0
     }
+
 }

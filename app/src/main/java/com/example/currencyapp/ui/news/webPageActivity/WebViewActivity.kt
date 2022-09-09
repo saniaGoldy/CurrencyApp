@@ -48,7 +48,7 @@ class WebViewActivity : AppCompatActivity() {
                     showToast(getString(R.string.no_internet_connection_error_message))
                     infoTV.text = getString(R.string.no_internet_connection_error_message)
                     showNoNetSnackBar()
-                }else if (!isLoaded){
+                } else if (!isLoaded) {
                     loadWebView()
                 }
             }
