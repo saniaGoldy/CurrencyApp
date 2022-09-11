@@ -40,9 +40,8 @@ class NewsViewModel @Inject constructor(
         viewModelScope.launch(exceptionHandler) {
             Log.d(TAG, "loadSettings: start")
             _searchSettings.postValue(repository.loadSettings())
+            fetchNews()
         }
-
-        fetchNews()
     }
 
     private fun fetchNews() {

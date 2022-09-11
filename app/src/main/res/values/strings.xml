@@ -31,4 +31,5 @@
     <string name="please_wait">Please wait</string>
     <string name="currency_info">currency info</string>
     <string name="rates_chart">rates chart</string>
+    <string name="rates_title_default">Buy currencies with UAH</string>
 </resources>

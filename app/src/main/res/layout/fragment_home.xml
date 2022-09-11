@@ -7,22 +7,52 @@
     tools:context=".ui.ratesList.homeFragment.HomeFragment">
 
 
-    <LinearLayout
-        android:id="@+id/linearLayout2"
+    <SearchView
+        android:id="@+id/searchView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@+id/rvCurrenciesList"
+        android:iconifiedByDefault="false"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/foldableContainer">
+
+    </SearchView>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/foldableContainer"
+        android:layout_width="0dp"
+        android:layout_height="280dp"
+        android:background="@drawable/stockmarket"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <SearchView
-            android:id="@+id/searchView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:iconifiedByDefault="false"/>
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/tvRatesTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="13dp"
+        android:text="@string/rates_title_default"
+        android:textAlignment="center"
+        android:textSize="30sp"
+        app:layout_constraintEnd_toStartOf="@+id/ratesSettingsImageButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/foldableContainer" />
+
+    <ImageButton
+        android:id="@+id/ratesSettingsImageButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@android:color/transparent"
+        android:minHeight="48dp"
+        android:src="@drawable/ic_baseline_settings_24"
+        app:layout_constraintEnd_toEndOf="@+id/foldableContainer"
+        app:layout_constraintTop_toTopOf="@+id/tvRatesTitle"
+        tools:ignore="SpeakableTextPresentCheck" />
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvCurrenciesList"
@@ -33,7 +63,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
+        app:layout_constraintTop_toBottomOf="@+id/searchView"
         tools:listitem="@layout/currencies_list_item" />
 
     <ProgressBar
