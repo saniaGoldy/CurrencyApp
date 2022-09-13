@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.ratesList.homeFragment.HomeFragment">
+    tools:context=".ui.ratesList.ratesListFragment.RatesListFragment">
 
 
     <SearchView
@@ -35,7 +35,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="13dp"
-        android:text="@string/rates_title_default"
+        android:text="@string/currency_rates_title"
         android:textAlignment="center"
         android:textSize="30sp"
         app:layout_constraintEnd_toStartOf="@+id/ratesSettingsImageButton"

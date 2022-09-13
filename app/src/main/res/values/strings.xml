@@ -13,8 +13,6 @@
     <string name="title">Title</string>
     <string name="title_currencies">rates</string>
     <string name="title_news">Financial News</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="keywords_input_hint">new bitcoin news 2021,money,-etherium</string>
     <string name="tags_input_hint">coma separated tags(Ex:Ukraine,UAH,money)</string>
     <string name="from_date_input_hint">FromDate(YYYY-MM-DD)</string>
@@ -31,5 +29,10 @@
     <string name="please_wait">Please wait</string>
     <string name="currency_info">currency info</string>
     <string name="rates_chart">rates chart</string>
-    <string name="rates_title_default">Buy currencies with UAH</string>
+    <string name="base_currency_spinner">base currency spinner</string>
+    <string name="rate_difference_precision_spinner">rate difference spinner</string>
+    <string name="base_currency_settings_title">Base currency :</string>
+    <string name="daily_rate_difference_precision">Daily rate difference precision:</string>
+    <string name="rates_list_settings_title">Rates list settings</string>
+    <string name="currency_rates_title">Currency rates for %1$s</string>
 </resources>

@@ -18,7 +18,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.navArgs
 import com.example.currencyapp.R
 import com.example.currencyapp.databinding.ActivityWebViewBinding
-import com.example.currencyapp.domain.services.ConnectivityObserver
+import com.example.currencyapp.domain.services.ConnectivityObserver.Status.*
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -43,12 +43,12 @@ class WebViewActivity : AppCompatActivity() {
 
         with(binding) {
 
-            viewModel.networkStatus.observe(this@WebViewActivity) {
-                if (it != ConnectivityObserver.Status.Available) {
+            viewModel.networkStatus.observe(this@WebViewActivity) { connectivityStatus ->
+                if (connectivityStatus == Lost) {
                     showToast(getString(R.string.no_internet_connection_error_message))
                     infoTV.text = getString(R.string.no_internet_connection_error_message)
                     showNoNetSnackBar()
-                } else if (!isLoaded) {
+                } else if (!isLoaded && connectivityStatus == Available) {
                     loadWebView()
                 }
             }

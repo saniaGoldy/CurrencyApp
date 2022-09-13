@@ -1,4 +1,4 @@
-package com.example.currencyapp.ui.ratesList.homeFragment
+package com.example.currencyapp.ui.ratesList.ratesListFragment
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
@@ -67,6 +67,7 @@ class CurrenciesListAdapter(val onListItemClickedActionCallback: ItemClickedActi
             tvRate.text = String.format(ROUNDING_FORMAT, item.rate)
 
             val rateDiff = item.getRateDifference()
+            //TODO: get format for rounding from settings
             val rateDiffText = String.format(ROUNDING_FORMAT, rateDiff)
 
             if (rateDiff >= 0) {

@@ -12,7 +12,10 @@ import com.example.currencyapp.data.repository.PreferencesRepository
 import com.example.currencyapp.data.repository.RemoteRepository
 import com.example.currencyapp.domain.model.CurrencyData
 import com.example.currencyapp.domain.repository.MainRepository.DataState
+import com.example.currencyapp.ui.ratesList.model.RatesListSettings
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class RepositoryUseCase @Inject constructor(
@@ -29,7 +32,10 @@ class RepositoryUseCase @Inject constructor(
         return remoteRepository.fetchNewsList(settings)
     }
 
-    override suspend fun fetchCurrenciesList(scope: CoroutineScope): DataState<List<CurrencyData>> {
+    override suspend fun fetchCurrenciesList(
+        scope: CoroutineScope,
+        baseCurrency: String
+    ): DataState<List<CurrencyData>> {
         return if (preferencesRepository.isRatesUpToDate().also {
                 Log.d(
                     TAG,
@@ -38,25 +44,42 @@ class RepositoryUseCase @Inject constructor(
             }) {
             localDBRepository.fetchCurrenciesList()
         } else {
-            preferencesRepository.saveRatesUpdateDate()
-
-            val currencyData = remoteRepository.loadCurrencyList().apply {
-                if (this is DataState.Success)
-                    localDBRepository.saveCurrenciesList(
-                        this.result,
-                        scope
-                    )
-            }
-
-            currencyData
+            updateRatesDataState(baseCurrency, scope)
         }
+    }
+
+    private suspend fun updateRatesDataState(
+        baseCurrency: String,
+        scope: CoroutineScope
+    ): DataState<List<CurrencyData>> {
+        preferencesRepository.saveRatesUpdateDate()
+
+        val currencyData = remoteRepository.loadCurrencyList(baseCurrency).apply {
+            if (this is DataState.Success)
+                localDBRepository.saveCurrenciesList(
+                    this.result,
+                    scope
+                )
+        }
+
+        return currencyData
     }
 
     override fun saveCurrenciesList(currencies: List<CurrencyData>, scope: CoroutineScope) =
         localDBRepository.saveCurrenciesList(currencies, scope)
 
-    override suspend fun loadSettings(): SearchSettings = preferencesRepository.loadSettings()
+    override suspend fun loadNewsSettings(): SearchSettings =
+        preferencesRepository.loadNewsSettings()
 
-    override fun saveSettings(settings: SearchSettings, scope: CoroutineScope) =
-        preferencesRepository.saveSettings(settings, scope)
+    override fun saveNewsSettings(settings: SearchSettings, scope: CoroutineScope) =
+        preferencesRepository.saveNewsSettings(settings, scope)
+
+    override fun saveRatesListSettings(settings: RatesListSettings, scope: CoroutineScope) {
+        scope.launch(Dispatchers.IO) {
+            preferencesRepository.saveRatesListSettings(settings, scope)
+        }
+    }
+
+    override suspend fun loadRatesListSettings(): RatesListSettings =
+        preferencesRepository.loadRatesListSettings()
 }

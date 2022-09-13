@@ -38,8 +38,9 @@ class NewsViewModel @Inject constructor(
 
     init {
         viewModelScope.launch(exceptionHandler) {
-            Log.d(TAG, "loadSettings: start")
-            _searchSettings.postValue(repository.loadSettings())
+            launch { Log.d(TAG, "loadNewsSettings: start")
+                _searchSettings.postValue(repository.loadNewsSettings()) }.join()
+
             fetchNews()
         }
     }
@@ -83,7 +84,7 @@ class NewsViewModel @Inject constructor(
             //load news with new settings
             fetchNews()
 
-            repository.saveSettings(settings, viewModelScope)
+            repository.saveNewsSettings(settings, viewModelScope)
         }
     }
 }

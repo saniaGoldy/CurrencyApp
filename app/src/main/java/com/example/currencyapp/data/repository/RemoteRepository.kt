@@ -14,9 +14,7 @@ class RemoteRepository(
     private val currencyAPI: CurrencyAPI,
 ) {
 
-    private val baseCurrency: String = Currencies.UAH.name
-
-    suspend fun loadCurrencyList(): DataState<List<CurrencyData>> {
+    suspend fun loadCurrencyList(baseCurrency: String): DataState<List<CurrencyData>> {
         val response = currencyAPI.getCurrencyRates(
             CurrentDateData.startDate,
             CurrentDateData.currentDate,

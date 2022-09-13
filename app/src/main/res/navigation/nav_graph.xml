@@ -7,9 +7,9 @@
 
     <fragment
         android:id="@+id/navigation_currencies"
-        android:name="com.example.currencyapp.ui.ratesList.homeFragment.HomeFragment"
+        android:name="com.example.currencyapp.ui.ratesList.ratesListFragment.RatesListFragment"
         android:label="fragment_home"
-        tools:layout="@layout/fragment_home" >
+        tools:layout="@layout/fragment_rates_list" >
         <action
             android:id="@+id/action_homeFragment_to_detailsFragment"
             app:destination="@id/navigation_news" />

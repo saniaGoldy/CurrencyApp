@@ -7,19 +7,17 @@ import android.view.ViewGroup
 import androidx.compose.ui.Modifier
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.example.currencyapp.databinding.FragmentCurrencyInfoBinding
-import com.example.currencyapp.domain.repository.MainRepository
 import com.example.currencyapp.domain.repository.MainRepository.DataState.Success
-import com.example.currencyapp.ui.ratesList.homeFragment.HomeViewModel
+import com.example.currencyapp.ui.ratesList.RatesListViewModel
 import com.google.accompanist.appcompattheme.AppCompatTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class CurrencyInfoFragment : Fragment() {
 
-    private val viewModel: HomeViewModel by activityViewModels()
+    private val viewModel: RatesListViewModel by activityViewModels()
 
     private var _binding: FragmentCurrencyInfoBinding? = null
     private val binding get() = _binding!!

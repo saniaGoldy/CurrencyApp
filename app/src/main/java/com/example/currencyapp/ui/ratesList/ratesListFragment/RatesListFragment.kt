@@ -1,4 +1,4 @@
-package com.example.currencyapp.ui.ratesList.homeFragment
+package com.example.currencyapp.ui.ratesList.ratesListFragment
 
 import android.os.Bundle
 import android.util.Log
@@ -13,20 +13,23 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import com.example.currencyapp.R
 import com.example.currencyapp.TAG
-import com.example.currencyapp.databinding.FragmentHomeBinding
+import com.example.currencyapp.databinding.FragmentRatesListBinding
 import com.example.currencyapp.domain.model.CurrencyData
 import com.example.currencyapp.domain.repository.MainRepository.DataState.*
 import com.example.currencyapp.domain.services.ConnectivityObserver
+import com.example.currencyapp.ui.ratesList.RatesListViewModel
+import com.example.currencyapp.ui.ratesList.model.RatesListSettings
+import com.example.currencyapp.ui.ratesList.ratesListSettingsDialog.RatesSettingsDialog
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class HomeFragment : Fragment() {
+class RatesListFragment : Fragment() {
 
     private lateinit var currenciesListAdapter: CurrenciesListAdapter
 
-    private val viewModel: HomeViewModel by viewModels()
+    private val viewModel: RatesListViewModel by viewModels()
 
-    private var _binding: FragmentHomeBinding? = null
+    private var _binding: FragmentRatesListBinding? = null
     private val binding get() = _binding!!
 
     override fun onCreateView(
@@ -34,7 +37,8 @@ class HomeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentHomeBinding.inflate(inflater, container, false)
+        _binding = FragmentRatesListBinding.inflate(inflater, container, false)
+
         return binding.root
     }
 
@@ -43,8 +47,8 @@ class HomeFragment : Fragment() {
 
         setupCurrenciesList()
 
-        with(binding.searchView) {
-            setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+        with(binding) {
+            searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
                 override fun onQueryTextSubmit(query: String?): Boolean {
                     return false
                 }
@@ -55,6 +59,19 @@ class HomeFragment : Fragment() {
                 }
 
             })
+
+            ratesSettingsImageButton.setOnClickListener {
+                viewModel.ratesSettings.value?.let { ratesListSettings ->
+                    RatesSettingsDialog.newInstance(
+                        object : RatesSettingsDialog.SettingsDataProcessor {
+                            override fun process(settings: RatesListSettings) {
+                                viewModel.updateRatesListSettings(settings)
+                            }
+                        },
+                        viewModel.ratesSettings.value!!
+                    ).show(childFragmentManager, RatesSettingsDialog.TAG)
+                }
+            }
         }
 
         setupObservers()
@@ -98,6 +115,10 @@ class HomeFragment : Fragment() {
             }
         }
 
+        viewModel.ratesSettings.observe(viewLifecycleOwner) { settings ->
+            binding.tvRatesTitle.text =
+                getString(R.string.currency_rates_title, settings.currencyCode)
+        }
     }
 
     private fun setupCurrenciesList() {
@@ -106,7 +127,7 @@ class HomeFragment : Fragment() {
                 object : CurrenciesListAdapter.ItemClickedAction {
                     override fun run(currencyData: CurrencyData) {
                         binding.root.findNavController().navigate(
-                            HomeFragmentDirections.actionNavigationCurrenciesToCurrencyInfoFragment(
+                            RatesListFragmentDirections.actionNavigationCurrenciesToCurrencyInfoFragment(
                                 currencyData.iso4217Alpha
                             )
                         )
@@ -116,4 +137,5 @@ class HomeFragment : Fragment() {
 
         binding.rvCurrenciesList.adapter = currenciesListAdapter
     }
+
 }
