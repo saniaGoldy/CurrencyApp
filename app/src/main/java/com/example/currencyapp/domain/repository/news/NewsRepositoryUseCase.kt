@@ -23,7 +23,7 @@ class NewsRepositoryUseCase @Inject constructor(
     override fun loadNewsSettings(): Flow<SearchSettings> =
         preferencesRepository.loadNewsSettings()
 
-    override fun saveNewsSettings(settings: SearchSettings, scope: CoroutineScope) {
-        scope.launch(Dispatchers.IO) { preferencesRepository.saveNewsSettings(settings) }
+    override suspend fun saveNewsSettings(settings: SearchSettings) {
+        preferencesRepository.saveNewsSettings(settings)
     }
 }

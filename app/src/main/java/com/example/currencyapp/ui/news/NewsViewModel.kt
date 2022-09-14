@@ -15,7 +15,9 @@ import com.example.currencyapp.domain.repository.news.NewsRepository
 import com.example.currencyapp.ui.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -70,7 +72,7 @@ class NewsViewModel @Inject constructor(
         settings.timeGapMode = timeGapMode
 
         if (searchSettings.value != settings) {
-            repository.saveNewsSettings(settings, viewModelScope)
+            viewModelScope.launch { repository.saveNewsSettings(settings)}
         }
     }
 }

@@ -8,9 +8,9 @@ import kotlinx.coroutines.flow.Flow
 
 interface RatesRepository {
 
-    suspend fun fetchCurrenciesList(scope: CoroutineScope): DataState<List<CurrencyData>>
+    suspend fun fetchCurrenciesList(): DataState<List<CurrencyData>>
 
-    fun saveRatesListSettings(settings: RatesListSettings, scope: CoroutineScope)
+    suspend fun saveRatesListSettings(settings: RatesListSettings)
 
     fun loadRatesListSettings(): Flow<RatesListSettings>
 

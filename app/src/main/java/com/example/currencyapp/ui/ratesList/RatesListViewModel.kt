@@ -41,14 +41,16 @@ class RatesListViewModel @Inject constructor(
         viewModelScope.launch(exceptionHandler) {
             _ratesDataState.postValue(DataState.Loading)
 
-            val result = repository.fetchCurrenciesList(viewModelScope)
+            val result = repository.fetchCurrenciesList()
 
             _ratesDataState.postValue(result)
         }
     }
 
     fun updateRatesListSettings(settings: RatesListSettings) {
-        Log.d(TAG, "updateRatesListSettings: $settings")
-        repository.saveRatesListSettings(settings, viewModelScope)
+        viewModelScope.launch {
+            Log.d(TAG, "updateRatesListSettings: $settings")
+            repository.saveRatesListSettings(settings)
+        }
     }
 }

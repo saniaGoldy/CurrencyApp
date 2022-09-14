@@ -12,5 +12,5 @@ interface NewsRepository {
 
     fun loadNewsSettings(): Flow<SearchSettings>
 
-    fun saveNewsSettings(settings: SearchSettings, scope: CoroutineScope)
+    suspend fun saveNewsSettings(settings: SearchSettings)
 }
