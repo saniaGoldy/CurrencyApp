@@ -8,7 +8,7 @@ import kotlinx.coroutines.Job
 interface LocalDBRepository {
     suspend fun fetchCurrenciesList(): DataState<List<CurrencyData>>
 
-    fun saveCurrenciesList(currencies: List<CurrencyData>, scope: CoroutineScope): Job
+    suspend fun saveCurrenciesList(currencies: List<CurrencyData>)
 
-    fun updateCurrenciesList(currencies: List<CurrencyData>, scope: CoroutineScope): Job
+    suspend fun updateCurrenciesList(currencies: List<CurrencyData>)
 }

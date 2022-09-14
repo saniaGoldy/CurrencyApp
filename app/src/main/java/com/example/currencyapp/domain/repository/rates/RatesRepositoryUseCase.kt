@@ -11,9 +11,11 @@ import com.example.currencyapp.domain.model.CurrencyData
 import com.example.currencyapp.domain.model.DataState
 import com.example.currencyapp.ui.ratesList.model.RatesListSettings
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class RatesRepositoryUseCase @Inject constructor(
@@ -51,25 +53,24 @@ class RatesRepositoryUseCase @Inject constructor(
             }) {
 
             baseCurrencyChanged = false
-            fetchRatesFromRemote(baseCurrency).apply {
+            fetchRatesFromRemote(baseCurrency).let { dataState ->
 
-                if (this is DataState.Success) {
-                    return when (isUpToDate) {
-                        //It's null when app is started first time on the device
-                        null -> {
-                            localDBRepository.saveCurrenciesList(
-                                this.result,
-                                scope
-                            )
-                        }
-                        else -> {
-                            localDBRepository.updateCurrenciesList(
-                                this.result,
-                                scope
-                            )
+                if (dataState is DataState.Success) {
+                    return scope.launch {
+                        when (isUpToDate) {
+                            //It's null when app is started first time on the device
+                            null -> {
+                                localDBRepository.saveCurrenciesList(
+                                    dataState.result
+                                )
+                            }
+                            else -> {
+                                localDBRepository.updateCurrenciesList(
+                                    dataState.result
+                                )
+                            }
                         }
                     }
-
                 }
             }
         }
@@ -87,7 +88,7 @@ class RatesRepositoryUseCase @Inject constructor(
         baseCurrencyChanged = settings.currencyCode != baseCurrency
         Log.d(TAG, "saveRatesListSettings baseCurrencyChanged: $baseCurrencyChanged")
 
-        preferencesRepository.saveRatesListSettings(settings, scope)
+        scope.launch(Dispatchers.IO) { preferencesRepository.saveRatesListSettings(settings) }
     }
 
     override fun loadRatesListSettings(): Flow<RatesListSettings> =

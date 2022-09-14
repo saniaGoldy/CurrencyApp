@@ -11,13 +11,12 @@ import com.example.currencyapp.domain.CurrentDateData
 import com.example.currencyapp.ui.ratesList.model.RatesListSettings
 import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.launch
 
-class PreferencesRepositoryImpl(private val dataStore: DataStore<Preferences>): PreferencesRepository {
+class PreferencesRepositoryImpl(private val dataStore: DataStore<Preferences>) :
+    PreferencesRepository {
     private val gson = Gson()
 
     override fun loadNewsSettings(): Flow<SearchSettings> {
@@ -32,13 +31,11 @@ class PreferencesRepositoryImpl(private val dataStore: DataStore<Preferences>): 
     }
 
 
-    override fun saveNewsSettings(settings: SearchSettings, scope: CoroutineScope) {
+    override suspend fun saveNewsSettings(settings: SearchSettings) {
         Log.d(TAG, "saveNewsSettings")
-        scope.launch(Dispatchers.IO) {
-            dataStore.edit {
-                it[NEWS_SETTINGS_PREF_KEY] = gson.toJson(settings)
-                Log.d(TAG, "saveNewsSettings: ${it[NEWS_SETTINGS_PREF_KEY]}")
-            }
+        dataStore.edit {
+            it[NEWS_SETTINGS_PREF_KEY] = gson.toJson(settings)
+            Log.d(TAG, "saveNewsSettings: ${it[NEWS_SETTINGS_PREF_KEY]}")
         }
     }
 
@@ -67,13 +64,12 @@ class PreferencesRepositoryImpl(private val dataStore: DataStore<Preferences>): 
     }
 
 
-    override fun saveRatesListSettings(settings: RatesListSettings, scope: CoroutineScope) {
+    override suspend fun saveRatesListSettings(settings: RatesListSettings) {
         Log.d(TAG, "saveRatesSettings")
-        scope.launch(Dispatchers.IO) {
-            dataStore.edit {
-                it[RATES_SETTINGS_PREF_KEY] = gson.toJson(settings)
-                Log.d(TAG, "saveRatesSettings: ${it[RATES_SETTINGS_PREF_KEY]}")
-            }
+
+        dataStore.edit {
+            it[RATES_SETTINGS_PREF_KEY] = gson.toJson(settings)
+            Log.d(TAG, "saveRatesSettings: ${it[RATES_SETTINGS_PREF_KEY]}")
         }
     }
 

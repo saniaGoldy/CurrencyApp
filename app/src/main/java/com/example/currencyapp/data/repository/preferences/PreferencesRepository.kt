@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
 interface PreferencesRepository {
     fun loadNewsSettings(): Flow<SearchSettings>
 
-    fun saveNewsSettings(settings: SearchSettings, scope: CoroutineScope)
+    suspend fun saveNewsSettings(settings: SearchSettings)
 
     suspend fun isRatesUpToDate(): Boolean?
 
@@ -16,5 +16,5 @@ interface PreferencesRepository {
 
     fun loadRatesListSettings(): Flow<RatesListSettings>
 
-    fun saveRatesListSettings(settings: RatesListSettings, scope: CoroutineScope)
+    suspend fun saveRatesListSettings(settings: RatesListSettings)
 }

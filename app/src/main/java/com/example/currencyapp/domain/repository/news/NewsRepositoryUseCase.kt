@@ -6,7 +6,9 @@ import com.example.currencyapp.data.repository.preferences.PreferencesRepository
 import com.example.currencyapp.data.repository.remote.RemoteRepository
 import com.example.currencyapp.domain.model.DataState
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class NewsRepositoryUseCase @Inject constructor(
@@ -21,6 +23,7 @@ class NewsRepositoryUseCase @Inject constructor(
     override fun loadNewsSettings(): Flow<SearchSettings> =
         preferencesRepository.loadNewsSettings()
 
-    override fun saveNewsSettings(settings: SearchSettings, scope: CoroutineScope) =
-        preferencesRepository.saveNewsSettings(settings, scope)
+    override fun saveNewsSettings(settings: SearchSettings, scope: CoroutineScope) {
+        scope.launch(Dispatchers.IO) { preferencesRepository.saveNewsSettings(settings) }
+    }
 }

@@ -6,12 +6,8 @@ import com.example.currencyapp.data.local.LocalDB
 import com.example.currencyapp.data.local.entities.CurrencyDataEntity
 import com.example.currencyapp.domain.model.CurrencyData
 import com.example.currencyapp.domain.model.DataState
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
 
-class LocalDBRepositoryImpl(private val localDB: LocalDB): LocalDBRepository {
+class LocalDBRepositoryImpl(private val localDB: LocalDB) : LocalDBRepository {
     override suspend fun fetchCurrenciesList(): DataState<List<CurrencyData>> {
         val currencies = localDB
             .currencyDao().getAll().map { entity ->
@@ -26,39 +22,36 @@ class LocalDBRepositoryImpl(private val localDB: LocalDB): LocalDBRepository {
     }
 
 
-    override fun saveCurrenciesList(currencies: List<CurrencyData>, scope: CoroutineScope): Job {
-        return scope.launch(Dispatchers.IO) {
-            localDB
-                .currencyDao().insertAll(currencies.map {
-                    CurrencyDataEntity(
-                        it.iso4217Alpha,
-                        it.rate,
-                        it.rateStory ?: mapOf()
-                    )
-                }).also {
-                    Log.d(
-                        TAG,
-                        "Saving data to local db: $currencies"
-                    )
-                }
-        }
+    override suspend fun saveCurrenciesList(currencies: List<CurrencyData>) {
+        localDB
+            .currencyDao().insertAll(currencies.map {
+                CurrencyDataEntity(
+                    it.iso4217Alpha,
+                    it.rate,
+                    it.rateStory ?: mapOf()
+                )
+            }).also {
+                Log.d(
+                    TAG,
+                    "Saving data to local db: $currencies"
+                )
+            }
     }
 
-    override fun updateCurrenciesList(currencies: List<CurrencyData>, scope: CoroutineScope): Job {
-        return scope.launch(Dispatchers.IO) {
-            localDB
-                .currencyDao().update(currencies.map {
-                    CurrencyDataEntity(
-                        it.iso4217Alpha,
-                        it.rate,
-                        it.rateStory ?: mapOf()
-                    )
-                }).also {
-                    Log.d(
-                        TAG,
-                        "Updating data in local db: $currencies"
-                    )
-                }
-        }
+    override suspend fun updateCurrenciesList(currencies: List<CurrencyData>) {
+
+        localDB
+            .currencyDao().update(currencies.map {
+                CurrencyDataEntity(
+                    it.iso4217Alpha,
+                    it.rate,
+                    it.rateStory ?: mapOf()
+                )
+            }).also {
+                Log.d(
+                    TAG,
+                    "Updating data in local db: $currencies"
+                )
+            }
     }
 }
