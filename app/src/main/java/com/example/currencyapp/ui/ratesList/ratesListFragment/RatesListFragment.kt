@@ -15,7 +15,7 @@ import com.example.currencyapp.R
 import com.example.currencyapp.TAG
 import com.example.currencyapp.databinding.FragmentRatesListBinding
 import com.example.currencyapp.domain.model.CurrencyData
-import com.example.currencyapp.domain.repository.MainRepository.DataState.*
+import com.example.currencyapp.domain.model.DataState.*
 import com.example.currencyapp.domain.services.ConnectivityObserver
 import com.example.currencyapp.ui.ratesList.RatesListViewModel
 import com.example.currencyapp.ui.ratesList.ratesListSettingsDialog.RatesSettingsDialog

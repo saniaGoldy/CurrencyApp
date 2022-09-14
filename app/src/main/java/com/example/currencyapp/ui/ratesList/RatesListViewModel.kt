@@ -8,8 +8,8 @@ import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.currencyapp.TAG
 import com.example.currencyapp.domain.model.CurrencyData
-import com.example.currencyapp.domain.repository.MainRepository
-import com.example.currencyapp.domain.repository.MainRepository.DataState
+import com.example.currencyapp.domain.model.DataState
+import com.example.currencyapp.domain.repository.rates.RatesRepository
 import com.example.currencyapp.ui.BaseViewModel
 import com.example.currencyapp.ui.ratesList.model.RatesListSettings
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,7 +19,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class RatesListViewModel @Inject constructor(
-    private val repository: MainRepository,
+    private val repository: RatesRepository,
     context: Application
 ) : BaseViewModel(context) {
 

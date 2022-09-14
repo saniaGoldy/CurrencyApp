@@ -9,7 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.navArgs
 import com.example.currencyapp.databinding.FragmentCurrencyInfoBinding
-import com.example.currencyapp.domain.repository.MainRepository.DataState.Success
+import com.example.currencyapp.domain.model.DataState.Success
 import com.example.currencyapp.ui.ratesList.RatesListViewModel
 import com.google.accompanist.appcompattheme.AppCompatTheme
 import dagger.hilt.android.AndroidEntryPoint

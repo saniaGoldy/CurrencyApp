@@ -20,11 +20,15 @@ import kotlinx.coroutines.launch
 class PreferencesRepository(val context: Context) {
     private val gson = Gson()
 
-    suspend fun loadNewsSettings(): SearchSettings {
+    fun loadNewsSettings(): Flow<SearchSettings> {
         Log.d(TAG, "loadNewsSettings")
-        return context.dataStore.data.first()[NEWS_SETTINGS_PREF_KEY]?.let {
-            gson.fromJson(it, SearchSettings::class.java)
-        } ?: SearchSettings()
+        return context.dataStore.data.map { preferences ->
+            preferences[NEWS_SETTINGS_PREF_KEY]?.let { settingsJson: String ->
+                gson.fromJson(settingsJson, SearchSettings::class.java).also {
+                    Log.d(TAG, "loadNewsSettings: $it")
+                }
+            } ?: SearchSettings().also { Log.d(TAG, "loadNewsSettings: default settings") }
+        }
     }
 
 

@@ -13,7 +13,7 @@ import androidx.navigation.findNavController
 import com.example.currencyapp.R
 import com.example.currencyapp.TAG
 import com.example.currencyapp.databinding.FragmentNewsListBinding
-import com.example.currencyapp.domain.repository.MainRepository.DataState.*
+import com.example.currencyapp.domain.model.DataState.*
 import com.example.currencyapp.domain.services.ConnectivityObserver
 import com.example.currencyapp.ui.news.NewsViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -45,6 +45,8 @@ class NewsListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.rvNewsList.adapter = adapter
 
+        //TODO: setup search view
+
         setupObservers()
 
         binding.settingsImageButton.setOnClickListener {
@@ -54,26 +56,32 @@ class NewsListFragment : Fragment() {
     }
 
     private fun setupObservers() {
-        viewModel.newsDataState.observe(viewLifecycleOwner) { dataState ->
-            binding.newsProgressBar.isVisible = dataState is Loading
-            when (dataState) {
-                is Success -> {
-                    adapter.newsList = dataState.result
-                }
-                is Failure -> {
-                    Log.e(TAG, "NewsStateObserver Failure: ${dataState.errorInfo}")
+        with(viewModel) {
+            searchSettings.observe(viewLifecycleOwner) { settings ->
+                viewModel.fetchNews(settings)
+            }
 
-                    Toast.makeText(
-                        this.requireContext(),
-                        if (viewModel.networkStatus.value == ConnectivityObserver.Status.Available) getString(
-                            R.string.standart_error_message
-                        ) else getString(
-                            R.string.no_internet_connection_error_message
-                        ),
-                        Toast.LENGTH_LONG
-                    ).show()
+            newsDataState.observe(viewLifecycleOwner) { dataState ->
+                binding.newsProgressBar.isVisible = dataState is Loading
+                when (dataState) {
+                    is Success -> {
+                        adapter.newsList = dataState.result
+                    }
+                    is Failure -> {
+                        Log.e(TAG, "NewsStateObserver Failure: ${dataState.errorInfo}")
+
+                        Toast.makeText(
+                            requireContext(),
+                            if (viewModel.networkStatus.value == ConnectivityObserver.Status.Available) getString(
+                                R.string.standart_error_message
+                            ) else getString(
+                                R.string.no_internet_connection_error_message
+                            ),
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+                    else -> Log.d(TAG, "NewsStateObserver : $dataState")
                 }
-                else -> Log.d(TAG, "NewsStateObserver : $dataState")
             }
         }
     }

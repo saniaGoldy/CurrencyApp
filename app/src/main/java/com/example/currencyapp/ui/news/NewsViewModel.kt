@@ -4,13 +4,14 @@ import android.app.Application
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.currencyapp.TAG
 import com.example.currencyapp.data.remote.entities.news.Data
 import com.example.currencyapp.data.remote.entities.news.NewsApiRequestOptions
 import com.example.currencyapp.data.remote.entities.news.SearchSettings
-import com.example.currencyapp.domain.repository.MainRepository
-import com.example.currencyapp.domain.repository.MainRepository.DataState
+import com.example.currencyapp.domain.model.DataState
+import com.example.currencyapp.domain.repository.news.NewsRepository
 import com.example.currencyapp.ui.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
@@ -19,12 +20,11 @@ import javax.inject.Inject
 
 @HiltViewModel
 class NewsViewModel @Inject constructor(
-    private val repository: MainRepository,
+    private val repository: NewsRepository,
     context: Application
 ) : BaseViewModel(context) {
 
-    private val _searchSettings = MutableLiveData<SearchSettings>()
-    val searchSettings get() = _searchSettings
+    val searchSettings = repository.loadNewsSettings().asLiveData()
 
     private val _newsDataState: MutableLiveData<DataState<List<Data>>> =
         MutableLiveData(DataState.Default)
@@ -36,25 +36,14 @@ class NewsViewModel @Inject constructor(
         _newsDataState.postValue(DataState.Failure(error.toString()))
     }
 
-    init {
-        viewModelScope.launch(exceptionHandler) {
-            launch {
-                Log.d(TAG, "loadNewsSettings: start")
-                _searchSettings.postValue(repository.loadNewsSettings())
-            }.join()
-
-            fetchNews()
-        }
-    }
-
-    private fun fetchNews() {
+    fun fetchNews(settings: SearchSettings) {
         Log.d(TAG, "fetchNews")
         _newsDataState.value = DataState.Loading
 
         viewModelScope.launch(exceptionHandler) {
             _newsDataState.postValue(
                 repository.fetchNewsList(
-                    _searchSettings.value ?: SearchSettings()
+                    settings
                 )
             )
         }
@@ -80,12 +69,7 @@ class NewsViewModel @Inject constructor(
 
         settings.timeGapMode = timeGapMode
 
-        if (_searchSettings.value != settings) {
-            _searchSettings.value = settings
-
-            //load news with new settings
-            fetchNews()
-
+        if (searchSettings.value != settings) {
             repository.saveNewsSettings(settings, viewModelScope)
         }
     }

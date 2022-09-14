@@ -46,10 +46,13 @@ class NewsListAdapter :
     inner class NewsViewHolder(private val binding: NewsListItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
+
         fun bind(item: Data) {
             with(binding) {
                 tvTitle.text = item.title
                 tvSource.text = item.source
+
+                //TODO: date and time separated
                 tvTimeStamp.text = item.publishedAt
                 tvTags.text = item.tags.toString()
                 itemContainer.setOnClickListener {
