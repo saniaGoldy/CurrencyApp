@@ -1,12 +1,12 @@
-package com.example.currencyapp.data.repository
+package com.example.currencyapp.data.repository.preferences
 
-import android.content.Context
 import android.util.Log
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.example.currencyapp.TAG
 import com.example.currencyapp.data.remote.entities.news.SearchSettings
-import com.example.currencyapp.dataStore
 import com.example.currencyapp.domain.CurrentDateData
 import com.example.currencyapp.ui.ratesList.model.RatesListSettings
 import com.google.gson.Gson
@@ -17,12 +17,12 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
-class PreferencesRepository(val context: Context) {
+class PreferencesRepositoryImpl(private val dataStore: DataStore<Preferences>): PreferencesRepository {
     private val gson = Gson()
 
-    fun loadNewsSettings(): Flow<SearchSettings> {
+    override fun loadNewsSettings(): Flow<SearchSettings> {
         Log.d(TAG, "loadNewsSettings")
-        return context.dataStore.data.map { preferences ->
+        return dataStore.data.map { preferences ->
             preferences[NEWS_SETTINGS_PREF_KEY]?.let { settingsJson: String ->
                 gson.fromJson(settingsJson, SearchSettings::class.java).also {
                     Log.d(TAG, "loadNewsSettings: $it")
@@ -32,32 +32,32 @@ class PreferencesRepository(val context: Context) {
     }
 
 
-    fun saveNewsSettings(settings: SearchSettings, scope: CoroutineScope) {
+    override fun saveNewsSettings(settings: SearchSettings, scope: CoroutineScope) {
         Log.d(TAG, "saveNewsSettings")
         scope.launch(Dispatchers.IO) {
-            context.dataStore.edit {
+            dataStore.edit {
                 it[NEWS_SETTINGS_PREF_KEY] = gson.toJson(settings)
                 Log.d(TAG, "saveNewsSettings: ${it[NEWS_SETTINGS_PREF_KEY]}")
             }
         }
     }
 
-    suspend fun isRatesUpToDate(): Boolean? {
+    override suspend fun isRatesUpToDate(): Boolean? {
         Log.d(TAG, "isRatesUpToDate")
-        return context.dataStore.data.first()[LAST_RATES_UPDATE_DATE_KEY]?.let { it == CurrentDateData.currentDate }
+        return dataStore.data.first()[LAST_RATES_UPDATE_DATE_KEY]?.let { it == CurrentDateData.currentDate }
     }
 
-    suspend fun saveRatesUpdateDate() {
+    override suspend fun saveRatesUpdateDate() {
         Log.d(TAG, "saveRatesUpdateDate")
-        context.dataStore.edit {
+        dataStore.edit {
             it[LAST_RATES_UPDATE_DATE_KEY] = CurrentDateData.currentDate
         }
     }
 
-    fun loadRatesListSettings(): Flow<RatesListSettings> {
+    override fun loadRatesListSettings(): Flow<RatesListSettings> {
         Log.d(TAG, "loadRatesSettings")
 
-        return context.dataStore.data.map { preferences ->
+        return dataStore.data.map { preferences ->
             preferences[RATES_SETTINGS_PREF_KEY]?.let { settingsJson: String ->
                 gson.fromJson(settingsJson, RatesListSettings::class.java).also {
                     Log.d(TAG, "loadRatesListSettings: $it")
@@ -67,10 +67,10 @@ class PreferencesRepository(val context: Context) {
     }
 
 
-    fun saveRatesListSettings(settings: RatesListSettings, scope: CoroutineScope) {
+    override fun saveRatesListSettings(settings: RatesListSettings, scope: CoroutineScope) {
         Log.d(TAG, "saveRatesSettings")
         scope.launch(Dispatchers.IO) {
-            context.dataStore.edit {
+            dataStore.edit {
                 it[RATES_SETTINGS_PREF_KEY] = gson.toJson(settings)
                 Log.d(TAG, "saveRatesSettings: ${it[RATES_SETTINGS_PREF_KEY]}")
             }

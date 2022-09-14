@@ -1,4 +1,4 @@
-package com.example.currencyapp.data.repository
+package com.example.currencyapp.data.repository.remote
 
 import android.util.Log
 import com.example.currencyapp.TAG
@@ -9,11 +9,11 @@ import com.example.currencyapp.domain.CurrentDateData
 import com.example.currencyapp.domain.model.CurrencyData
 import com.example.currencyapp.domain.model.DataState
 
-class RemoteRepository(
+class RemoteRepositoryImpl(
     private val currencyAPI: CurrencyAPI,
-) {
+): RemoteRepository {
 
-    suspend fun loadCurrencyList(baseCurrency: String): DataState<List<CurrencyData>> {
+    override suspend fun loadCurrencyList(baseCurrency: String): DataState<List<CurrencyData>> {
         val response = currencyAPI.getCurrencyRates(
             CurrentDateData.startDate,
             CurrentDateData.currentDate,
@@ -51,7 +51,7 @@ class RemoteRepository(
         }
     }
 
-    suspend fun fetchNewsList(settings: SearchSettings): DataState<List<Data>> {
+    override suspend fun fetchNewsList(settings: SearchSettings): DataState<List<Data>> {
         val response = currencyAPI.getCurrencyNews(
             settings.tags,
             settings.keywords,

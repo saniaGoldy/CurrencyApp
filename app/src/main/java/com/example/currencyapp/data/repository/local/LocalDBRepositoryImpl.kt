@@ -1,4 +1,4 @@
-package com.example.currencyapp.data.repository
+package com.example.currencyapp.data.repository.local
 
 import android.util.Log
 import com.example.currencyapp.TAG
@@ -11,8 +11,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
-class LocalDBRepository(private val localDB: LocalDB) {
-    suspend fun fetchCurrenciesList(): DataState<List<CurrencyData>> {
+class LocalDBRepositoryImpl(private val localDB: LocalDB): LocalDBRepository {
+    override suspend fun fetchCurrenciesList(): DataState<List<CurrencyData>> {
         val currencies = localDB
             .currencyDao().getAll().map { entity ->
                 CurrencyData(entity.iso4217Alpha, entity.rate, entity.rateStory)
@@ -26,7 +26,7 @@ class LocalDBRepository(private val localDB: LocalDB) {
     }
 
 
-    fun saveCurrenciesList(currencies: List<CurrencyData>, scope: CoroutineScope): Job {
+    override fun saveCurrenciesList(currencies: List<CurrencyData>, scope: CoroutineScope): Job {
         return scope.launch(Dispatchers.IO) {
             localDB
                 .currencyDao().insertAll(currencies.map {
@@ -44,7 +44,7 @@ class LocalDBRepository(private val localDB: LocalDB) {
         }
     }
 
-    fun updateCurrenciesList(currencies: List<CurrencyData>, scope: CoroutineScope): Job {
+    override fun updateCurrenciesList(currencies: List<CurrencyData>, scope: CoroutineScope): Job {
         return scope.launch(Dispatchers.IO) {
             localDB
                 .currencyDao().update(currencies.map {

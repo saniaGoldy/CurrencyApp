@@ -4,7 +4,11 @@ import android.app.Application
 import androidx.room.Room
 import com.example.currencyapp.data.local.LocalDB
 import com.example.currencyapp.data.remote.CurrencyAPI
-import com.example.currencyapp.data.repository.PreferencesRepository
+import com.example.currencyapp.data.repository.local.LocalDBRepositoryImpl
+import com.example.currencyapp.data.repository.preferences.PreferencesRepository
+import com.example.currencyapp.data.repository.preferences.PreferencesRepositoryImpl
+import com.example.currencyapp.data.repository.remote.RemoteRepositoryImpl
+import com.example.currencyapp.dataStore
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -45,7 +49,19 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun providePreferencesRepository(context: Application): PreferencesRepository {
-        return PreferencesRepository(context)
+    fun providePreferencesRepository(context: Application): PreferencesRepositoryImpl {
+        return PreferencesRepositoryImpl(context.dataStore)
+    }
+
+    @Provides
+    @Singleton
+    fun provideLocalRepository(localDB: LocalDB): LocalDBRepositoryImpl {
+        return LocalDBRepositoryImpl(localDB)
+    }
+
+    @Provides
+    @Singleton
+    fun provideRemoteRepository(currencyAPI: CurrencyAPI): RemoteRepositoryImpl {
+        return RemoteRepositoryImpl(currencyAPI)
     }
 }

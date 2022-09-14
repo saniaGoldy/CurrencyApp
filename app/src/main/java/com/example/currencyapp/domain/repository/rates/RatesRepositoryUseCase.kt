@@ -1,13 +1,11 @@
 package com.example.currencyapp.domain.repository.rates
 
-import android.app.Application
 import android.util.Log
 import com.example.currencyapp.TAG
-import com.example.currencyapp.data.local.LocalDB
 import com.example.currencyapp.data.remote.CurrencyAPI
-import com.example.currencyapp.data.repository.LocalDBRepository
-import com.example.currencyapp.data.repository.PreferencesRepository
-import com.example.currencyapp.data.repository.RemoteRepository
+import com.example.currencyapp.data.repository.local.LocalDBRepository
+import com.example.currencyapp.data.repository.preferences.PreferencesRepository
+import com.example.currencyapp.data.repository.remote.RemoteRepository
 import com.example.currencyapp.domain.model.Currencies
 import com.example.currencyapp.domain.model.CurrencyData
 import com.example.currencyapp.domain.model.DataState
@@ -19,14 +17,10 @@ import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class RatesRepositoryUseCase @Inject constructor(
-    localDB: LocalDB,
-    context: Application,
-    currencyAPI: CurrencyAPI
+    private val localDBRepository: LocalDBRepository,
+    private val preferencesRepository: PreferencesRepository,
+    private val remoteRepository: RemoteRepository
 ) : RatesRepository {
-
-    private val localDBRepository = LocalDBRepository(localDB)
-    private val preferencesRepository = PreferencesRepository(context)
-    private val remoteRepository = RemoteRepository(currencyAPI)
 
     private var baseCurrency: String = Currencies.UAH.name
     private var baseCurrencyChanged = false
