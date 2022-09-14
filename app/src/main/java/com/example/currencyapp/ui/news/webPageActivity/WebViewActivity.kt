@@ -18,7 +18,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.navArgs
 import com.example.currencyapp.R
 import com.example.currencyapp.databinding.ActivityWebViewBinding
-import com.example.currencyapp.domain.services.ConnectivityObserver.Status.*
+import com.example.currencyapp.domain.services.ConnectivityObserver.Status.Available
+import com.example.currencyapp.domain.services.ConnectivityObserver.Status.Lost
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 

@@ -18,7 +18,6 @@ import com.example.currencyapp.domain.model.CurrencyData
 import com.example.currencyapp.domain.repository.MainRepository.DataState.*
 import com.example.currencyapp.domain.services.ConnectivityObserver
 import com.example.currencyapp.ui.ratesList.RatesListViewModel
-import com.example.currencyapp.ui.ratesList.model.RatesListSettings
 import com.example.currencyapp.ui.ratesList.ratesListSettingsDialog.RatesSettingsDialog
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -63,11 +62,6 @@ class RatesListFragment : Fragment() {
             ratesSettingsImageButton.setOnClickListener {
                 viewModel.ratesSettings.value?.let { ratesListSettings ->
                     RatesSettingsDialog.newInstance(
-                        object : RatesSettingsDialog.SettingsDataProcessor {
-                            override fun process(settings: RatesListSettings) {
-                                viewModel.updateRatesListSettings(settings)
-                            }
-                        },
                         viewModel.ratesSettings.value!!
                     ).show(childFragmentManager, RatesSettingsDialog.TAG)
                 }
@@ -92,6 +86,15 @@ class RatesListFragment : Fragment() {
 
     private fun setupObservers() {
 
+        viewModel.ratesSettings.observe(viewLifecycleOwner) { settings ->
+            binding.tvRatesTitle.text =
+                getString(R.string.currency_rates_title, settings.currencyCode)
+            currenciesListAdapter.setRoundingFormat(settings.precision)
+
+            //load rates after settings loaded
+            viewModel.updateDataState()
+        }
+
         viewModel.ratesDataState.observe(viewLifecycleOwner) { dataState ->
             binding.progressBar.isVisible = dataState is Loading
             when (dataState) {
@@ -115,10 +118,6 @@ class RatesListFragment : Fragment() {
             }
         }
 
-        viewModel.ratesSettings.observe(viewLifecycleOwner) { settings ->
-            binding.tvRatesTitle.text =
-                getString(R.string.currency_rates_title, settings.currencyCode)
-        }
     }
 
     private fun setupCurrenciesList() {

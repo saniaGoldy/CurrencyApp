@@ -33,13 +33,15 @@ class NewsViewModel @Inject constructor(
 
     private val exceptionHandler = CoroutineExceptionHandler { context, error ->
         Log.d(TAG, error.toString())
-        _newsDataState.postValue(DataState.Failure())
+        _newsDataState.postValue(DataState.Failure(error.toString()))
     }
 
     init {
         viewModelScope.launch(exceptionHandler) {
-            launch { Log.d(TAG, "loadNewsSettings: start")
-                _searchSettings.postValue(repository.loadNewsSettings()) }.join()
+            launch {
+                Log.d(TAG, "loadNewsSettings: start")
+                _searchSettings.postValue(repository.loadNewsSettings())
+            }.join()
 
             fetchNews()
         }

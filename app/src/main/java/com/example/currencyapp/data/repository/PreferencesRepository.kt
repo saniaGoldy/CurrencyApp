@@ -8,12 +8,13 @@ import com.example.currencyapp.TAG
 import com.example.currencyapp.data.remote.entities.news.SearchSettings
 import com.example.currencyapp.dataStore
 import com.example.currencyapp.domain.CurrentDateData
-import com.example.currencyapp.domain.model.Currencies
 import com.example.currencyapp.ui.ratesList.model.RatesListSettings
 import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 class PreferencesRepository(val context: Context) {
@@ -37,10 +38,9 @@ class PreferencesRepository(val context: Context) {
         }
     }
 
-    suspend fun isRatesUpToDate(): Boolean {
+    suspend fun isRatesUpToDate(): Boolean? {
         Log.d(TAG, "isRatesUpToDate")
         return context.dataStore.data.first()[LAST_RATES_UPDATE_DATE_KEY]?.let { it == CurrentDateData.currentDate }
-            ?: false
     }
 
     suspend fun saveRatesUpdateDate() {
@@ -50,11 +50,16 @@ class PreferencesRepository(val context: Context) {
         }
     }
 
-    suspend fun loadRatesListSettings(): RatesListSettings {
+    fun loadRatesListSettings(): Flow<RatesListSettings> {
         Log.d(TAG, "loadRatesSettings")
-        return context.dataStore.data.first()[RATES_SETTINGS_PREF_KEY]?.let {
-            gson.fromJson(it, RatesListSettings::class.java)
-        } ?: RatesListSettings()
+
+        return context.dataStore.data.map { preferences ->
+            preferences[RATES_SETTINGS_PREF_KEY]?.let { settingsJson: String ->
+                gson.fromJson(settingsJson, RatesListSettings::class.java).also {
+                    Log.d(TAG, "loadRatesListSettings: $it")
+                }
+            } ?: RatesListSettings().also { Log.d(TAG, "loadRatesListSettings: default settings") }
+        }
     }
 
 

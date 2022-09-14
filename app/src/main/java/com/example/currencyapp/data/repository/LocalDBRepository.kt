@@ -8,6 +8,7 @@ import com.example.currencyapp.domain.model.CurrencyData
 import com.example.currencyapp.domain.repository.MainRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 class LocalDBRepository(private val localDB: LocalDB) {
@@ -25,8 +26,8 @@ class LocalDBRepository(private val localDB: LocalDB) {
     }
 
 
-    fun saveCurrenciesList(currencies: List<CurrencyData>, scope: CoroutineScope) {
-        scope.launch(Dispatchers.IO) {
+    fun saveCurrenciesList(currencies: List<CurrencyData>, scope: CoroutineScope): Job {
+        return scope.launch(Dispatchers.IO) {
             localDB
                 .currencyDao().insertAll(currencies.map {
                     CurrencyDataEntity(
@@ -37,7 +38,25 @@ class LocalDBRepository(private val localDB: LocalDB) {
                 }).also {
                     Log.d(
                         TAG,
-                        "Saving data to local db..."
+                        "Saving data to local db: $currencies"
+                    )
+                }
+        }
+    }
+
+    fun updateCurrenciesList(currencies: List<CurrencyData>, scope: CoroutineScope): Job {
+        return scope.launch(Dispatchers.IO) {
+            localDB
+                .currencyDao().update(currencies.map {
+                    CurrencyDataEntity(
+                        it.iso4217Alpha,
+                        it.rate,
+                        it.rateStory ?: mapOf()
+                    )
+                }).also {
+                    Log.d(
+                        TAG,
+                        "Updating data in local db: $currencies"
                     )
                 }
         }

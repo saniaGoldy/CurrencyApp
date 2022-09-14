@@ -6,7 +6,6 @@ import com.example.currencyapp.data.remote.CurrencyAPI
 import com.example.currencyapp.data.remote.entities.news.Data
 import com.example.currencyapp.data.remote.entities.news.SearchSettings
 import com.example.currencyapp.domain.CurrentDateData
-import com.example.currencyapp.domain.model.Currencies
 import com.example.currencyapp.domain.model.CurrencyData
 import com.example.currencyapp.domain.repository.MainRepository.DataState
 

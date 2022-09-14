@@ -2,18 +2,16 @@ package com.example.currencyapp.domain.repository
 
 import com.example.currencyapp.data.remote.entities.news.Data
 import com.example.currencyapp.data.remote.entities.news.SearchSettings
-import com.example.currencyapp.domain.model.Currencies
 import com.example.currencyapp.domain.model.CurrencyData
 import com.example.currencyapp.ui.ratesList.model.RatesListSettings
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.Flow
 
 interface MainRepository {
 
     suspend fun fetchNewsList(settings: SearchSettings): DataState<List<Data>>
 
-    suspend fun fetchCurrenciesList(scope: CoroutineScope, baseCurrency: String): DataState<List<CurrencyData>>
-
-    fun saveCurrenciesList(currencies: List<CurrencyData>, scope: CoroutineScope)
+    suspend fun fetchCurrenciesList(scope: CoroutineScope): DataState<List<CurrencyData>>
 
     suspend fun loadNewsSettings(): SearchSettings
 
@@ -21,7 +19,7 @@ interface MainRepository {
 
     fun saveRatesListSettings(settings: RatesListSettings, scope: CoroutineScope)
 
-    suspend fun loadRatesListSettings(): RatesListSettings
+    fun loadRatesListSettings(): Flow<RatesListSettings>
 
     sealed class DataState<out T : Any?> {
         object Loading : DataState<Nothing>()

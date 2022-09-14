@@ -8,9 +8,10 @@ import android.view.ViewGroup
 import android.view.Window
 import android.widget.ArrayAdapter
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.viewModels
 import com.example.currencyapp.R
 import com.example.currencyapp.databinding.AlertDialogRatesTabSettingsBinding
-import com.example.currencyapp.domain.model.Currencies
+import com.example.currencyapp.ui.ratesList.RatesListViewModel
 import com.example.currencyapp.ui.ratesList.model.RatesListSettings
 
 class RatesSettingsDialog : DialogFragment() {
@@ -18,10 +19,11 @@ class RatesSettingsDialog : DialogFragment() {
     private lateinit var _binding: AlertDialogRatesTabSettingsBinding
     private val binding get() = _binding
 
+    private val viewModel: RatesListViewModel by viewModels(ownerProducer = { requireParentFragment() })
+
     lateinit var baseCurrencyOptions: Array<String>
     lateinit var precisionOptions: List<Int>
 
-    private lateinit var processor: SettingsDataProcessor
     private lateinit var settings: RatesListSettings
 
     override fun onCreateView(
@@ -90,7 +92,7 @@ class RatesSettingsDialog : DialogFragment() {
                 dismiss()
             }
             btnApplyRatesSettings.setOnClickListener {
-                processor.process(
+                viewModel.updateRatesListSettings(
                     RatesListSettings(
                         baseCurrencyOptions[spinnerBaseCurrency.selectedItemPosition],
                         precisionOptions[spinnerRateDifferencePrecision.selectedItemPosition]
@@ -101,19 +103,12 @@ class RatesSettingsDialog : DialogFragment() {
         }
     }
 
-    interface SettingsDataProcessor {
-        fun process(settings: RatesListSettings)
-    }
-
-
     companion object {
         const val TAG = "SettingsDialog"
         fun newInstance(
-            processor: SettingsDataProcessor,
             settings: RatesListSettings
         ): RatesSettingsDialog {
             return RatesSettingsDialog().also {
-                it.processor = processor
                 it.settings = settings
             }
         }

@@ -10,10 +10,16 @@ import com.example.currencyapp.R
 import com.example.currencyapp.databinding.CurrenciesListItemBinding
 import com.example.currencyapp.domain.model.CurrencyData
 
-private const val ROUNDING_FORMAT: String = "%.3f"
+//private const val roundingFormat: String = "%.3f"
 
 class CurrenciesListAdapter(val onListItemClickedActionCallback: ItemClickedAction) :
     RecyclerView.Adapter<CurrenciesListAdapter.CurrencyViewHolder>() {
+
+    private var roundingFormat = "%.3f"
+
+    fun setRoundingFormat(precision: Int) {
+        roundingFormat = roundingFormat.replaceFirst(Regex("\\d"), precision.toString())
+    }
 
     private val diffCallback = object : DiffUtil.ItemCallback<CurrencyData>() {
 
@@ -64,11 +70,11 @@ class CurrenciesListAdapter(val onListItemClickedActionCallback: ItemClickedActi
         fun bind(item: CurrencyData) {
             tvFullName.text = item.fullName
             tvCode.text = item.iso4217Alpha
-            tvRate.text = String.format(ROUNDING_FORMAT, item.rate)
+            tvRate.text = String.format(roundingFormat, item.rate)
 
             val rateDiff = item.getRateDifference()
             //TODO: get format for rounding from settings
-            val rateDiffText = String.format(ROUNDING_FORMAT, rateDiff)
+            val rateDiffText = String.format(roundingFormat, rateDiff)
 
             if (rateDiff >= 0) {
                 tvDifference.text = "+$rateDiffText"

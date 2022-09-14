@@ -35,9 +35,9 @@ class CurrencyInfoFragment : Fragment() {
             else mapOf()
         }
 
-        binding.rateStoryChart.setContent { 
+        binding.rateStoryChart.setContent {
             AppCompatTheme {
-                CurrencyRatesChart(rateStory = rateStory,modifier = Modifier)
+                CurrencyRatesChart(rateStory = rateStory, modifier = Modifier)
             }
         }
         return binding.root
