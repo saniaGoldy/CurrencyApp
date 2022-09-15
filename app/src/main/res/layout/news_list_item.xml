@@ -29,12 +29,12 @@
             app:layout_constraintTop_toBottomOf="@+id/tvTags" />
 
         <TextView
-            android:id="@+id/tvTimeStamp"
+            android:id="@+id/tvPublicationTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:gravity="end"
-            android:text="@string/publication_date_amp_time"
+            android:text="@string/publication_time"
             android:textColor="@color/grey"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -51,7 +51,7 @@
             app:layout_constraintBottom_toTopOf="@+id/tvTags"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/guideline4"
-            app:layout_constraintTop_toBottomOf="@+id/tvTimeStamp" />
+            app:layout_constraintTop_toBottomOf="@+id/tvPublicationTime" />
 
         <TextView
             android:id="@+id/tvTags"
@@ -84,6 +84,19 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/news_colored" />
+
+        <TextView
+            android:id="@+id/tvPublicationDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:text="@string/publication_date"
+            app:layout_constraintBottom_toBottomOf="@+id/tvPublicationTime"
+            app:layout_constraintEnd_toStartOf="@+id/tvPublicationTime"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/guideline4"
+            app:layout_constraintTop_toTopOf="@+id/tvPublicationTime"
+            app:layout_constraintVertical_bias="0.0" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

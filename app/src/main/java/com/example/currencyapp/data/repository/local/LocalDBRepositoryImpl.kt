@@ -4,7 +4,7 @@ import android.util.Log
 import com.example.currencyapp.TAG
 import com.example.currencyapp.data.local.LocalDB
 import com.example.currencyapp.data.local.entities.CurrencyDataEntity
-import com.example.currencyapp.domain.model.CurrencyData
+import com.example.currencyapp.domain.model.rates.CurrencyData
 import java.io.IOException
 
 class LocalDBRepositoryImpl(private val localDB: LocalDB) : LocalDBRepository {

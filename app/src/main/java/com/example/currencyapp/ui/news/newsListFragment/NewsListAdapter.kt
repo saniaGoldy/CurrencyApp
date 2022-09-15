@@ -6,20 +6,20 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.example.currencyapp.data.remote.entities.news.Data
 import com.example.currencyapp.databinding.NewsListItemBinding
+import com.example.currencyapp.domain.model.news.NewsData
 
 
 class NewsListAdapter :
     RecyclerView.Adapter<NewsListAdapter.NewsViewHolder>() {
 
-    private val diffCallback = object : DiffUtil.ItemCallback<Data>() {
+    private val diffCallback = object : DiffUtil.ItemCallback<NewsData>() {
 
-        override fun areItemsTheSame(oldItem: Data, newItem: Data): Boolean {
+        override fun areItemsTheSame(oldItem: NewsData, newItem: NewsData): Boolean {
             return oldItem == newItem
         }
 
-        override fun areContentsTheSame(oldItem: Data, newItem: Data): Boolean {
+        override fun areContentsTheSame(oldItem: NewsData, newItem: NewsData): Boolean {
             return oldItem == newItem
         }
 
@@ -27,7 +27,7 @@ class NewsListAdapter :
 
     private val differ = AsyncListDiffer(this, diffCallback)
 
-    var newsList: List<Data>
+    var newsList: List<NewsData>
         get() = differ.currentList
         set(value) {
             differ.submitList(value)
@@ -47,14 +47,16 @@ class NewsListAdapter :
         RecyclerView.ViewHolder(binding.root) {
 
 
-        fun bind(item: Data) {
+        fun bind(item: NewsData) {
             with(binding) {
                 tvTitle.text = item.title
                 tvSource.text = item.source
 
-                //TODO: date and time separated
-                tvTimeStamp.text = item.publishedAt
-                tvTags.text = item.tags.toString()
+                tvPublicationDate.text = item.publishedAt.publishDate
+                tvPublicationTime.text = item.publishedAt.publishTime
+
+                tvTags.text = item.getTagsAsString()
+
                 itemContainer.setOnClickListener {
                     root.findNavController().navigate(
                         NewsListFragmentDirections.actionNavigationNewsToWebViewActivity(item.url)

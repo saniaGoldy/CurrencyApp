@@ -1,4 +1,4 @@
-package com.example.currencyapp.domain.model
+package com.example.currencyapp.domain.model.rates
 
 
 data class CurrencyData(

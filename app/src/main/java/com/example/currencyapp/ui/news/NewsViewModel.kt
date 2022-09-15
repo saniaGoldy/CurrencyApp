@@ -11,6 +11,7 @@ import com.example.currencyapp.data.remote.entities.news.Data
 import com.example.currencyapp.data.remote.entities.news.NewsApiRequestOptions
 import com.example.currencyapp.data.remote.entities.news.SearchSettings
 import com.example.currencyapp.domain.model.DataState
+import com.example.currencyapp.domain.model.news.NewsData
 import com.example.currencyapp.domain.repository.news.NewsRepository
 import com.example.currencyapp.ui.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -26,9 +27,9 @@ class NewsViewModel @Inject constructor(
 
     val searchSettings = repository.loadNewsSettings().asLiveData()
 
-    private val _newsDataState: MutableLiveData<DataState<List<Data>>> =
+    private val _newsDataState: MutableLiveData<DataState<List<NewsData>>> =
         MutableLiveData(DataState.Default)
-    val newsDataState: LiveData<DataState<List<Data>>>
+    val newsDataState: LiveData<DataState<List<NewsData>>>
         get() = _newsDataState
 
     private val exceptionHandler = CoroutineExceptionHandler { context, error ->

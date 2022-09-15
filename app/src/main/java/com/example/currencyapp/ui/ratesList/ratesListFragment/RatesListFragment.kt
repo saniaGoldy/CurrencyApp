@@ -14,7 +14,7 @@ import androidx.navigation.findNavController
 import com.example.currencyapp.R
 import com.example.currencyapp.TAG
 import com.example.currencyapp.databinding.FragmentRatesListBinding
-import com.example.currencyapp.domain.model.CurrencyData
+import com.example.currencyapp.domain.model.rates.CurrencyData
 import com.example.currencyapp.domain.model.DataState.*
 import com.example.currencyapp.domain.services.ConnectivityObserver
 import com.example.currencyapp.ui.ratesList.RatesListViewModel
@@ -45,19 +45,9 @@ class RatesListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         setupCurrenciesList()
+        setupSearchView()
 
         with(binding) {
-            searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-                override fun onQueryTextSubmit(query: String?): Boolean {
-                    return false
-                }
-
-                override fun onQueryTextChange(newText: String?): Boolean {
-                    filter(newText)
-                    return true
-                }
-
-            })
 
             ratesSettingsImageButton.setOnClickListener {
                 viewModel.ratesSettings.value.let { ratesListSettings ->
@@ -70,6 +60,20 @@ class RatesListFragment : Fragment() {
         }
 
         setupObservers()
+    }
+
+    private fun setupSearchView() {
+        binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                filter(newText)
+                return true
+            }
+
+        })
     }
 
     fun filter(keyword: String?) {

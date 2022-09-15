@@ -5,13 +5,11 @@ import com.example.currencyapp.TAG
 import com.example.currencyapp.data.repository.local.LocalDBRepository
 import com.example.currencyapp.data.repository.preferences.PreferencesRepository
 import com.example.currencyapp.data.repository.remote.RemoteRepository
-import com.example.currencyapp.domain.model.Currencies
-import com.example.currencyapp.domain.model.CurrencyData
-import com.example.currencyapp.domain.model.DataState
+import com.example.currencyapp.domain.model.rates.Currencies
+import com.example.currencyapp.domain.model.rates.CurrencyData
 import com.example.currencyapp.ui.ratesList.model.RatesListSettings
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import java.io.IOException
 import javax.inject.Inject
 
 class RatesRepositoryUseCase @Inject constructor(

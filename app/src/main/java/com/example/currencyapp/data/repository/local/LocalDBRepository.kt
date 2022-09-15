@@ -1,9 +1,6 @@
 package com.example.currencyapp.data.repository.local
 
-import com.example.currencyapp.domain.model.CurrencyData
-import com.example.currencyapp.domain.model.DataState
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Job
+import com.example.currencyapp.domain.model.rates.CurrencyData
 
 interface LocalDBRepository {
 

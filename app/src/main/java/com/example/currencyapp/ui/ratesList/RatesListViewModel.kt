@@ -7,7 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.currencyapp.TAG
-import com.example.currencyapp.domain.model.CurrencyData
+import com.example.currencyapp.domain.model.rates.CurrencyData
 import com.example.currencyapp.domain.model.DataState
 import com.example.currencyapp.domain.repository.rates.RatesRepository
 import com.example.currencyapp.ui.BaseViewModel

@@ -3,6 +3,7 @@ package com.example.currencyapp.data.remote.entities.news
 
 import com.google.gson.annotations.SerializedName
 
+
 data class Data(
     @SerializedName("description")
     val description: String,
@@ -18,4 +19,8 @@ data class Data(
     val title: String,
     @SerializedName("url")
     val url: String
-)
+) {
+    companion object {
+        const val DATE_TIME_DELIMITER = 'T'
+    }
+}

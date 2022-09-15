@@ -1,4 +1,4 @@
-package com.example.currencyapp.domain.model
+package com.example.currencyapp.domain.model.rates
 
 enum class Currencies(val fullName: String) {
     AED("United Arab Emirates Dirham"),

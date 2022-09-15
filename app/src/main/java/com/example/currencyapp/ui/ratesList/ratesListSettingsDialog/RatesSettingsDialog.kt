@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.widget.ArrayAdapter
+import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import com.example.currencyapp.R
@@ -32,6 +33,8 @@ class RatesSettingsDialog : DialogFragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = AlertDialogRatesTabSettingsBinding.inflate(inflater, container, false)
+
+        settings = arguments?.get(SETTINGS_ARGUMENT) as RatesListSettings
         return binding.root
     }
 
@@ -105,11 +108,12 @@ class RatesSettingsDialog : DialogFragment() {
 
     companion object {
         const val TAG = "SettingsDialog"
+        private const val SETTINGS_ARGUMENT = "Settings"
         fun newInstance(
             settings: RatesListSettings?
         ): RatesSettingsDialog {
             return RatesSettingsDialog().also {
-                it.settings = settings ?: RatesListSettings()
+                it.arguments = bundleOf(SETTINGS_ARGUMENT to settings)
             }
         }
     }

@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.SearchView
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -45,13 +46,40 @@ class NewsListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.rvNewsList.adapter = adapter
 
-        //TODO: setup search view
+        setupSearchView()
 
         setupObservers()
 
         binding.settingsImageButton.setOnClickListener {
             binding.root.findNavController()
                 .navigate(NewsListFragmentDirections.actionNavigationNewsToSearchSettingsFragment())
+        }
+    }
+
+    private fun setupSearchView() {
+        binding.searchViewNews.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                filter(newText)
+                return true
+            }
+
+        })
+    }
+
+    fun filter(keyword: String?) {
+        val cashedListState = viewModel.newsDataState.value
+
+        if (cashedListState is Success) {
+            adapter.newsList = if (!keyword.isNullOrEmpty())
+                cashedListState.result.filter {
+                    it.containsKeyword(keyword)
+                }
+            else
+                cashedListState.result
         }
     }
 

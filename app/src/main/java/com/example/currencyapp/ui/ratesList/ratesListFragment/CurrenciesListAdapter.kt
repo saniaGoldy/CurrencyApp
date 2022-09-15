@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.currencyapp.R
 import com.example.currencyapp.databinding.CurrenciesListItemBinding
-import com.example.currencyapp.domain.model.CurrencyData
+import com.example.currencyapp.domain.model.rates.CurrencyData
 
 //private const val roundingFormat: String = "%.3f"
 
