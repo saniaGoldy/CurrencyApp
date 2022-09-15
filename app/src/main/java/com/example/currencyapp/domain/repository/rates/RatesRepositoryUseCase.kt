@@ -11,6 +11,7 @@ import com.example.currencyapp.domain.model.DataState
 import com.example.currencyapp.ui.ratesList.model.RatesListSettings
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import java.io.IOException
 import javax.inject.Inject
 
 class RatesRepositoryUseCase @Inject constructor(
@@ -24,7 +25,7 @@ class RatesRepositoryUseCase @Inject constructor(
 
 
     override suspend fun fetchCurrenciesList(
-    ): DataState<List<CurrencyData>> {
+    ): Result<List<CurrencyData>> {
 
         updateLocalDB()
 
@@ -47,19 +48,19 @@ class RatesRepositoryUseCase @Inject constructor(
             }) {
 
             baseCurrencyChanged = false
-            fetchRatesFromRemote(baseCurrency).let { dataState ->
+            fetchRatesFromRemote(baseCurrency).let { result ->
 
-                if (dataState is DataState.Success) {
+                if (result.isSuccess) {
                     when (isUpToDate) {
                         //It's null when app is started first time on the device
                         null -> {
                             localDBRepository.saveCurrenciesList(
-                                dataState.result
+                                result.getOrNull()!!
                             )
                         }
                         else -> {
                             localDBRepository.updateCurrenciesList(
-                                dataState.result
+                                result.getOrNull()!!
                             )
                         }
                     }
@@ -71,7 +72,7 @@ class RatesRepositoryUseCase @Inject constructor(
 
     private suspend fun fetchRatesFromRemote(
         baseCurrency: String
-    ): DataState<List<CurrencyData>> {
+    ): Result<List<CurrencyData>> {
         preferencesRepository.saveRatesUpdateDate()
         return remoteRepository.loadCurrencyList(baseCurrency)
     }

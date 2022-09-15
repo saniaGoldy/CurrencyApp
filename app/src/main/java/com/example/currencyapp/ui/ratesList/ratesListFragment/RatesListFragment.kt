@@ -61,6 +61,7 @@ class RatesListFragment : Fragment() {
 
             ratesSettingsImageButton.setOnClickListener {
                 viewModel.ratesSettings.value.let { ratesListSettings ->
+                    //TODO: pass settings in bundle
                     RatesSettingsDialog.newInstance(
                         ratesListSettings
                     ).show(childFragmentManager, RatesSettingsDialog.TAG)

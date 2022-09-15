@@ -16,7 +16,7 @@ class NewsRepositoryUseCase @Inject constructor(
     private val remoteRepository: RemoteRepository
 ) : NewsRepository {
 
-    override suspend fun fetchNewsList(settings: SearchSettings): DataState<List<Data>> {
+    override suspend fun fetchNewsList(settings: SearchSettings): Result<List<Data>> {
         return remoteRepository.fetchNewsList(settings)
     }
 

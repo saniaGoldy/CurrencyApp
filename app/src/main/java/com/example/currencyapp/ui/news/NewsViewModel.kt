@@ -15,9 +15,7 @@ import com.example.currencyapp.domain.repository.news.NewsRepository
 import com.example.currencyapp.ui.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -44,9 +42,14 @@ class NewsViewModel @Inject constructor(
 
         viewModelScope.launch(exceptionHandler) {
             _newsDataState.postValue(
-                repository.fetchNewsList(
-                    settings
-                )
+                repository.fetchNewsList(settings)
+                    .let {
+                        if (it.isSuccess) {
+                            DataState.Success(it.getOrNull()!!)
+                        }else{
+                            DataState.Failure(it.exceptionOrNull().toString())
+                        }
+                    }
             )
         }
     }
@@ -72,7 +75,7 @@ class NewsViewModel @Inject constructor(
         settings.timeGapMode = timeGapMode
 
         if (searchSettings.value != settings) {
-            viewModelScope.launch { repository.saveNewsSettings(settings)}
+            viewModelScope.launch { repository.saveNewsSettings(settings) }
         }
     }
 }

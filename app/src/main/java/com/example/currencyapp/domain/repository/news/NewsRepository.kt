@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface NewsRepository {
 
-    suspend fun fetchNewsList(settings: SearchSettings): DataState<List<Data>>
+    suspend fun fetchNewsList(settings: SearchSettings): Result<List<Data>>
 
     fun loadNewsSettings(): Flow<SearchSettings>
 

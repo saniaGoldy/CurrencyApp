@@ -19,6 +19,7 @@ class CurrenciesListAdapter(val onListItemClickedActionCallback: ItemClickedActi
 
     fun setRoundingFormat(precision: Int) {
         roundingFormat = roundingFormat.replaceFirst(Regex("\\d"), precision.toString())
+        notifyItemRangeChanged(0, currenciesList.size)
     }
 
     private val diffCallback = object : DiffUtil.ItemCallback<CurrencyData>() {
@@ -73,7 +74,6 @@ class CurrenciesListAdapter(val onListItemClickedActionCallback: ItemClickedActi
             tvRate.text = String.format(roundingFormat, item.rate)
 
             val rateDiff = item.getRateDifference()
-            //TODO: get format for rounding from settings
             val rateDiffText = String.format(roundingFormat, rateDiff)
 
             if (rateDiff >= 0) {

@@ -6,7 +6,8 @@ import com.example.currencyapp.domain.model.CurrencyData
 import com.example.currencyapp.domain.model.DataState
 
 interface RemoteRepository {
-    suspend fun loadCurrencyList(baseCurrency: String): DataState<List<CurrencyData>>
 
-    suspend fun fetchNewsList(settings: SearchSettings): DataState<List<Data>>
+    suspend fun loadCurrencyList(baseCurrency: String): Result<List<CurrencyData>>
+
+    suspend fun fetchNewsList(settings: SearchSettings): Result<List<Data>>
 }

@@ -43,7 +43,13 @@ class RatesListViewModel @Inject constructor(
 
             val result = repository.fetchCurrenciesList()
 
-            _ratesDataState.postValue(result)
+            _ratesDataState.postValue(
+                if(result.isSuccess){
+                    DataState.Success(result.getOrNull()!!)
+                }else{
+                    DataState.Failure(result.exceptionOrNull()!!.stackTraceToString())
+                }
+            )
         }
     }
 

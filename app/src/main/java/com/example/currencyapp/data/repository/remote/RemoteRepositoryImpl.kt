@@ -8,12 +8,13 @@ import com.example.currencyapp.data.remote.entities.news.SearchSettings
 import com.example.currencyapp.domain.CurrentDateData
 import com.example.currencyapp.domain.model.CurrencyData
 import com.example.currencyapp.domain.model.DataState
+import java.io.IOException
 
 class RemoteRepositoryImpl(
     private val currencyAPI: CurrencyAPI,
 ): RemoteRepository {
 
-    override suspend fun loadCurrencyList(baseCurrency: String): DataState<List<CurrencyData>> {
+    override suspend fun loadCurrencyList(baseCurrency: String): Result<List<CurrencyData>> {
         val response = currencyAPI.getCurrencyRates(
             CurrentDateData.startDate,
             CurrentDateData.currentDate,
@@ -44,14 +45,14 @@ class RemoteRepositoryImpl(
 
             Log.d(TAG, "loadCurrencyList: $currenciesData")
 
-            DataState.Success(currenciesData)
+            Result.success(currenciesData)
 
         } else {
-            DataState.Failure(response.errorBody().toString())
+           Result.failure(IOException(response.errorBody().toString()))
         }
     }
 
-    override suspend fun fetchNewsList(settings: SearchSettings): DataState<List<Data>> {
+    override suspend fun fetchNewsList(settings: SearchSettings): Result<List<Data>> {
         val response = currencyAPI.getCurrencyNews(
             settings.tags,
             settings.keywords,
@@ -59,9 +60,9 @@ class RemoteRepositoryImpl(
         )
 
         return if (response.isSuccessful) {
-            DataState.Success(response.body()!!.data)
+            Result.success(response.body()!!.data)
         } else {
-            DataState.Failure(response.errorBody().toString())
+            Result.failure(IOException(response.errorBody().toString()))
         }
     }
 }
