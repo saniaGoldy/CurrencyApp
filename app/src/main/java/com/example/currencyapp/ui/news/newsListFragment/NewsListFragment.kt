@@ -101,7 +101,7 @@ class NewsListFragment : Fragment() {
                         Toast.makeText(
                             requireContext(),
                             if (viewModel.networkStatus.value == ConnectivityObserver.Status.Available) getString(
-                                R.string.standart_error_message
+                                R.string.standard_error_message
                             ) else getString(
                                 R.string.no_internet_connection_error_message
                             ),

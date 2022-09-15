@@ -4,10 +4,11 @@ import com.example.currencyapp.domain.model.rates.CurrencyData
 
 interface LocalDBRepository {
 
-    /**returns empty list if failed*/
     suspend fun fetchCurrenciesList(): Result<List<CurrencyData>>
 
     suspend fun saveCurrenciesList(currencies: List<CurrencyData>)
 
     suspend fun updateCurrenciesList(currencies: List<CurrencyData>)
+
+    suspend fun fetchCurrencyDataByCode(code: String): Result<CurrencyData>
 }

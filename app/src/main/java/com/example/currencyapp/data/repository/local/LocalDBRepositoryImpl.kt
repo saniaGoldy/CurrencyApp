@@ -19,7 +19,7 @@ class LocalDBRepositoryImpl(private val localDB: LocalDB) : LocalDBRepository {
 
         return currencies.let {
             if (it.isEmpty()) {
-                Result.failure(IOException("failed to lad data from local repository"))
+                Result.failure(IOException("failed to load data from local repository"))
             } else {
                 Result.success(it)
             }
@@ -58,5 +58,10 @@ class LocalDBRepositoryImpl(private val localDB: LocalDB) : LocalDBRepository {
                     "Updating data in local db: $currencies"
                 )
             }
+    }
+
+    override suspend fun fetchCurrencyDataByCode(code: String): Result<CurrencyData> {
+         val currencyEntity: CurrencyDataEntity = localDB.currencyDao().findById(code)
+        return Result.success(CurrencyData(currencyEntity.iso4217Alpha, currencyEntity.rate, currencyEntity.rateStory))
     }
 }

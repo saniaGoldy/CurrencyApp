@@ -88,4 +88,8 @@ class RatesRepositoryUseCase @Inject constructor(
             baseCurrency = ratesListSettings.currencyCode
             ratesListSettings
         }
+
+    override suspend fun getCurrencyByCode(code: String): Result<CurrencyData> {
+        return localDBRepository.fetchCurrencyDataByCode(code)
+    }
 }

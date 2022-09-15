@@ -51,7 +51,6 @@ class RatesListFragment : Fragment() {
 
             ratesSettingsImageButton.setOnClickListener {
                 viewModel.ratesSettings.value.let { ratesListSettings ->
-                    //TODO: pass settings in bundle
                     RatesSettingsDialog.newInstance(
                         ratesListSettings
                     ).show(childFragmentManager, RatesSettingsDialog.TAG)
@@ -112,7 +111,7 @@ class RatesListFragment : Fragment() {
                     Toast.makeText(
                         this.requireContext(),
                         if (viewModel.networkStatus.value == ConnectivityObserver.Status.Available) getString(
-                            R.string.standart_error_message
+                            R.string.standard_error_message
                         ) else getString(
                             R.string.no_internet_connection_error_message
                         ),

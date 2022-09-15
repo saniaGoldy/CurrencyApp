@@ -4,20 +4,23 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.compose.ui.Modifier
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.navArgs
+import com.example.currencyapp.R
 import com.example.currencyapp.databinding.FragmentCurrencyInfoBinding
+import com.example.currencyapp.domain.model.DataState
 import com.example.currencyapp.domain.model.DataState.Success
-import com.example.currencyapp.ui.ratesList.RatesListViewModel
 import com.google.accompanist.appcompattheme.AppCompatTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class CurrencyInfoFragment : Fragment() {
 
-    private val viewModel: RatesListViewModel by activityViewModels()
+    private val viewModel: CurrencyInfoViewModel by activityViewModels()
 
     private var _binding: FragmentCurrencyInfoBinding? = null
     private val binding get() = _binding!!
@@ -29,17 +32,31 @@ class CurrencyInfoFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentCurrencyInfoBinding.inflate(inflater, container, false)
-        val rateStory = viewModel.ratesDataState.value.let { dataState ->
-            if (dataState is Success)
-                dataState.result.find { it.iso4217Alpha == args.currencyCode }?.rateStory ?: mapOf()
-            else mapOf()
-        }
 
-        binding.rateStoryChart.setContent {
-            AppCompatTheme {
-                CurrencyRatesChart(rateStory = rateStory, modifier = Modifier)
+        viewModel.loadCurrencyData(args.currencyCode)
+
+        viewModel.currency.observe(viewLifecycleOwner) { dataState ->
+            binding.progressBarRatesChart.isVisible = dataState is DataState.Loading
+            when (dataState) {
+                is Success -> {
+                    binding.rateStoryChart.setContent {
+                        AppCompatTheme {
+                            CurrencyRatesChart(rateStory = dataState.result.rateStory ?: mapOf(), modifier = Modifier)
+                        }
+                    }
+                }
+                is DataState.Failure -> {
+                    Toast.makeText(
+                        requireContext(),
+                        getString(R.string.standard_error_message),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+                else ->{}
             }
         }
+
+
         return binding.root
     }
 

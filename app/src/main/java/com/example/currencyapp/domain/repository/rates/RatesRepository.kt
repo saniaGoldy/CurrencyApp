@@ -12,4 +12,5 @@ interface RatesRepository {
 
     fun loadRatesListSettings(): Flow<RatesListSettings>
 
+    suspend fun getCurrencyByCode(code: String):Result<CurrencyData>
 }
