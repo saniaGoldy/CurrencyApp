@@ -60,9 +60,9 @@ class RatesListFragment : Fragment() {
             })
 
             ratesSettingsImageButton.setOnClickListener {
-                viewModel.ratesSettings.value?.let { ratesListSettings ->
+                viewModel.ratesSettings.value.let { ratesListSettings ->
                     RatesSettingsDialog.newInstance(
-                        viewModel.ratesSettings.value!!
+                        ratesListSettings
                     ).show(childFragmentManager, RatesSettingsDialog.TAG)
                 }
             }

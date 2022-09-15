@@ -106,10 +106,10 @@ class RatesSettingsDialog : DialogFragment() {
     companion object {
         const val TAG = "SettingsDialog"
         fun newInstance(
-            settings: RatesListSettings
+            settings: RatesListSettings?
         ): RatesSettingsDialog {
             return RatesSettingsDialog().also {
-                it.settings = settings
+                it.settings = settings ?: RatesListSettings()
             }
         }
     }
