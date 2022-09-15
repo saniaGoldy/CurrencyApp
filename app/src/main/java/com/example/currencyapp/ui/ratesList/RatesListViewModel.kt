@@ -14,7 +14,9 @@ import com.example.currencyapp.ui.BaseViewModel
 import com.example.currencyapp.ui.ratesList.model.RatesListSettings
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -39,24 +41,28 @@ class RatesListViewModel @Inject constructor(
     fun updateDataState() {
         Log.d(TAG, "Rates View model updateDataState")
         viewModelScope.launch(exceptionHandler) {
-            _ratesDataState.postValue(DataState.Loading)
+            withContext(Dispatchers.IO){
+                _ratesDataState.postValue(DataState.Loading)
 
-            val result = repository.fetchCurrenciesList()
+                val result = repository.fetchCurrenciesList()
 
-            _ratesDataState.postValue(
-                if(result.isSuccess){
-                    DataState.Success(result.getOrNull()!!)
-                }else{
-                    DataState.Failure(result.exceptionOrNull()!!.stackTraceToString())
-                }
-            )
+                _ratesDataState.postValue(
+                    if(result.isSuccess){
+                        DataState.Success(result.getOrNull()!!)
+                    }else{
+                        DataState.Failure(result.exceptionOrNull()!!.stackTraceToString())
+                    }
+                )
+            }
         }
     }
 
     fun updateRatesListSettings(settings: RatesListSettings) {
-        viewModelScope.launch {
-            Log.d(TAG, "updateRatesListSettings: $settings")
-            repository.saveRatesListSettings(settings)
+        viewModelScope.launch(exceptionHandler) {
+            withContext(Dispatchers.IO){
+                Log.d(TAG, "updateRatesListSettings: $settings")
+                repository.saveRatesListSettings(settings)
+            }
         }
     }
 }

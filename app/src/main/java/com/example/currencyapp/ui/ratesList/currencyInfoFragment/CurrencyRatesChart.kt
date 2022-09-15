@@ -21,7 +21,7 @@ private const val TEXT_SIZE = 12
 private const val SPACING = 100f
 
 //constants for chart
-private const val RATES_SCALE = 2
+private const val RATES_SCALE = 3
 private const val GRAPH_GRADIENT_TOP_COLOR_ALPHA = 0.5f
 private const val Y_AXIS_BOTTOM_MARGIN = 5
 private const val X_AXIS_VALUES_NUMBER = 5

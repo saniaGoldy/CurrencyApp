@@ -75,7 +75,6 @@ class RatesRepositoryUseCase @Inject constructor(
         return remoteRepository.loadCurrencyList(baseCurrency)
     }
 
-    //TODO: call withContext(Dispatchers.IO) ?
     override suspend fun saveRatesListSettings(settings: RatesListSettings) {
         baseCurrencyChanged = settings.currencyCode != baseCurrency
         Log.d(TAG, "saveRatesListSettings baseCurrencyChanged: $baseCurrencyChanged")

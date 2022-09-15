@@ -12,7 +12,9 @@ import com.example.currencyapp.domain.repository.rates.RatesRepository
 import com.example.currencyapp.ui.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -33,15 +35,17 @@ class CurrencyInfoViewModel @Inject constructor(
     fun loadCurrencyData(code: String){
         _currency.value = DataState.Loading
         viewModelScope.launch(exceptionHandler) {
-            _currency.postValue(
-                repository.getCurrencyByCode(code).let {
-                    if (it.isSuccess){
-                        DataState.Success(it.getOrNull()!!)
-                    }else{
-                        DataState.Failure(it.exceptionOrNull().toString())
+            withContext(Dispatchers.IO){
+                _currency.postValue(
+                    repository.getCurrencyByCode(code).let {
+                        if (it.isSuccess) {
+                            DataState.Success(it.getOrNull()!!)
+                        } else {
+                            DataState.Failure(it.exceptionOrNull().toString())
+                        }
                     }
-                }
-            )
+                )
+            }
         }
     }
 }
