@@ -29,11 +29,15 @@
     <string name="back_again_to_exit">Press back again to exit</string>
     <string name="please_wait">Please wait</string>
     <string name="currency_info">currency info</string>
-    <string name="rates_chart">rates chart</string>
+    <string name="rates_chart">rates chart for last week</string>
     <string name="base_currency_spinner">base currency spinner</string>
     <string name="rate_difference_precision_spinner">rate difference spinner</string>
     <string name="base_currency_settings_title">Base currency :</string>
     <string name="daily_rate_difference_precision">Daily rate difference precision:</string>
     <string name="rates_list_settings_title">Rates list settings</string>
     <string name="currency_rates_title">Currency rates for %1$s</string>
+    <string name="based_on_detailes">Chart uses rates based on %1$s</string>
+    <string name="title_rates_chart_for">Rates chart for %1$s</string>
+    <string name="from_to">from: %1$s to: %2$s</string>
+    <string name="rates">rates</string>
 </resources>

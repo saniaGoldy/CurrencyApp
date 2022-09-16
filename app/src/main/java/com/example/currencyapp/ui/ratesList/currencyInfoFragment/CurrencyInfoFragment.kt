@@ -14,6 +14,7 @@ import com.example.currencyapp.R
 import com.example.currencyapp.databinding.FragmentCurrencyInfoBinding
 import com.example.currencyapp.domain.model.DataState
 import com.example.currencyapp.domain.model.DataState.Success
+import com.example.currencyapp.domain.model.rates.Currencies
 import com.google.accompanist.appcompattheme.AppCompatTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -34,14 +35,32 @@ class CurrencyInfoFragment : Fragment() {
         _binding = FragmentCurrencyInfoBinding.inflate(inflater, container, false)
 
         viewModel.loadCurrencyData(args.currencyCode)
+        binding.tvChartFragmentTitle.text =
+            getString(R.string.title_rates_chart_for, Currencies.valueOf(args.currencyCode).fullName)
 
+        setupObservers()
+
+        return binding.root
+    }
+
+    private fun setupObservers() {
         viewModel.currency.observe(viewLifecycleOwner) { dataState ->
             binding.progressBarRatesChart.isVisible = dataState is DataState.Loading
             when (dataState) {
                 is Success -> {
+                    val currencyRateStory = dataState.result.rateStory ?: mapOf()
+
+                    currencyRateStory.keys.toList().let {
+                        binding.tvChartTimeStamp.text =
+                            getString(R.string.from_to, it[0], it[it.lastIndex])
+                    }
+
                     binding.rateStoryChart.setContent {
                         AppCompatTheme {
-                            CurrencyRatesChart(rateStory = dataState.result.rateStory ?: mapOf(), modifier = Modifier)
+                            CurrencyRatesChart(
+                                rateStory = currencyRateStory,
+                                modifier = Modifier
+                            )
                         }
                     }
                 }
@@ -52,12 +71,9 @@ class CurrencyInfoFragment : Fragment() {
                         Toast.LENGTH_SHORT
                     ).show()
                 }
-                else ->{}
+                else -> {}
             }
         }
-
-
-        return binding.root
     }
 
 }

@@ -56,5 +56,8 @@
         <argument
             android:name="currencyCode"
             app:argType="string" />
+        <argument
+            android:name="settings"
+            app:argType="com.example.currencyapp.ui.ratesList.model.RatesListSettings" />
     </fragment>
 </navigation>

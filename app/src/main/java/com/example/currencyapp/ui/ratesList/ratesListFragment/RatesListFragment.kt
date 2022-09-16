@@ -18,6 +18,7 @@ import com.example.currencyapp.domain.model.rates.CurrencyData
 import com.example.currencyapp.domain.model.DataState.*
 import com.example.currencyapp.domain.services.ConnectivityObserver
 import com.example.currencyapp.ui.ratesList.RatesListViewModel
+import com.example.currencyapp.ui.ratesList.model.RatesListSettings
 import com.example.currencyapp.ui.ratesList.ratesListSettingsDialog.RatesSettingsDialog
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -131,7 +132,8 @@ class RatesListFragment : Fragment() {
                     override fun run(currencyData: CurrencyData) {
                         binding.root.findNavController().navigate(
                             RatesListFragmentDirections.actionNavigationCurrenciesToCurrencyInfoFragment(
-                                currencyData.iso4217Alpha
+                                currencyData.iso4217Alpha,
+                                viewModel.ratesSettings.value ?: RatesListSettings()
                             )
                         )
                     }
