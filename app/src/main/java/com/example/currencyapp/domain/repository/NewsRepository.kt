@@ -1,10 +1,7 @@
-package com.example.currencyapp.domain.repository.news
+package com.example.currencyapp.domain.repository
 
-import com.example.currencyapp.data.remote.entities.news.Data
 import com.example.currencyapp.data.remote.entities.news.SearchSettings
-import com.example.currencyapp.domain.model.DataState
 import com.example.currencyapp.domain.model.news.NewsData
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 
 interface NewsRepository {

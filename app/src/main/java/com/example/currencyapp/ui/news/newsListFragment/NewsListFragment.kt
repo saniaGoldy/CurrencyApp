@@ -16,7 +16,6 @@ import com.example.currencyapp.TAG
 import com.example.currencyapp.databinding.FragmentNewsListBinding
 import com.example.currencyapp.domain.model.DataState.*
 import com.example.currencyapp.domain.services.ConnectivityObserver
-import com.example.currencyapp.ui.news.NewsViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -26,7 +25,7 @@ class NewsListFragment : Fragment() {
         fun newInstance() = NewsListFragment()
     }
 
-    private val viewModel: NewsViewModel by activityViewModels()
+    private val viewModel: NewsListViewModel by activityViewModels()
 
     private val adapter = NewsListAdapter()
 

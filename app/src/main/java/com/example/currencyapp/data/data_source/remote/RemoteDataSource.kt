@@ -1,11 +1,10 @@
-package com.example.currencyapp.data.repository.remote
+package com.example.currencyapp.data.data_source.remote
 
-import com.example.currencyapp.data.remote.entities.news.Data
 import com.example.currencyapp.data.remote.entities.news.SearchSettings
 import com.example.currencyapp.domain.model.news.NewsData
 import com.example.currencyapp.domain.model.rates.CurrencyData
 
-interface RemoteRepository {
+interface RemoteDataSource {
 
     suspend fun loadCurrencyList(baseCurrency: String): Result<List<CurrencyData>>
 

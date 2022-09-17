@@ -36,7 +36,10 @@ class CurrencyInfoFragment : Fragment() {
 
         viewModel.loadCurrencyData(args.currencyCode)
         binding.tvChartFragmentTitle.text =
-            getString(R.string.title_rates_chart_for, Currencies.valueOf(args.currencyCode).fullName)
+            getString(
+                R.string.title_rates_chart_for,
+                Currencies.valueOf(args.currencyCode).fullName
+            )
 
         setupObservers()
 

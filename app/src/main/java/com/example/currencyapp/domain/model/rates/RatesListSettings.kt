@@ -1,10 +1,12 @@
-package com.example.currencyapp.ui.ratesList.model
+package com.example.currencyapp.domain.model.rates
 
 import android.os.Parcel
 import android.os.Parcelable
-import com.example.currencyapp.domain.model.rates.Currencies
 
-data class RatesListSettings(val currencyCode: String = Currencies.UAH.name, val precision: Int = 3) :
+data class RatesListSettings(
+    val currencyCode: String = Currencies.UAH.name,
+    val precision: Int = 3
+) :
     Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readString() ?: "Oopsie",

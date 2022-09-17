@@ -58,6 +58,6 @@
             app:argType="string" />
         <argument
             android:name="settings"
-            app:argType="com.example.currencyapp.ui.ratesList.model.RatesListSettings" />
+            app:argType="com.example.currencyapp.domain.model.rates.RatesListSettings" />
     </fragment>
 </navigation>

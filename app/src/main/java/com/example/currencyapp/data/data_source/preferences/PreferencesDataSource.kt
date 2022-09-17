@@ -1,11 +1,10 @@
-package com.example.currencyapp.data.repository.preferences
+package com.example.currencyapp.data.data_source.preferences
 
 import com.example.currencyapp.data.remote.entities.news.SearchSettings
-import com.example.currencyapp.ui.ratesList.model.RatesListSettings
-import kotlinx.coroutines.CoroutineScope
+import com.example.currencyapp.domain.model.rates.RatesListSettings
 import kotlinx.coroutines.flow.Flow
 
-interface PreferencesRepository {
+interface PreferencesDataSource {
     fun loadNewsSettings(): Flow<SearchSettings>
 
     suspend fun saveNewsSettings(settings: SearchSettings)

@@ -1,4 +1,4 @@
-package com.example.currencyapp.data.repository.preferences
+package com.example.currencyapp.data.data_source.preferences
 
 import android.util.Log
 import androidx.datastore.core.DataStore
@@ -8,15 +8,14 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import com.example.currencyapp.TAG
 import com.example.currencyapp.data.remote.entities.news.SearchSettings
 import com.example.currencyapp.domain.CurrentDateData
-import com.example.currencyapp.ui.ratesList.model.RatesListSettings
+import com.example.currencyapp.domain.model.rates.RatesListSettings
 import com.google.gson.Gson
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 
-class PreferencesRepositoryImpl(private val dataStore: DataStore<Preferences>) :
-    PreferencesRepository {
+class PreferencesDataSourceImpl(private val dataStore: DataStore<Preferences>) :
+    PreferencesDataSource {
     private val gson = Gson()
 
     override fun loadNewsSettings(): Flow<SearchSettings> {

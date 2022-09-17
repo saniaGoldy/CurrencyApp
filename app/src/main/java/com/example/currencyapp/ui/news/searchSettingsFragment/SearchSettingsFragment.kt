@@ -10,21 +10,23 @@ import android.widget.ArrayAdapter
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import com.example.currencyapp.R
 import com.example.currencyapp.TAG
 import com.example.currencyapp.data.remote.entities.news.NewsApiRequestOptions
+import com.example.currencyapp.data.remote.entities.news.SearchSettings
 import com.example.currencyapp.databinding.FragmentSearchSettingsBinding
-import com.example.currencyapp.ui.news.NewsViewModel
 import com.google.android.material.textfield.TextInputLayout
+import dagger.hilt.android.AndroidEntryPoint
 
 private const val TAGS_REGEX = " *-?[\\w ]+(?:, *-?(?:\\w+ *)+)*"
 private const val DATE_REGEX = "\\d{4}-\\d{2}-\\d{2}"
 
+@AndroidEntryPoint
 class SearchSettingsFragment : Fragment() {
 
-    private val viewModel: NewsViewModel by activityViewModels()
+    private val viewModel: SearchSettingsViewModel by viewModels()
 
     private var _binding: FragmentSearchSettingsBinding? = null
     private val binding get() = _binding!!
@@ -47,12 +49,15 @@ class SearchSettingsFragment : Fragment() {
             spinnerItems.add(option)
         }
 
-        setupDropDownList()
 
-        with(binding) {
-            setupInputTextFields()
+        viewModel.searchSettings.observe(viewLifecycleOwner) {
+            setupDropDownList(it)
 
-            setupButtons()
+            with(binding) {
+                setupInputTextFields(it)
+
+                setupButtons()
+            }
         }
     }
 
@@ -77,7 +82,7 @@ class SearchSettingsFragment : Fragment() {
         }
     }
 
-    private fun FragmentSearchSettingsBinding.setupInputTextFields() {
+    private fun FragmentSearchSettingsBinding.setupInputTextFields(settings: SearchSettings) {
 
         editTextKeywords.setText(viewModel.searchSettings.value?.keywords)
 
@@ -100,7 +105,7 @@ class SearchSettingsFragment : Fragment() {
                 getString(R.string.edit_text_error_message)
             )
 
-            editText?.setText(viewModel.searchSettings.value?.timeGap?.substringBefore(","))
+            editText?.setText(settings.timeGap.substringBefore(","))
         }
         textInputDateTo.apply {
             setupErrorHandling(
@@ -108,12 +113,12 @@ class SearchSettingsFragment : Fragment() {
                 getString(R.string.edit_text_error_message)
             )
 
-            editText?.setText(viewModel.searchSettings.value?.timeGap?.substringAfter(","))
+            editText?.setText(settings.timeGap.substringAfter(","))
         }
     }
 
 
-    private fun setupDropDownList() = with(binding) {
+    private fun setupDropDownList(settings: SearchSettings) = with(binding) {
 
         ArrayAdapter.createFromResource(
             requireContext(),
@@ -154,7 +159,7 @@ class SearchSettingsFragment : Fragment() {
             }
         }
 
-        spinner.setSelection(spinnerItems.indexOf(viewModel.searchSettings.value?.timeGapMode))
+        spinner.setSelection(spinnerItems.indexOf(settings.timeGapMode))
 
     }
 

@@ -12,15 +12,16 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import com.example.currencyapp.R
 import com.example.currencyapp.databinding.AlertDialogRatesTabSettingsBinding
-import com.example.currencyapp.ui.ratesList.RatesListViewModel
-import com.example.currencyapp.ui.ratesList.model.RatesListSettings
+import com.example.currencyapp.domain.model.rates.RatesListSettings
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class RatesSettingsDialog : DialogFragment() {
 
     private lateinit var _binding: AlertDialogRatesTabSettingsBinding
     private val binding get() = _binding
 
-    private val viewModel: RatesListViewModel by viewModels(ownerProducer = { requireParentFragment() })
+    private val viewModel: RatesSettingsViewModel by viewModels()
 
     lateinit var baseCurrencyOptions: Array<String>
     lateinit var precisionOptions: List<Int>

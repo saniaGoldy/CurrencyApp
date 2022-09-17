@@ -13,8 +13,8 @@ data class NewsData(
     val title: String,
 
     val url: String
-){
-    fun containsKeyword(keyword: String, ignoreCase: Boolean = true): Boolean{
+) {
+    fun containsKeyword(keyword: String, ignoreCase: Boolean = true): Boolean {
         return description.contains(keyword, ignoreCase)
                 || publishedAt.publishDate.contains(keyword, ignoreCase)
                 || publishedAt.publishTime.contains(keyword, ignoreCase)
@@ -23,7 +23,7 @@ data class NewsData(
                 || title.contains(keyword, ignoreCase)
     }
 
-    fun getTagsAsString(): String{
+    fun getTagsAsString(): String {
         return tags.toString().let { it.substring(1, it.length) }
     }
 }

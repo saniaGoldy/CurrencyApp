@@ -14,11 +14,10 @@ import androidx.navigation.findNavController
 import com.example.currencyapp.R
 import com.example.currencyapp.TAG
 import com.example.currencyapp.databinding.FragmentRatesListBinding
-import com.example.currencyapp.domain.model.rates.CurrencyData
 import com.example.currencyapp.domain.model.DataState.*
+import com.example.currencyapp.domain.model.rates.CurrencyData
+import com.example.currencyapp.domain.model.rates.RatesListSettings
 import com.example.currencyapp.domain.services.ConnectivityObserver
-import com.example.currencyapp.ui.ratesList.RatesListViewModel
-import com.example.currencyapp.ui.ratesList.model.RatesListSettings
 import com.example.currencyapp.ui.ratesList.ratesListSettingsDialog.RatesSettingsDialog
 import dagger.hilt.android.AndroidEntryPoint
 
