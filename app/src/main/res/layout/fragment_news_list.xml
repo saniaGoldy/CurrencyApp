@@ -5,6 +5,7 @@
     android:id="@+id/constraintLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/stockmarket"
     tools:context=".ui.news.newsListFragment.NewsListFragment">
 
     <androidx.recyclerview.widget.RecyclerView
@@ -22,37 +23,39 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/newsListHeaderFoldableContainer"
         android:layout_width="0dp"
-        android:layout_height="280dp"
-        android:background="@drawable/stockmarket"
+        android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+        <TextView
+            android:id="@+id/tvNewsListTitle"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:text="@string/title_news"
+            android:textAlignment="center"
+            android:textSize="30sp"
+            app:layout_constraintEnd_toStartOf="@+id/settingsImageButton"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageButton
+            android:id="@+id/settingsImageButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:backgroundTint="@android:color/transparent"
+            android:minHeight="48dp"
+            android:src="@drawable/ic_baseline_settings_24"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="SpeakableTextPresentCheck" />
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <TextView
-        android:id="@+id/tvNewsListTitle"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="13dp"
-        android:text="@string/title_news"
-        android:textAlignment="center"
-        android:textSize="30sp"
-        app:layout_constraintEnd_toStartOf="@+id/settingsImageButton"
-        app:layout_constraintStart_toStartOf="@+id/newsListHeaderFoldableContainer"
-        app:layout_constraintTop_toTopOf="@+id/newsListHeaderFoldableContainer" />
-
-    <ImageButton
-        android:id="@+id/settingsImageButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:backgroundTint="@android:color/transparent"
-        android:minHeight="48dp"
-        android:src="@drawable/ic_baseline_settings_24"
-        app:layout_constraintEnd_toEndOf="@+id/newsListHeaderFoldableContainer"
-        app:layout_constraintTop_toTopOf="@+id/tvNewsListTitle"
-        tools:ignore="SpeakableTextPresentCheck" />
 
 
     <ProgressBar
