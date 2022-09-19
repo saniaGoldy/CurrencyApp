@@ -47,33 +47,32 @@ class RatesRepositoryImpl @Inject constructor(
             }) {
 
             baseCurrencyChanged = false
-            fetchRatesFromRemote(baseCurrency).let { result ->
 
-                if (result.isSuccess) {
+            try {
+                fetchRatesFromRemote(baseCurrency).let { result ->
                     when (isUpToDate) {
                         //It's null when app is started first time on the device
                         null -> {
                             localDBDataSource.saveCurrenciesList(
-                                result.getOrNull()!!
+                                result
                             )
                         }
                         else -> {
                             localDBDataSource.updateCurrenciesList(
-                                result.getOrNull()!!
+                                result
                             )
                         }
                     }
-
-                } else {
-                    Log.e(TAG, "updateLocalDB: failed to fetch rates data from remote")
                 }
+            }catch (e: Exception){
+                Log.e(TAG, "updateLocalDB: failed to fetch rates data from remote")
             }
         }
     }
 
     private suspend fun fetchRatesFromRemote(
         baseCurrency: String
-    ): Result<List<CurrencyData>> {
+    ): List<CurrencyData> {
         preferencesDataSource.saveRatesUpdateDate()
         return remoteDataSource.loadCurrencyList(baseCurrency)
     }

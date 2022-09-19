@@ -1,6 +1,6 @@
 package com.example.currencyapp.domain.model.rates
 
-
+/**[iso4217Alpha] have to be one of [Currencies] values*/
 data class CurrencyData(
     val iso4217Alpha: String,
     val rate: Double,

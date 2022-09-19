@@ -6,7 +6,7 @@ import com.example.currencyapp.domain.model.rates.CurrencyData
 
 interface RemoteDataSource {
 
-    suspend fun loadCurrencyList(baseCurrency: String): Result<List<CurrencyData>>
+    suspend fun loadCurrencyList(baseCurrency: String): List<CurrencyData>
 
-    suspend fun fetchNewsList(settings: SearchSettings): Result<List<NewsData>>
+    suspend fun fetchNewsList(settings: SearchSettings): List<NewsData>
 }

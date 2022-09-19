@@ -16,7 +16,7 @@ class NewsListUseCase @Inject constructor(
     suspend fun fetchNewsList(settings: SearchSettings): Result<List<NewsData>> {
         return withContext(Dispatchers.IO) {
             try {
-                (newsRepository.fetchNewsList(settings))
+                Result.success(newsRepository.fetchNewsList(settings))
             } catch (ex: Exception) {
                 Log.d(TAG, "fetchNewsList: ${ex.message}")
                 Result.failure(ex)
