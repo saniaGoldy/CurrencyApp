@@ -8,6 +8,7 @@ import com.example.currencyapp.data.data_source.remote.RemoteDataSourceImpl
 import com.example.currencyapp.data.local.LocalDB
 import com.example.currencyapp.data.remote.CurrencyAPI
 import com.example.currencyapp.dataStore
+import com.example.currencyapp.other.Constants
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -29,7 +30,7 @@ object AppModule {
         val interceptor = HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
         val clientBuilder = OkHttpClient.Builder().addInterceptor(interceptor)
         return Retrofit.Builder()
-            .baseUrl("https://api.apilayer.com/")
+            .baseUrl(Constants.API_BASE_URL)
             .client(clientBuilder.build())
             .addConverterFactory(GsonConverterFactory.create())
             .build()
@@ -42,7 +43,7 @@ object AppModule {
         return Room.databaseBuilder(
             context.applicationContext,
             LocalDB::class.java,
-            "currencyfluctuation"
+            Constants.CURRENCY_LOCAL_DB_NAME
         ).fallbackToDestructiveMigration().build()
     }
 
