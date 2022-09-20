@@ -27,6 +27,7 @@ class RatesRepositoryImpl @Inject constructor(
     ): List<CurrencyData> {
 
         updateLocalDB()
+        Log.d(TAG, "fetchCurrenciesList: afterLocalDBUpdate")
 
         return localDBDataSource.fetchCurrenciesList()
     }
@@ -50,21 +51,13 @@ class RatesRepositoryImpl @Inject constructor(
 
             try {
                 fetchRatesFromRemote(baseCurrency).let { result ->
-                    when (isUpToDate) {
-                        //It's null when app is started first time on the device
-                        null -> {
-                            localDBDataSource.saveCurrenciesList(
-                                result
-                            )
-                        }
-                        else -> {
-                            localDBDataSource.updateCurrenciesList(
-                                result
-                            )
-                        }
+                    if (isUpToDate != true) {
+                        localDBDataSource.saveCurrenciesList(
+                            result
+                        )
                     }
                 }
-            }catch (e: Exception){
+            } catch (e: Exception) {
                 Log.e(TAG, "updateLocalDB: failed to fetch rates data from remote")
             }
         }
