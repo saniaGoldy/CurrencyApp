@@ -18,7 +18,7 @@ interface CurrencyAPI {
         @Query("start_date") startDate: String,
         @Query("end_date") endDate: String,
         @Query("base") base: String
-    ): Response<CurrenciesFluctuationsResponse>
+    ): CurrenciesFluctuationsResponse
 
     @Headers("apikey: ${BuildConfig.RATES_API_KEY}")
     @GET("/exchangerates_data/timeseries")
@@ -26,7 +26,7 @@ interface CurrencyAPI {
         @Query("start_date") startDate: String,
         @Query("end_date") endDate: String,
         @Query("base") base: String
-    ): Response<CurrenciesRateStory>
+    ): CurrenciesRateStory
 
 
     /**
@@ -42,7 +42,7 @@ interface CurrencyAPI {
         @Query("tags") tags: String,
         @Query("keywords") keywords: String,
         @Query("date") date: String
-    ): Response<NewsResponse>
+    ): NewsResponse
 
 
 }
