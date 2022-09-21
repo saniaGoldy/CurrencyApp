@@ -29,15 +29,6 @@ class LocalDBDataSourceImpl(private val localDB: LocalDB) : LocalDBDataSource {
         }
     }
 
-    override suspend fun updateCurrenciesList(currencies: List<CurrencyData>) {
-        localDB.currencyDao().update(currencies.mapCurrencyDataToEntity()).also {
-            Log.d(
-                TAG,
-                "Updating data in local db: $currencies"
-            )
-        }
-    }
-
     override suspend fun fetchCurrencyDataByCode(code: String): CurrencyData =
         localDB.currencyDao().findById(code).toCurrencyData()
 }
