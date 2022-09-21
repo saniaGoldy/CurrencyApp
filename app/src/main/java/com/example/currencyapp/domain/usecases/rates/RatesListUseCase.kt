@@ -23,7 +23,6 @@ class RatesListUseCase @Inject constructor(
                     }
                 }
             } catch (ex: Exception) {
-                Log.d(TAG, "fetchNewsList: ${ex.message}")
                 Result.failure(ex)
             }
         }

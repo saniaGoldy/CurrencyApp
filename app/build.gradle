@@ -172,9 +172,11 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.5.1'
     // UI Tests
     androidTestImplementation 'androidx.compose.ui:ui-test-junit4:1.2.1'
-
     // When using a AppCompat theme
     implementation "com.google.accompanist:accompanist-appcompat-theme:0.25.1"
+
+    //MokK
+    testImplementation "io.mockk:mockk:1.9.3"
 
 }
 
