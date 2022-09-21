@@ -5,7 +5,9 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.SmallTest
 import androidx.test.platform.app.InstrumentationRegistry
 import com.example.currencyapp.domain.model.DataState
+import com.example.currencyapp.domain.model.rates.CurrencyData
 import com.example.currencyapp.domain.usecases.rates.RatesListUseCase
+import com.example.currencyapp.getOrAwaitValue
 import com.google.common.truth.Truth
 import io.mockk.coEvery
 import io.mockk.mockk
@@ -43,11 +45,12 @@ internal class RatesListViewModelTest {
     fun updateDataStateReturnsSuccessWhenReceiveResultSuccess() = runTest {
 
         coEvery { interactorMock.fetchRatesList() } returns Result.success(
-            listOf()
+            listOf(CurrencyData("UAH", 1.0, mapOf()))
         )
         viewModel.updateDataState()
-        runBlocking { delay(100L) }
-        Truth.assertThat(viewModel.ratesDataState.value).isInstanceOf(DataState.Success::class.java)
+
+        //TODO: Fix this mf
+        Truth.assertThat(viewModel.ratesDataState.getOrAwaitValue(valueCountdown = 2)).isInstanceOf(DataState.Success::class.java)
     }
 
     @Test
@@ -56,8 +59,8 @@ internal class RatesListViewModelTest {
             IOException()
         )
         viewModel.updateDataState()
-        runBlocking { delay(100L) }
-        Truth.assertThat(viewModel.ratesDataState.value).isInstanceOf(DataState.Failure::class.java)
+
+        Truth.assertThat(viewModel.ratesDataState.getOrAwaitValue(valueCountdown = 2)).isInstanceOf(DataState.Failure::class.java)
     }
 
     @Test
@@ -66,6 +69,6 @@ internal class RatesListViewModelTest {
 
         viewModel.updateDataState()
 
-        Truth.assertThat(viewModel.ratesDataState.value).isInstanceOf(DataState.Loading::class.java)
+        Truth.assertThat(viewModel.ratesDataState.getOrAwaitValue()).isInstanceOf(DataState.Loading::class.java)
     }
 }

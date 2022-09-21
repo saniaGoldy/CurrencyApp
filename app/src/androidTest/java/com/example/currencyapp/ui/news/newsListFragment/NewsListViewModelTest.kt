@@ -7,6 +7,7 @@ import androidx.test.platform.app.InstrumentationRegistry
 import com.example.currencyapp.data.remote.entities.news.SearchSettings
 import com.example.currencyapp.domain.model.DataState
 import com.example.currencyapp.domain.usecases.news.NewsListUseCase
+import com.example.currencyapp.getOrAwaitValue
 import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
 import io.mockk.mockk
@@ -50,8 +51,8 @@ internal class NewsListViewModelTest {
             listOf()
         )
         viewModel.fetchNews(searchSettings)
-        runBlocking { delay(100L) }
-        assertThat(viewModel.newsDataState.value).isInstanceOf(DataState.Success::class.java)
+
+        assertThat(viewModel.newsDataState.getOrAwaitValue(valueCountdown = 2)).isInstanceOf(DataState.Success::class.java)
     }
 
     @Test
@@ -61,8 +62,8 @@ internal class NewsListViewModelTest {
         )
 
         viewModel.fetchNews(searchSettings)
-        runBlocking { delay(100L) }
-        assertThat(viewModel.newsDataState.value).isInstanceOf(DataState.Failure::class.java)
+
+        assertThat(viewModel.newsDataState.getOrAwaitValue(valueCountdown = 2)).isInstanceOf(DataState.Failure::class.java)
     }
 
     @Test
@@ -71,6 +72,6 @@ internal class NewsListViewModelTest {
 
         viewModel.fetchNews(searchSettings)
 
-        assertThat(viewModel.newsDataState.value).isInstanceOf(DataState.Loading::class.java)
+        assertThat(viewModel.newsDataState.getOrAwaitValue()).isInstanceOf(DataState.Loading::class.java)
     }
 }

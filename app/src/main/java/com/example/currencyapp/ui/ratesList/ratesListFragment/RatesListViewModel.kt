@@ -26,16 +26,15 @@ class RatesListViewModel @Inject constructor(
     val ratesSettings: LiveData<RatesListSettings> = interactor.fetchRatesSettings()
 
     private val _ratesDataState =
-        MutableLiveData<DataState<List<CurrencyData>>>()
+        MutableLiveData<DataState<List<CurrencyData>>>(DataState.Default)
 
     val ratesDataState: LiveData<DataState<List<CurrencyData>>>
         get() = _ratesDataState
 
     fun updateDataState() {
-        _ratesDataState.postValue(DataState.Loading)
+        _ratesDataState.value = DataState.Loading
         Log.d(TAG, "Rates View model updateDataState")
         viewModelScope.launch {
-            withContext(Dispatchers.IO) {
                 val result = interactor.fetchRatesList()
 
                 _ratesDataState.postValue(
@@ -45,7 +44,7 @@ class RatesListViewModel @Inject constructor(
                         DataState.Failure(result.exceptionOrNull()?.message.toString())
                     }
                 )
-            }
+
         }
     }
 }

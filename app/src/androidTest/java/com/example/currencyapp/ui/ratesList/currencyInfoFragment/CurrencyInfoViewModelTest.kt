@@ -4,16 +4,14 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.SmallTest
 import androidx.test.platform.app.InstrumentationRegistry
-import com.example.currencyapp.data.remote.entities.news.SearchSettings
 import com.example.currencyapp.domain.model.DataState
 import com.example.currencyapp.domain.model.rates.CurrencyData
 import com.example.currencyapp.domain.usecases.rates.RatesCurrencyInfoUseCase
+import com.example.currencyapp.getOrAwaitValue
 import com.google.common.truth.Truth
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
@@ -44,12 +42,18 @@ internal class CurrencyInfoViewModelTest {
     @Test
     fun loadCurrencyDataReturnsSuccessWhenReceiveResultSuccess() = runTest {
 
+        val currencyData = CurrencyData("UAH", 1.0, mapOf())
         coEvery { interactorMock.getCurrencyByCode("") } returns Result.success(
-            CurrencyData("UAH", 1.0, mapOf())
+            currencyData
         )
         viewModel.loadCurrencyData("UAH")
-        runBlocking { delay(100L) }
-        Truth.assertThat(viewModel.currency.value).isInstanceOf(DataState.Success::class.java)
+
+
+        Truth.assertThat(
+            viewModel.currency.getOrAwaitValue(
+                valueCountdown = 2
+            )
+        ).isInstanceOf(DataState.Success::class.java)
     }
 
     @Test
@@ -58,8 +62,9 @@ internal class CurrencyInfoViewModelTest {
             IOException()
         )
         viewModel.loadCurrencyData("")
-        runBlocking { delay(100L) }
-        Truth.assertThat(viewModel.currency.value).isInstanceOf(DataState.Failure::class.java)
+
+        Truth.assertThat(viewModel.currency.getOrAwaitValue(valueCountdown = 2))
+            .isInstanceOf(DataState.Failure::class.java)
     }
 
     @Test
@@ -68,6 +73,6 @@ internal class CurrencyInfoViewModelTest {
 
         viewModel.loadCurrencyData("")
 
-        Truth.assertThat(viewModel.currency.value).isInstanceOf(DataState.Loading::class.java)
+        Truth.assertThat(viewModel.currency.getOrAwaitValue()).isInstanceOf(DataState.Loading::class.java)
     }
 }
