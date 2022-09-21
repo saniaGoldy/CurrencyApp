@@ -1,6 +1,6 @@
 package com.example.currencyapp.ui.ratesList.ratesListFragment
 
-import android.app.Application
+import android.content.Context
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -20,23 +20,22 @@ import javax.inject.Inject
 @HiltViewModel
 class RatesListViewModel @Inject constructor(
     private val interactor: RatesListUseCase,
-    context: Application
+    context: Context
 ) : BaseViewModel(context) {
 
     val ratesSettings: LiveData<RatesListSettings> = interactor.fetchRatesSettings()
 
     private val _ratesDataState =
-        MutableLiveData<DataState<List<CurrencyData>>>(DataState.Default)
+        MutableLiveData<DataState<List<CurrencyData>>>()
 
     val ratesDataState: LiveData<DataState<List<CurrencyData>>>
         get() = _ratesDataState
 
     fun updateDataState() {
+        _ratesDataState.postValue(DataState.Loading)
         Log.d(TAG, "Rates View model updateDataState")
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                _ratesDataState.postValue(DataState.Loading)
-
                 val result = interactor.fetchRatesList()
 
                 _ratesDataState.postValue(

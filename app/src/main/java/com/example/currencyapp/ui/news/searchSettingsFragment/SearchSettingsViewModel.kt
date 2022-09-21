@@ -1,6 +1,7 @@
 package com.example.currencyapp.ui.news.searchSettingsFragment
 
 import android.app.Application
+import android.content.Context
 import androidx.lifecycle.viewModelScope
 import com.example.currencyapp.data.remote.entities.news.NewsApiRequestOptions
 import com.example.currencyapp.data.remote.entities.news.SearchSettings
@@ -13,7 +14,7 @@ import javax.inject.Inject
 @HiltViewModel
 class SearchSettingsViewModel @Inject constructor(
     private val interactor: NewsSettingsEditUseCase,
-    context: Application
+    context: Context
 ) : SearchSettingsBaseViewModel(interactor, context) {
 
     fun setSearchSettings(

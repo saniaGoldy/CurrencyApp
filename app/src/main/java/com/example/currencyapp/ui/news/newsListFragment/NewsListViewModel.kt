@@ -1,6 +1,7 @@
 package com.example.currencyapp.ui.news.newsListFragment
 
 import android.app.Application
+import android.content.Context
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -18,7 +19,7 @@ import javax.inject.Inject
 @HiltViewModel
 class NewsListViewModel @Inject constructor(
     private val interactor: NewsListUseCase,
-    context: Application
+    context: Context
 ) : SearchSettingsBaseViewModel(interactor, context) {
 
     private val _newsDataState: MutableLiveData<DataState<List<NewsData>>> =

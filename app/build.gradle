@@ -51,6 +51,9 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+    packagingOptions {
+        resources.excludes.add("META-INF/*")
+    }
 }
 
 dependencies {
@@ -117,7 +120,7 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-reactivestreams:$lifecycle_version")
 
     // optional - Test helpers for LiveData
-    testImplementation("androidx.arch.core:core-testing:$arch_version")
+    androidTestImplementation("androidx.arch.core:core-testing:$arch_version")
 
 
     // Retrofit
@@ -176,7 +179,8 @@ dependencies {
     implementation "com.google.accompanist:accompanist-appcompat-theme:0.25.1"
 
     //MokK
-    testImplementation "io.mockk:mockk:1.9.3"
+    androidTestImplementation 'io.mockk:mockk-android:1.12.8'
+    implementation 'com.github.wseemann:FFmpegMediaMetadataRetriever-native:1.0.15'
 
 }
 
