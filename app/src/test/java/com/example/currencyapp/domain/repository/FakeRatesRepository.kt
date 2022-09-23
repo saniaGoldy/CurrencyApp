@@ -7,7 +7,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import java.io.IOException
 
-class FakeRatesRepository(remoteDataSource: FakeRemoteDataSource = FakeRemoteDataSource()) : RatesRepository {
+class FakeRatesRepository(remoteDataSource: FakeRemoteDataSource = FakeRemoteDataSource()) :
+    RatesRepository {
 
     private var fetchCurrencyListShouldThrowException = false
     private var fetchCurrencyListShouldReturnEmptyList = false

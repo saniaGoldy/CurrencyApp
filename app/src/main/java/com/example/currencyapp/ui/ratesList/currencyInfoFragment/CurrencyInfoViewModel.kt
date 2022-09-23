@@ -1,6 +1,5 @@
 package com.example.currencyapp.ui.ratesList.currencyInfoFragment
 
-import android.app.Application
 import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -10,13 +9,14 @@ import com.example.currencyapp.domain.model.rates.CurrencyData
 import com.example.currencyapp.domain.usecases.rates.RatesCurrencyInfoUseCase
 import com.example.currencyapp.ui.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class CurrencyInfoViewModel @Inject constructor(
     private val interactor: RatesCurrencyInfoUseCase,
-    context: Context
+    @ApplicationContext context: Context
 ) : BaseViewModel(context) {
 
     private val _currency = MutableLiveData<DataState<CurrencyData>>(DataState.Default)

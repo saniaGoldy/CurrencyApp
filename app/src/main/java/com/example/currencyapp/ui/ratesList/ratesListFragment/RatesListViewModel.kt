@@ -12,15 +12,14 @@ import com.example.currencyapp.domain.model.rates.RatesListSettings
 import com.example.currencyapp.domain.usecases.rates.RatesListUseCase
 import com.example.currencyapp.ui.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
 class RatesListViewModel @Inject constructor(
     private val interactor: RatesListUseCase,
-    context: Context
+    @ApplicationContext context: Context
 ) : BaseViewModel(context) {
 
     val ratesSettings: LiveData<RatesListSettings> = interactor.fetchRatesSettings()
@@ -35,15 +34,15 @@ class RatesListViewModel @Inject constructor(
         _ratesDataState.value = DataState.Loading
         Log.d(TAG, "Rates View model updateDataState")
         viewModelScope.launch {
-                val result = interactor.fetchRatesList()
+            val result = interactor.fetchRatesList()
 
-                _ratesDataState.postValue(
-                    if (result.isSuccess) {
-                        DataState.Success(result.getOrNull()!!)
-                    } else {
-                        DataState.Failure(result.exceptionOrNull()?.message.toString())
-                    }
-                )
+            _ratesDataState.postValue(
+                if (result.isSuccess) {
+                    DataState.Success(result.getOrNull()!!)
+                } else {
+                    DataState.Failure(result.exceptionOrNull()?.message.toString())
+                }
+            )
 
         }
     }

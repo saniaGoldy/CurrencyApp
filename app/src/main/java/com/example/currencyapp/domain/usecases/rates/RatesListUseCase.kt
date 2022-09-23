@@ -1,7 +1,5 @@
 package com.example.currencyapp.domain.usecases.rates
 
-import android.util.Log
-import com.example.currencyapp.TAG
 import com.example.currencyapp.domain.model.rates.CurrencyData
 import com.example.currencyapp.domain.repository.RatesRepository
 import kotlinx.coroutines.Dispatchers

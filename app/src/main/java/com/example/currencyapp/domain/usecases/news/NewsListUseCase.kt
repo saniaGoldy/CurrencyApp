@@ -1,7 +1,5 @@
 package com.example.currencyapp.domain.usecases.news
 
-import android.util.Log
-import com.example.currencyapp.TAG
 import com.example.currencyapp.data.remote.entities.news.SearchSettings
 import com.example.currencyapp.domain.model.news.NewsData
 import com.example.currencyapp.domain.repository.NewsRepository

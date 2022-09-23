@@ -34,13 +34,13 @@ object CurrencyDataMapper {
         }
     }
 
-    fun List<CurrencyDataEntity>.mapEntityToCurrencyData(): List<CurrencyData>{
+    fun List<CurrencyDataEntity>.mapEntityToCurrencyData(): List<CurrencyData> {
         return this.map { entity ->
             entity.toCurrencyData()
         }
     }
 
-    fun CurrencyData.toEntity (): CurrencyDataEntity {
+    fun CurrencyData.toEntity(): CurrencyDataEntity {
         return CurrencyDataEntity(
             this.iso4217Alpha,
             this.rate,

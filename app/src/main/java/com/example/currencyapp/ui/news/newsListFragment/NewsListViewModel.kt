@@ -1,6 +1,5 @@
 package com.example.currencyapp.ui.news.newsListFragment
 
-import android.app.Application
 import android.content.Context
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -13,13 +12,14 @@ import com.example.currencyapp.domain.model.news.NewsData
 import com.example.currencyapp.domain.usecases.news.NewsListUseCase
 import com.example.currencyapp.ui.news.SearchSettingsBaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class NewsListViewModel @Inject constructor(
     private val interactor: NewsListUseCase,
-    context: Context
+    @ApplicationContext context: Context
 ) : SearchSettingsBaseViewModel(interactor, context) {
 
     private val _newsDataState: MutableLiveData<DataState<List<NewsData>>> =

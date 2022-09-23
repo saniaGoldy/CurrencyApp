@@ -37,7 +37,7 @@ class FakeRemoteDataSource : RemoteDataSource {
     )
 
     override suspend fun loadCurrencyList(baseCurrency: String): List<CurrencyData> {
-        if (loadCurrencyListShouldThrowException){
+        if (loadCurrencyListShouldThrowException) {
             throw IOException()
         }
         return currencies

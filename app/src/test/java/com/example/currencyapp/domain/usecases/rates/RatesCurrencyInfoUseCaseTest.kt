@@ -21,13 +21,25 @@ internal class RatesCurrencyInfoUseCaseTest {
     fun `getCurrencyByCode returns Success`() = runBlocking {
 
         val code = "UAH"
-        assertThat(useCase.getCurrencyByCode(code)).isEqualTo(Result.success(repository.getCurrencyByCode(code)))
+        assertThat(useCase.getCurrencyByCode(code)).isEqualTo(
+            Result.success(
+                repository.getCurrencyByCode(
+                    code
+                )
+            )
+        )
     }
 
     @Test
     fun `getCurrencyByCode returns Failure if catches exception`() = runBlocking {
         repository.setFetchCurrencyListShouldThrowException(true)
         val code = "UAH"
-        assertThat(useCase.getCurrencyByCode(code)).isEqualTo(Result.success(repository.getCurrencyByCode(code)))
+        assertThat(useCase.getCurrencyByCode(code)).isEqualTo(
+            Result.success(
+                repository.getCurrencyByCode(
+                    code
+                )
+            )
+        )
     }
 }

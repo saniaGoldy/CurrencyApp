@@ -1,7 +1,6 @@
 package com.example.currencyapp.data.di
 
 import android.app.Application
-import android.content.Context
 import androidx.room.Room
 import com.example.currencyapp.data.data_source.local.LocalDBDataSourceImpl
 import com.example.currencyapp.data.data_source.preferences.PreferencesDataSourceImpl
@@ -25,8 +24,6 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object AppModule {
 
-
-
     @Provides
     @Singleton
     fun provideCurrencyAPI(): CurrencyAPI {
@@ -42,12 +39,6 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideContext(application: Application): Context {
-        return application.applicationContext
-    }
-
-    @Provides
-    @Singleton
     fun provideLocalDB(context: Application): LocalDB {
         return Room.databaseBuilder(
             context.applicationContext,
@@ -55,7 +46,6 @@ object AppModule {
             Constants.CURRENCY_LOCAL_DB_NAME
         ).fallbackToDestructiveMigration().build()
     }
-
 
 
     @Provides
