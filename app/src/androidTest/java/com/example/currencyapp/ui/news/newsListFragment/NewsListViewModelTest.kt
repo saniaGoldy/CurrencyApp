@@ -4,16 +4,15 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.SmallTest
 import androidx.test.platform.app.InstrumentationRegistry
+import com.example.currencyapp.LiveDataTestUtil
 import com.example.currencyapp.data.remote.entities.news.SearchSettings
 import com.example.currencyapp.domain.model.DataState
+import com.example.currencyapp.domain.model.news.NewsData
 import com.example.currencyapp.domain.usecases.news.NewsListUseCase
-import com.example.currencyapp.getOrAwaitValue
 import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
@@ -52,7 +51,20 @@ internal class NewsListViewModelTest {
         )
         viewModel.fetchNews(searchSettings)
 
-        assertThat(viewModel.newsDataState.getOrAwaitValue(valueCountdown = 2)).isInstanceOf(DataState.Success::class.java)
+
+
+        assertThat(
+            with(LiveDataTestUtil<DataState<List<NewsData>>>()) {
+                viewModel.newsDataState.isValueGetsEmitted(emissionChecker = object :
+                    LiveDataTestUtil.EmissionChecker {
+                    override fun <T> check(value: T?): Boolean {
+                        return value?.let {
+                            val emission = value as DataState<List<NewsData>>
+                            emission is DataState.Success<List<NewsData>>
+                        } ?: false
+                    }
+                })
+            }).isTrue()
     }
 
     @Test
@@ -63,7 +75,18 @@ internal class NewsListViewModelTest {
 
         viewModel.fetchNews(searchSettings)
 
-        assertThat(viewModel.newsDataState.getOrAwaitValue(valueCountdown = 2)).isInstanceOf(DataState.Failure::class.java)
+        assertThat(
+            with(LiveDataTestUtil<DataState<List<NewsData>>>()) {
+                viewModel.newsDataState.isValueGetsEmitted(emissionChecker = object :
+                    LiveDataTestUtil.EmissionChecker {
+                    override fun <T> check(value: T?): Boolean {
+                        return value?.let {
+                            val emission = value as DataState<List<NewsData>>
+                            emission is DataState.Failure
+                        } ?: false
+                    }
+                })
+            }).isTrue()
     }
 
     @Test
@@ -72,6 +95,17 @@ internal class NewsListViewModelTest {
 
         viewModel.fetchNews(searchSettings)
 
-        assertThat(viewModel.newsDataState.getOrAwaitValue()).isInstanceOf(DataState.Loading::class.java)
+        assertThat(
+            with(LiveDataTestUtil<DataState<List<NewsData>>>()) {
+                viewModel.newsDataState.isValueGetsEmitted(emissionChecker = object :
+                    LiveDataTestUtil.EmissionChecker {
+                    override fun <T> check(value: T?): Boolean {
+                        return value?.let {
+                            val emission = value as DataState<List<NewsData>>
+                            emission is DataState.Loading
+                        } ?: false
+                    }
+                })
+            }).isTrue()
     }
 }

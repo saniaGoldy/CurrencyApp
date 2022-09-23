@@ -4,31 +4,38 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
-import java.util.concurrent.TimeoutException
 
-fun <T> LiveData<T>.getOrAwaitValue(
-    time: Long = 2,
-    timeUnit: TimeUnit = TimeUnit.SECONDS,
-    valueCountdown: Int = 1,
-): T? {
-    var data: T? = null
-    val latch = CountDownLatch(valueCountdown)
-    val observer = object : Observer<T> {
-        override fun onChanged(o: T?) {
-            data = o
-            latch.countDown()
-            if (latch.await(time, timeUnit))
-                this@getOrAwaitValue.removeObserver(this)
+class LiveDataTestUtil<T> {
+    fun LiveData<T>.isValueGetsEmitted(
+        time: Long = 2,
+        timeUnit: TimeUnit = TimeUnit.SECONDS,
+        emissionChecker: EmissionChecker
+    ): Boolean {
+        var typeGotEmitted = false
+        val latch = CountDownLatch(1)
+        val observer = object : Observer<T> {
+            override fun onChanged(o: T?) {
+                if (emissionChecker.check(o)) {
+                    typeGotEmitted = true
+                    latch.countDown()
+                    this@isValueGetsEmitted.removeObserver(this)
+                }
+            }
         }
+
+        this.observeForever(observer)
+
+        // Don't wait indefinitely if the LiveData is not set.
+        if (!latch.await(time, timeUnit)) {
+            return typeGotEmitted
+        }
+
+        @Suppress("UNCHECKED_CAST")
+        return typeGotEmitted
     }
 
-    this.observeForever(observer)
-
-    // Don't wait indefinitely if the LiveData is not set.
-    if (!latch.await(time, timeUnit)) {
-        throw TimeoutException("LiveData value was never set.")
+    interface EmissionChecker {
+        fun <T> check(value: T?): Boolean
     }
 
-    @Suppress("UNCHECKED_CAST")
-    return data
 }

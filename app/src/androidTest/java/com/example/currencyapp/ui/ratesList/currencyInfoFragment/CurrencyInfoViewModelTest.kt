@@ -4,11 +4,11 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.SmallTest
 import androidx.test.platform.app.InstrumentationRegistry
+import com.example.currencyapp.LiveDataTestUtil
 import com.example.currencyapp.domain.model.DataState
 import com.example.currencyapp.domain.model.rates.CurrencyData
 import com.example.currencyapp.domain.usecases.rates.RatesCurrencyInfoUseCase
-import com.example.currencyapp.getOrAwaitValue
-import com.google.common.truth.Truth
+import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -49,11 +49,18 @@ internal class CurrencyInfoViewModelTest {
         viewModel.loadCurrencyData("UAH")
 
 
-        Truth.assertThat(
-            viewModel.currency.getOrAwaitValue(
-                valueCountdown = 2
-            )
-        ).isInstanceOf(DataState.Success::class.java)
+        assertThat(
+            with(LiveDataTestUtil<DataState<CurrencyData>>()) {
+                viewModel.currency.isValueGetsEmitted(emissionChecker = object :
+                    LiveDataTestUtil.EmissionChecker {
+                    override fun <T> check(value: T?): Boolean {
+                        return value?.let {
+                            val emission = value as DataState<CurrencyData>
+                            emission is DataState.Success<CurrencyData>
+                        } ?: false
+                    }
+                })
+            }).isTrue()
     }
 
     @Test
@@ -63,8 +70,18 @@ internal class CurrencyInfoViewModelTest {
         )
         viewModel.loadCurrencyData("")
 
-        Truth.assertThat(viewModel.currency.getOrAwaitValue(valueCountdown = 2))
-            .isInstanceOf(DataState.Failure::class.java)
+        assertThat(
+            with(LiveDataTestUtil<DataState<CurrencyData>>()) {
+                viewModel.currency.isValueGetsEmitted(emissionChecker = object :
+                    LiveDataTestUtil.EmissionChecker {
+                    override fun <T> check(value: T?): Boolean {
+                        return value?.let {
+                            val emission = value as DataState<CurrencyData>
+                            emission is DataState.Failure
+                        } ?: false
+                    }
+                })
+            }).isTrue()
     }
 
     @Test
@@ -73,6 +90,17 @@ internal class CurrencyInfoViewModelTest {
 
         viewModel.loadCurrencyData("")
 
-        Truth.assertThat(viewModel.currency.getOrAwaitValue()).isInstanceOf(DataState.Loading::class.java)
+        assertThat(
+            with(LiveDataTestUtil<DataState<CurrencyData>>()) {
+                viewModel.currency.isValueGetsEmitted(emissionChecker = object :
+                    LiveDataTestUtil.EmissionChecker {
+                    override fun <T> check(value: T?): Boolean {
+                        return value?.let {
+                            val emission = value as DataState<CurrencyData>
+                            emission is DataState.Loading
+                        } ?: false
+                    }
+                })
+            }).isTrue()
     }
 }
