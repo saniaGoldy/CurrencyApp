@@ -20,7 +20,7 @@ android {
         buildConfigField("String", "RATES_API_KEY", RATES_API_KEY)
         buildConfigField("String", "NEWS_API_KEY", NEWS_API_KEY)
 
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "com.example.currencyapp.HiltTestRunner"
 
         javaCompileOptions {
             annotationProcessorOptions {
