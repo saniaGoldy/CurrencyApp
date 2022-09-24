@@ -2,6 +2,7 @@ package com.example.currencyapp.data.di
 
 import android.app.Application
 import androidx.room.Room
+import com.example.currencyapp.BuildConfig
 import com.example.currencyapp.data.data_source.local.LocalDBDataSourceImpl
 import com.example.currencyapp.data.data_source.preferences.PreferencesDataSourceImpl
 import com.example.currencyapp.data.data_source.remote.RemoteDataSourceImpl
@@ -28,7 +29,10 @@ object AppModule {
     @Singleton
     fun provideCurrencyAPI(): CurrencyAPI {
         val interceptor = HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
-        val clientBuilder = OkHttpClient.Builder().addInterceptor(interceptor)
+        val clientBuilder = OkHttpClient.Builder().addInterceptor(interceptor).addInterceptor { chain ->
+            val request = chain.request().newBuilder().addHeader("apikey", BuildConfig.NEWS_API_KEY).build()
+            chain.proceed(request)
+        }
         return Retrofit.Builder()
             .baseUrl(Constants.API_BASE_URL)
             .client(clientBuilder.build())
