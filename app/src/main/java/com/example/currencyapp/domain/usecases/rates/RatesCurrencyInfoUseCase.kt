@@ -14,13 +14,8 @@ class RatesCurrencyInfoUseCase @Inject constructor(
 
     suspend fun getCurrencyByCode(code: String): Result<CurrencyData> {
         return withContext(Dispatchers.IO) {
-            try {
-                ratesRepository.getCurrencyByCode(code).let {
-                    Result.success(it)
-                }
-            } catch (ex: Exception) {
-                Log.d(TAG, "fetchNewsList: ${ex.message}")
-                Result.failure(ex)
+            runCatching {
+                ratesRepository.getCurrencyByCode(code)
             }
         }
     }

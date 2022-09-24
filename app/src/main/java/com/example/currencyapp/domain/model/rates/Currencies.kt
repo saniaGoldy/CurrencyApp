@@ -168,6 +168,10 @@ enum class Currencies(val fullName: String) {
     ZAR("South African Rand"),
     ZMK("Zambian Kwacha (pre-2013)"),
     ZMW("Zambian Kwacha"),
-    ZWL("Zimbabwean Dollar")
+    ZWL("Zimbabwean Dollar");
+
+    override fun toString(): String {
+        return this.name
+    }
 }
 

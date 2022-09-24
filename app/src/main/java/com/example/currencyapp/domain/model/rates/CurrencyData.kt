@@ -1,13 +1,12 @@
 package com.example.currencyapp.domain.model.rates
 
-/**[iso4217Alpha] have to be one of [Currencies] values*/
 data class CurrencyData(
-    val iso4217Alpha: String,
+    val currency: Currencies,
     val rate: Double,
     var rateStory: Map<String, Double>?
 ) {
 
-    val fullName: String = Currencies.valueOf(iso4217Alpha).fullName
+    constructor (code: String, rate: Double, rateStory: Map<String, Double>?) : this(Currencies.valueOf(code), rate, rateStory)
 
     fun getRateDifference(): Double {
         val rates = rateStory?.values?.toList()

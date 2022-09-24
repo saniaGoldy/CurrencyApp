@@ -28,7 +28,7 @@ class CurrenciesListAdapter(val onListItemClickedActionCallback: ItemClickedActi
             oldItem: CurrencyData,
             newItem: CurrencyData
         ): Boolean {
-            return oldItem.iso4217Alpha == newItem.iso4217Alpha
+            return oldItem.currency == newItem.currency
         }
 
         override fun areContentsTheSame(
@@ -69,8 +69,8 @@ class CurrenciesListAdapter(val onListItemClickedActionCallback: ItemClickedActi
 
         @SuppressLint("SetTextI18n")
         fun bind(item: CurrencyData) {
-            tvFullName.text = item.fullName
-            tvCode.text = item.iso4217Alpha
+            tvFullName.text = item.currency.fullName
+            tvCode.text = item.currency.name
             tvRate.text = String.format(roundingFormat, item.rate)
 
             val rateDiff = item.getRateDifference()

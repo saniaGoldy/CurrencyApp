@@ -2,6 +2,7 @@ package com.example.currencyapp.data.data_source.mappers
 
 import com.example.currencyapp.data.local.entities.CurrencyDataEntity
 import com.example.currencyapp.data.remote.entities.currencyRateStory.CurrenciesRateStory
+import com.example.currencyapp.domain.model.rates.Currencies
 import com.example.currencyapp.domain.model.rates.CurrencyData
 
 object CurrencyDataMapper {
@@ -10,14 +11,14 @@ object CurrencyDataMapper {
         val rates = this.rates.toList()
 
         rates[0].second.toList().forEach { rate ->
-            currenciesData.add(CurrencyData(rate.first, 1 / rate.second, null))
+            currenciesData.add(CurrencyData(Currencies.valueOf(rate.first), 1 / rate.second, null))
         }
 
         currenciesData.forEach { currencyData ->
             val dateToRateMap = mutableMapOf<String, Double>()
 
             rates.forEach { date ->
-                date.second[currencyData.iso4217Alpha]?.let { rate ->
+                date.second[currencyData.currency.name]?.let { rate ->
                     dateToRateMap[date.first] = 1 / rate
                 }
             }
@@ -42,13 +43,13 @@ object CurrencyDataMapper {
 
     fun CurrencyData.toEntity(): CurrencyDataEntity {
         return CurrencyDataEntity(
-            this.iso4217Alpha,
+            this.currency.name,
             this.rate,
             this.rateStory ?: mapOf()
         )
     }
 
     fun CurrencyDataEntity.toCurrencyData(): CurrencyData {
-        return CurrencyData(this.iso4217Alpha, this.rate, this.rateStory)
+        return CurrencyData(Currencies.valueOf(this.iso4217Alpha), this.rate, this.rateStory)
     }
 }

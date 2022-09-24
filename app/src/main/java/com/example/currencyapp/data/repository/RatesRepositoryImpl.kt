@@ -5,6 +5,7 @@ import com.example.currencyapp.TAG
 import com.example.currencyapp.data.data_source.local.LocalDBDataSource
 import com.example.currencyapp.data.data_source.preferences.PreferencesDataSource
 import com.example.currencyapp.data.data_source.remote.RemoteDataSource
+import com.example.currencyapp.domain.model.InconsistentData
 import com.example.currencyapp.domain.model.rates.Currencies
 import com.example.currencyapp.domain.model.rates.CurrencyData
 import com.example.currencyapp.domain.model.rates.RatesListSettings
@@ -24,15 +25,18 @@ class RatesRepositoryImpl @Inject constructor(
 
 
     override suspend fun fetchCurrenciesList(
-    ): List<CurrencyData> {
-
-        updateLocalDB()
+    ): InconsistentData<List<CurrencyData>> {
+        var message = updateLocalDB()
         Log.d(TAG, "fetchCurrenciesList: afterLocalDBUpdate")
 
-        return localDBDataSource.fetchCurrenciesList()
+        val data = localDBDataSource.fetchCurrenciesList().also { if (it.isNullOrEmpty()) message = "empty list"}
+
+        return message?.let { info ->
+            InconsistentData.SuccessWithErrorInfo(data, info)
+        } ?: InconsistentData.Success(data)
     }
 
-    private suspend fun updateLocalDB() {
+    private suspend fun updateLocalDB():String? {
         val isUpToDate = preferencesDataSource.isRatesUpToDate()
 
         if (isUpToDate.also {
@@ -58,9 +62,12 @@ class RatesRepositoryImpl @Inject constructor(
                     }
                 }
             } catch (e: Exception) {
-                Log.e(TAG, "updateLocalDB: failed to fetch rates data from remote")
+                val message = "failed to fetch rates data from remote"
+                Log.e(TAG, "updateLocalDB: $message")
+                return message
             }
         }
+        return null
     }
 
     private suspend fun fetchRatesFromRemote(
