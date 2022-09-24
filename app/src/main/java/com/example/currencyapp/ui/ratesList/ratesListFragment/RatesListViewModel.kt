@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.currencyapp.TAG
 import com.example.currencyapp.domain.model.DataState
+import com.example.currencyapp.domain.model.InconsistentData
 import com.example.currencyapp.domain.model.rates.CurrencyData
 import com.example.currencyapp.domain.model.rates.RatesListSettings
 import com.example.currencyapp.domain.usecases.rates.RatesListUseCase
@@ -37,10 +38,10 @@ class RatesListViewModel @Inject constructor(
             val result = interactor.fetchRatesList()
 
             _ratesDataState.postValue(
-                if (result.isSuccess) {
-                    DataState.Success(result.getOrNull()!!)
-                } else {
-                    DataState.Failure(result.exceptionOrNull()?.message.toString())
+                when(result){
+                    is InconsistentData.Failure -> DataState.Failure(result.errorInfo)
+                    is InconsistentData.Success -> DataState.Success(result.value)
+                    is InconsistentData.SuccessWithErrorInfo -> DataState.Success(result.value, result.errorInfo)
                 }
             )
 

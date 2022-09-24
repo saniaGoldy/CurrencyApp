@@ -12,12 +12,9 @@ class NewsListUseCase @Inject constructor(
 ) : NewsSettingsReadUseCase(newsRepository) {
 
     suspend fun fetchNewsList(settings: SearchSettings): Result<List<NewsData>> {
+
         return withContext(Dispatchers.IO) {
-            try {
-                Result.success(newsRepository.fetchNewsList(settings))
-            } catch (ex: Exception) {
-                Result.failure(ex)
-            }
+            kotlin.runCatching { newsRepository.fetchNewsList(settings) }
         }
     }
 }

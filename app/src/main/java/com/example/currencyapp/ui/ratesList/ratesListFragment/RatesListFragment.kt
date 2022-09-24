@@ -81,7 +81,10 @@ class RatesListFragment : Fragment() {
         if (cashedListState is Success) {
             currenciesListAdapter.currenciesList = if (!keyword.isNullOrEmpty())
                 cashedListState.result.filter {
-                    it.iso4217Alpha.contains(keyword, true) || it.fullName.contains(keyword, true)
+                    it.currency.name.contains(keyword, true) || it.currency.fullName.contains(
+                        keyword,
+                        true
+                    )
                 }
             else
                 cashedListState.result
@@ -104,24 +107,31 @@ class RatesListFragment : Fragment() {
             when (dataState) {
                 is Success -> {
                     currenciesListAdapter.currenciesList = dataState.result
+
+                    dataState.info?.let { showToast(it) }
                 }
                 is Failure -> {
                     Log.e(TAG, "dataStateObserver Failure: ${dataState.errorInfo}")
 
-                    Toast.makeText(
-                        this.requireContext(),
-                        if (viewModel.networkStatus.value == ConnectivityObserver.Status.Available) getString(
-                            R.string.standard_error_message
-                        ) else getString(
-                            R.string.no_internet_connection_error_message
-                        ),
-                        Toast.LENGTH_LONG
-                    ).show()
+                    showToast()
                 }
                 else -> {}
             }
         }
 
+    }
+
+    /** Pass null to [message] to use standard message*/
+    private fun showToast(message: String? = null) {
+        Toast.makeText(
+            this.requireContext(),
+            if (viewModel.networkStatus.value == ConnectivityObserver.Status.Available) {
+                message ?: getString(R.string.standard_error_message)
+            } else {
+                getString(R.string.no_internet_connection_error_message)
+            },
+            Toast.LENGTH_LONG
+        ).show()
     }
 
     private fun setupCurrenciesList() {
@@ -131,7 +141,7 @@ class RatesListFragment : Fragment() {
                     override fun run(currencyData: CurrencyData) {
                         binding.root.findNavController().navigate(
                             RatesListFragmentDirections.actionNavigationCurrenciesToCurrencyInfoFragment(
-                                currencyData.iso4217Alpha,
+                                currencyData.currency.name,
                                 viewModel.ratesSettings.value ?: RatesListSettings()
                             )
                         )

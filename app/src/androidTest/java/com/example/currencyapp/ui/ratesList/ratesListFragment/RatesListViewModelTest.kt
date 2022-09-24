@@ -6,6 +6,7 @@ import androidx.test.filters.SmallTest
 import androidx.test.platform.app.InstrumentationRegistry
 import com.example.currencyapp.LiveDataTestUtil
 import com.example.currencyapp.domain.model.DataState
+import com.example.currencyapp.domain.model.InconsistentData
 import com.example.currencyapp.domain.model.rates.CurrencyData
 import com.example.currencyapp.domain.usecases.rates.RatesListUseCase
 import com.google.common.truth.Truth.assertThat
@@ -17,7 +18,6 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import java.io.IOException
 
 @OptIn(ExperimentalCoroutinesApi::class)
 @RunWith(AndroidJUnit4::class)
@@ -42,7 +42,7 @@ internal class RatesListViewModelTest {
     @Test
     fun updateDataStateReturnsSuccessWhenReceiveResultSuccess() = runTest {
 
-        coEvery { interactorMock.fetchRatesList() } returns Result.success(
+        coEvery { interactorMock.fetchRatesList() } returns InconsistentData.Success(
             listOf(CurrencyData("UAH", 1.0, mapOf()))
         )
         viewModel.updateDataState()
@@ -64,9 +64,7 @@ internal class RatesListViewModelTest {
 
     @Test
     fun updateDataStateReturnsFailureWhenReceiveResultFailure() = runTest {
-        coEvery { interactorMock.fetchRatesList() } returns Result.failure(
-            IOException()
-        )
+        coEvery { interactorMock.fetchRatesList() } returns InconsistentData.Failure("some error")
         viewModel.updateDataState()
 
         assertThat(
@@ -84,8 +82,30 @@ internal class RatesListViewModelTest {
     }
 
     @Test
+    fun updateDataStateReturnsSuccessWhenReceiveSuccessWithMessage() = runTest {
+        coEvery { interactorMock.fetchRatesList() } returns InconsistentData.SuccessWithErrorInfo(
+            listOf(CurrencyData("UAH", 1.0, mapOf())),
+            "some error"
+        )
+        viewModel.updateDataState()
+
+        assertThat(
+            with(LiveDataTestUtil<DataState<List<CurrencyData>>>()) {
+                viewModel.ratesDataState.isValueGetsEmitted(emissionChecker = object :
+                    LiveDataTestUtil.EmissionChecker {
+                    override fun <T> check(value: T?): Boolean {
+                        return value?.let {
+                            val emission = value as DataState<List<CurrencyData>>
+                            emission is DataState.Success
+                        } ?: false
+                    }
+                })
+            }).isTrue()
+    }
+
+    @Test
     fun updateDataStateReturnsLoadingImmediatelyAfterLoadCurrencyDataCalled() = runTest {
-        coEvery { interactorMock.fetchRatesList() } returns Result.failure(IOException())
+        coEvery { interactorMock.fetchRatesList() } returns InconsistentData.Failure("some error")
 
         viewModel.updateDataState()
 
