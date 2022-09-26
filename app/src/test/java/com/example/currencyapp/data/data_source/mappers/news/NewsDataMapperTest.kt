@@ -1,13 +1,20 @@
-package com.example.currencyapp.data.data_source.mappers
+package com.example.currencyapp.data.data_source.mappers.news
 
-import com.example.currencyapp.data.data_source.mappers.NewsDataMapper.mapToNewsData
 import com.example.currencyapp.data.remote.entities.news.Data
 import com.example.currencyapp.domain.model.news.NewsData
 import com.example.currencyapp.domain.model.news.PublishDate
 import com.google.common.truth.Truth.assertThat
+import org.junit.Before
 import org.junit.Test
 
-internal class NewsDataMapperTest {
+internal class NewsDataMapperTest{
+
+    private lateinit var mapper: NewsDataMapper
+
+    @Before
+    fun setup(){
+        mapper = NewsDataMapper()
+    }
 
     @Test
     fun mapToNewsData() {
@@ -30,7 +37,7 @@ internal class NewsDataMapperTest {
             )
         )
 
-        assertThat(dataFromAPI.mapToNewsData()).isEqualTo(
+        assertThat(mapper.map(dataFromAPI)).isEqualTo(
             listOf(
                 NewsData(
                     description,

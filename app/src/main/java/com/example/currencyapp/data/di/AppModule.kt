@@ -4,6 +4,10 @@ import android.app.Application
 import androidx.room.Room
 import com.example.currencyapp.BuildConfig
 import com.example.currencyapp.data.data_source.local.LocalDBDataSourceImpl
+import com.example.currencyapp.data.data_source.mappers.currencies.CurrenciesRateStoryMapper
+import com.example.currencyapp.data.data_source.mappers.currencies.DataToEntityMapper
+import com.example.currencyapp.data.data_source.mappers.currencies.EntityToDataMapper
+import com.example.currencyapp.data.data_source.mappers.news.NewsDataMapper
 import com.example.currencyapp.data.data_source.preferences.PreferencesDataSourceImpl
 import com.example.currencyapp.data.data_source.remote.RemoteDataSourceImpl
 import com.example.currencyapp.data.local.LocalDB
@@ -61,12 +65,12 @@ object AppModule {
     @Provides
     @Singleton
     fun provideLocalRepository(localDB: LocalDB): LocalDBDataSourceImpl {
-        return LocalDBDataSourceImpl(localDB)
+        return LocalDBDataSourceImpl(localDB,EntityToDataMapper(),DataToEntityMapper())
     }
 
     @Provides
     @Singleton
     fun provideRemoteRepository(currencyAPI: CurrencyAPI): RemoteDataSourceImpl {
-        return RemoteDataSourceImpl(currencyAPI)
+        return RemoteDataSourceImpl(currencyAPI, NewsDataMapper(), CurrenciesRateStoryMapper())
     }
 }
