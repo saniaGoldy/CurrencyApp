@@ -29,14 +29,15 @@ class RatesRepositoryImpl @Inject constructor(
         var message = updateLocalDB()
         Log.d(TAG, "fetchCurrenciesList: afterLocalDBUpdate")
 
-        val data = localDBDataSource.fetchCurrenciesList().also { if (it.isNullOrEmpty()) message = "empty list"}
+        val data = localDBDataSource.fetchCurrenciesList()
+            .also { if (it.isEmpty()) message = "empty list" }
 
         return message?.let { info ->
             InconsistentData.SuccessWithErrorInfo(data, info)
         } ?: InconsistentData.Success(data)
     }
 
-    private suspend fun updateLocalDB():String? {
+    private suspend fun updateLocalDB(): String? {
         val isUpToDate = preferencesDataSource.isRatesUpToDate()
 
         if (isUpToDate.also {
@@ -55,11 +56,9 @@ class RatesRepositoryImpl @Inject constructor(
 
             try {
                 fetchRatesFromRemote(baseCurrency).let { result ->
-                    if (isUpToDate != true) {
-                        localDBDataSource.saveCurrenciesList(
-                            result
-                        )
-                    }
+                    localDBDataSource.saveCurrenciesList(
+                        result
+                    )
                 }
             } catch (e: Exception) {
                 val message = "failed to fetch rates data from remote"

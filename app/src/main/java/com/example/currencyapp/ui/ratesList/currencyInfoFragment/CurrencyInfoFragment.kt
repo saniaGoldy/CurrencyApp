@@ -35,15 +35,21 @@ class CurrencyInfoFragment : Fragment() {
         _binding = FragmentCurrencyInfoBinding.inflate(inflater, container, false)
 
         viewModel.loadCurrencyData(args.currencyCode)
-        binding.tvChartFragmentTitle.text =
-            getString(
-                R.string.title_rates_chart_for,
-                Currencies.valueOf(args.currencyCode).fullName
-            )
+        setupTVs()
 
         setupObservers()
 
         return binding.root
+    }
+
+    private fun setupTVs() = with(binding) {
+        tvChartFragmentTitle.text =
+            getString(
+                R.string.title_rates_chart_for,
+                Currencies.valueOf(args.currencyCode).fullName
+            )
+        tvChartFragmentDetails.text =
+            getString(R.string.based_on_detailes, Currencies.valueOf(args.settings.currencyCode))
     }
 
     private fun setupObservers() {
