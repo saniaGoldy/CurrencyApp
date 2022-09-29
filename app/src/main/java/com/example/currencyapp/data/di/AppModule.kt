@@ -34,7 +34,7 @@ object AppModule {
     fun provideCurrencyAPI(): CurrencyAPI {
         val interceptor = HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
         val clientBuilder = OkHttpClient.Builder().addInterceptor(interceptor).addInterceptor { chain ->
-            val request = chain.request().newBuilder().addHeader("apikey", BuildConfig.NEWS_API_KEY).build()
+            val request = chain.request().newBuilder().addHeader("apikey", "jwTY3ePdZwCZrZ1kP96pLfnUe9qUpOq9").build()
             chain.proceed(request)
         }
         return Retrofit.Builder()
