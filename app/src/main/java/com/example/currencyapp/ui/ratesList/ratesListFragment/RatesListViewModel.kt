@@ -35,7 +35,7 @@ class RatesListViewModel @Inject constructor(
         _ratesDataState.value = DataState.Loading
         Log.d(TAG, "Rates View model updateDataState")
         viewModelScope.launch {
-            val result = interactor.fetchRatesList()
+            val result =  interactor.fetchRatesList()
 
             _ratesDataState.postValue(
                 when(result){

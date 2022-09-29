@@ -5,17 +5,20 @@ import android.os.Parcelable
 
 data class RatesListSettings(
     val currencyCode: String = Currencies.UAH.name,
-    val precision: Int = 3
-) :
-    Parcelable {
+    val precision: Int = 3,
+    var isRatesIsUpToDateWithSettings: Boolean = true
+) : Parcelable {
     constructor(parcel: Parcel) : this(
-        parcel.readString() ?: "Oopsie",
-        parcel.readInt()
-    )
+        parcel.readString() ?: "UAH",
+        parcel.readInt(),
+        parcel.readByte() != 0.toByte()
+    ) {
+    }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(currencyCode)
         parcel.writeInt(precision)
+        parcel.writeByte(if (isRatesIsUpToDateWithSettings) 1 else 0)
     }
 
     override fun describeContents(): Int {
@@ -31,4 +34,5 @@ data class RatesListSettings(
             return arrayOfNulls(size)
         }
     }
+
 }

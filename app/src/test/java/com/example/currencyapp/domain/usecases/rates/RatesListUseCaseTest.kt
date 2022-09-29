@@ -13,7 +13,6 @@ internal class RatesListUseCaseTest {
     private lateinit var useCase: RatesListUseCase
     private lateinit var repository: FakeRatesRepository
 
-
     @Before
     fun setup() {
 
