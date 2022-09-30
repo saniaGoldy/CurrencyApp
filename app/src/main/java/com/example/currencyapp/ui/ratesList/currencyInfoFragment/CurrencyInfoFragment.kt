@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -13,8 +14,8 @@ import androidx.navigation.fragment.navArgs
 import com.example.currencyapp.R
 import com.example.currencyapp.databinding.FragmentCurrencyInfoBinding
 import com.example.currencyapp.domain.model.DataState
+import com.example.currencyapp.domain.model.DataState.Failure
 import com.example.currencyapp.domain.model.DataState.Success
-import com.example.currencyapp.domain.model.rates.Currencies
 import com.google.accompanist.appcompattheme.AppCompatTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -35,21 +36,16 @@ class CurrencyInfoFragment : Fragment() {
         _binding = FragmentCurrencyInfoBinding.inflate(inflater, container, false)
 
         viewModel.loadCurrencyData(args.currencyCode)
-        setupTVs()
 
+        setupTVs()
         setupObservers()
 
         return binding.root
     }
 
     private fun setupTVs() = with(binding) {
-        tvChartFragmentTitle.text =
-            getString(
-                R.string.title_rates_chart_for,
-                Currencies.valueOf(args.currencyCode).fullName
-            )
-        tvChartFragmentDetails.text =
-            getString(R.string.based_on_detailes, Currencies.valueOf(args.settings.currencyCode))
+        tvChartFragmentTitle.text = viewModel.getTvChartFragmentTitle(args.currencyCode)
+        tvChartFragmentDetails.text = viewModel.getTvChartFragmentDetails(args.settings.currencyCode)
     }
 
     private fun setupObservers() {
@@ -59,30 +55,37 @@ class CurrencyInfoFragment : Fragment() {
                 is Success -> {
                     val currencyRateStory = dataState.result.rateStory ?: mapOf()
 
-                    currencyRateStory.keys.toList().let {
-                        binding.tvChartTimeStamp.text =
-                            getString(R.string.from_to, it[0], it[it.lastIndex])
-                    }
+                    binding.tvChartTimeStamp.text =
+                        viewModel.getFromToLabel(currencyRateStory.keys.toList())
 
                     binding.rateStoryChart.setContent {
-                        AppCompatTheme {
-                            CurrencyRatesChart(
-                                rateStory = currencyRateStory,
-                                modifier = Modifier
-                            )
-                        }
+                        ShowRateStoryChart(currencyRateStory)
                     }
                 }
-                is DataState.Failure -> {
-                    Toast.makeText(
-                        requireContext(),
-                        getString(R.string.standard_error_message),
-                        Toast.LENGTH_SHORT
-                    ).show()
+                is Failure -> {
+                    showErrorMessageToast()
                 }
                 else -> {}
             }
         }
+    }
+
+    @Composable
+    private fun ShowRateStoryChart(currencyRateStory: Map<String, Double>) {
+        AppCompatTheme {
+            CurrencyRatesChart(
+                rateStory = currencyRateStory,
+                modifier = Modifier
+            )
+        }
+    }
+
+    private fun showErrorMessageToast() {
+        Toast.makeText(
+            requireContext(),
+            getString(R.string.standard_error_message),
+            Toast.LENGTH_SHORT
+        ).show()
     }
 
 }

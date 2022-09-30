@@ -7,7 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.currencyapp.TAG
 import com.example.currencyapp.domain.model.DataState
-import com.example.currencyapp.domain.model.InconsistentData
+import com.example.currencyapp.domain.model.DataWithErrorInfo
 import com.example.currencyapp.domain.model.rates.CurrencyData
 import com.example.currencyapp.domain.model.rates.RatesListSettings
 import com.example.currencyapp.domain.usecases.rates.RatesListUseCase
@@ -39,9 +39,9 @@ class RatesListViewModel @Inject constructor(
 
             _ratesDataState.postValue(
                 when (result) {
-                    is InconsistentData.Failure -> DataState.Failure(result.errorInfo)
-                    is InconsistentData.Success -> DataState.Success(result.value)
-                    is InconsistentData.SuccessWithErrorInfo -> DataState.Success(
+                    is DataWithErrorInfo.Failure -> DataState.Failure(result.errorInfo)
+                    is DataWithErrorInfo.Success -> DataState.Success(result.value)
+                    is DataWithErrorInfo.SuccessWithErrorInfo -> DataState.Success(
                         result.value,
                         result.errorInfo
                     )

@@ -5,7 +5,7 @@ import com.example.currencyapp.TAG
 import com.example.currencyapp.data.data_source.local.LocalDBDataSource
 import com.example.currencyapp.data.data_source.preferences.PreferencesDataSource
 import com.example.currencyapp.data.data_source.remote.RemoteDataSource
-import com.example.currencyapp.domain.model.InconsistentData
+import com.example.currencyapp.domain.model.DataWithErrorInfo
 import com.example.currencyapp.domain.model.rates.CurrencyData
 import com.example.currencyapp.domain.model.rates.RatesListSettings
 import com.example.currencyapp.domain.repository.RatesRepository
@@ -20,15 +20,15 @@ class RatesRepositoryImpl @Inject constructor(
 ) : RatesRepository {
 
     override suspend fun fetchCurrenciesList(
-    ): InconsistentData<List<CurrencyData>> {
+    ): DataWithErrorInfo<List<CurrencyData>> {
         var message = updateCurrenciesList()
 
         val data = localDBDataSource.fetchCurrenciesList()
             .also { if (it.isEmpty()) message = "empty list" }
 
         return message?.let { info ->
-            InconsistentData.SuccessWithErrorInfo(data, info)
-        } ?: InconsistentData.Success(data)
+            DataWithErrorInfo.SuccessWithErrorInfo(data, info)
+        } ?: DataWithErrorInfo.Success(data)
     }
 
     private suspend fun updateCurrenciesList(): String? {

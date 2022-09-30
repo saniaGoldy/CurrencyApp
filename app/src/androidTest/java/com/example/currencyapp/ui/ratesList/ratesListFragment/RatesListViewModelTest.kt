@@ -6,7 +6,7 @@ import androidx.test.filters.SmallTest
 import androidx.test.platform.app.InstrumentationRegistry
 import com.example.currencyapp.LiveDataTestUtil
 import com.example.currencyapp.domain.model.DataState
-import com.example.currencyapp.domain.model.InconsistentData
+import com.example.currencyapp.domain.model.DataWithErrorInfo
 import com.example.currencyapp.domain.model.rates.CurrencyData
 import com.example.currencyapp.domain.usecases.rates.RatesListUseCase
 import com.google.common.truth.Truth.assertThat
@@ -42,7 +42,7 @@ internal class RatesListViewModelTest {
     @Test
     fun updateDataStateReturnsSuccessWhenReceiveResultSuccess() = runTest {
 
-        coEvery { interactorMock.fetchRatesList() } returns InconsistentData.Success(
+        coEvery { interactorMock.fetchRatesList() } returns DataWithErrorInfo.Success(
             listOf(CurrencyData("UAH", 1.0, mapOf()))
         )
         viewModel.updateDataState()
@@ -64,7 +64,7 @@ internal class RatesListViewModelTest {
 
     @Test
     fun updateDataStateReturnsFailureWhenReceiveResultFailure() = runTest {
-        coEvery { interactorMock.fetchRatesList() } returns InconsistentData.Failure("some error")
+        coEvery { interactorMock.fetchRatesList() } returns DataWithErrorInfo.Failure("some error")
         viewModel.updateDataState()
 
         assertThat(
@@ -83,7 +83,7 @@ internal class RatesListViewModelTest {
 
     @Test
     fun updateDataStateReturnsSuccessWhenReceiveSuccessWithMessage() = runTest {
-        coEvery { interactorMock.fetchRatesList() } returns InconsistentData.SuccessWithErrorInfo(
+        coEvery { interactorMock.fetchRatesList() } returns DataWithErrorInfo.SuccessWithErrorInfo(
             listOf(CurrencyData("UAH", 1.0, mapOf())),
             "some error"
         )
@@ -105,7 +105,7 @@ internal class RatesListViewModelTest {
 
     @Test
     fun updateDataStateReturnsLoadingImmediatelyAfterLoadCurrencyDataCalled() = runTest {
-        coEvery { interactorMock.fetchRatesList() } returns InconsistentData.Failure("some error")
+        coEvery { interactorMock.fetchRatesList() } returns DataWithErrorInfo.Failure("some error")
 
         viewModel.updateDataState()
 

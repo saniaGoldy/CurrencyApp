@@ -1,6 +1,6 @@
 package com.example.currencyapp.domain.usecases.rates
 
-import com.example.currencyapp.domain.model.InconsistentData
+import com.example.currencyapp.domain.model.DataWithErrorInfo
 import com.example.currencyapp.domain.repository.FakeRatesRepository
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.runBlocking
@@ -28,12 +28,12 @@ internal class RatesListUseCaseTest {
     @Test
     fun `fetchRatesList returns success with error message on empty list`() = runBlocking {
         repository.setFetchCurrencyListShouldReturnEmptyList(true)
-        assertThat(useCase.fetchRatesList()).isInstanceOf(InconsistentData.SuccessWithErrorInfo::class.java)
+        assertThat(useCase.fetchRatesList()).isInstanceOf(DataWithErrorInfo.SuccessWithErrorInfo::class.java)
     }
 
     @Test
     fun `fetchRatesList returns failure on exception`() = runBlocking {
         repository.setFetchCurrencyListShouldThrowException(true)
-        assertThat(useCase.fetchRatesList()).isInstanceOf(InconsistentData.Failure::class.java)
+        assertThat(useCase.fetchRatesList()).isInstanceOf(DataWithErrorInfo.Failure::class.java)
     }
 }
