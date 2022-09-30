@@ -37,13 +37,7 @@ object AppModule {
             OkHttpClient.Builder()
                 .addInterceptor(interceptor)
                 .addInterceptor { chain ->
-                    val request = chain
-                        .request()
-                        .newBuilder()
-                        .addHeader("apikey", "jwTY3ePdZwCZrZ1kP96pLfnUe9qUpOq9")
-                        .build()
-
-                    chain.proceed(request)
+                    APIKeyInterceptor.getInstance(chain).response
                 }
 
         return Retrofit.Builder()
