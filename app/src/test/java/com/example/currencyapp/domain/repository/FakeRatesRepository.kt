@@ -31,7 +31,8 @@ class FakeRatesRepository(remoteDataSource: FakeRemoteDataSource = FakeRemoteDat
             throw IOException()
         }
         return if (fetchCurrencyListShouldReturnEmptyList) InconsistentData.SuccessWithErrorInfo(
-            listOf(),"empty list") else InconsistentData.Success(currencies)
+            listOf(), "empty list"
+        ) else InconsistentData.Success(currencies)
     }
 
     override suspend fun saveRatesListSettings(settings: RatesListSettings) {

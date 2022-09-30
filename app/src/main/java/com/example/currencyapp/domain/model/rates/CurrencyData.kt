@@ -6,7 +6,11 @@ data class CurrencyData(
     var rateStory: Map<String, Double>?
 ) {
 
-    constructor (code: String, rate: Double, rateStory: Map<String, Double>?) : this(Currencies.valueOf(code), rate, rateStory)
+    constructor (
+        code: String,
+        rate: Double,
+        rateStory: Map<String, Double>?
+    ) : this(Currencies.valueOf(code), rate, rateStory)
 
     fun getRateDifference(): Double {
         val rates = rateStory?.values?.toList()

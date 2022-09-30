@@ -5,7 +5,7 @@ import com.example.currencyapp.data.remote.entities.currencyRateStory.Currencies
 import com.example.currencyapp.domain.model.rates.Currencies
 import com.example.currencyapp.domain.model.rates.CurrencyData
 
-class CurrenciesRateStoryMapper: Mapper<CurrenciesRateStory, MutableList<CurrencyData>> {
+class CurrenciesRateStoryMapper : Mapper<CurrenciesRateStory, MutableList<CurrencyData>> {
 
     override fun map(from: CurrenciesRateStory): MutableList<CurrencyData> {
         val rates = from.rates.toList()

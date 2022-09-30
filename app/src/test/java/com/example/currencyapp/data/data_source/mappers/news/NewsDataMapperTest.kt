@@ -7,12 +7,12 @@ import com.google.common.truth.Truth.assertThat
 import org.junit.Before
 import org.junit.Test
 
-internal class NewsDataMapperTest{
+internal class NewsDataMapperTest {
 
     private lateinit var mapper: NewsDataMapper
 
     @Before
-    fun setup(){
+    fun setup() {
         mapper = NewsDataMapper()
     }
 

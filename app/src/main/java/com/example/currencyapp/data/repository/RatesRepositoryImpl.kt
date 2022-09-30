@@ -38,7 +38,10 @@ class RatesRepositoryImpl @Inject constructor(
         val isRatesIsUpToDateWithBaseCurrency = storedSettings.isRatesIsUpToDateWithSettings
 
 
-        Log.d(TAG, "fetchCurrenciesList isRatesIsUpToDateWithBaseCurrency: $isRatesIsUpToDateWithBaseCurrency")
+        Log.d(
+            TAG,
+            "fetchCurrenciesList isRatesIsUpToDateWithBaseCurrency: $isRatesIsUpToDateWithBaseCurrency"
+        )
         Log.d(TAG, "fetchCurrenciesList IsRatesUpToDate: $isUpToDate")
 
         if (isUpToDate != true || !isRatesIsUpToDateWithBaseCurrency) {

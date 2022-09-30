@@ -10,7 +10,7 @@ class RatesSettingsEditUseCase @Inject constructor(
     ratesRepository: RatesRepository
 ) : RatesSettingsReadUseCase(ratesRepository) {
 
-    suspend fun updateSettings(settings: RatesListSettings){
+    suspend fun updateSettings(settings: RatesListSettings) {
         withContext(Dispatchers.IO) {
             ratesRepository.saveRatesListSettings(settings)
         }

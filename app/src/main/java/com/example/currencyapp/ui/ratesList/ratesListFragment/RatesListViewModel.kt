@@ -35,13 +35,16 @@ class RatesListViewModel @Inject constructor(
         _ratesDataState.value = DataState.Loading
         Log.d(TAG, "Rates View model updateDataState")
         viewModelScope.launch {
-            val result =  interactor.fetchRatesList()
+            val result = interactor.fetchRatesList()
 
             _ratesDataState.postValue(
-                when(result){
+                when (result) {
                     is InconsistentData.Failure -> DataState.Failure(result.errorInfo)
                     is InconsistentData.Success -> DataState.Success(result.value)
-                    is InconsistentData.SuccessWithErrorInfo -> DataState.Success(result.value, result.errorInfo)
+                    is InconsistentData.SuccessWithErrorInfo -> DataState.Success(
+                        result.value,
+                        result.errorInfo
+                    )
                 }
             )
 

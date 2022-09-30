@@ -12,8 +12,7 @@ data class RatesListSettings(
         parcel.readString() ?: "UAH",
         parcel.readInt(),
         parcel.readByte() != 0.toByte()
-    ) {
-    }
+    )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(currencyCode)
