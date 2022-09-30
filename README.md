@@ -1,21 +1,10 @@
 # CurrencyApp
-<<<<<<< HEAD
-Часть 1
-  Используя Clean Architecture, создать Kotlin модуль, который будет описывать работу валютной системы, сценарием использования которой является предоставление курса валют (Структура объекта курса валют: Название, Текущий курс, Изменение курса за 24 часа)
+## Rates list tab
 
-Часть 2
-  Написать  Android реализацию этой системы с отображением списка курсов валют на UI используя паттерн MVVM (Jetpack). Если изменение курса положительное, то элемент изменения курса в списке должен иметь зеленый цвет, в противном случае красный.
+Shows a list of exchange rates for all currencies, how each currency changed in 24 hours, shows a chart wich describes how rates changed recently for each currency.
+User can search through rates list by typing any words that present in info related to the desired currency
 
-Exchange rate API: https://exchangeratesapi.io/ (или любой другой бесплатный API)
-=======
-Create new project or use existing one with the Room db
+## News tab
 
-Add ViewModel, LiveData and Navigation libraries (Hilt is an optional bonus)
-Use existing project as an example: https://github.com/Yazon2006/KeepSimple2
-
-Check if the viewModel survive screen rotation
-
-Use liveData to receive updates from Room
-
-Make HTTP request and save the result in DB which trigger LiveData which trigger UI updates
->>>>>>> localDb
+Shows list of cards with news, sends to news source on click on each card, user could specify keywords, tags and time (from to) of search.
+User can search through news cards by typing any words that present in info related to the desired news card
