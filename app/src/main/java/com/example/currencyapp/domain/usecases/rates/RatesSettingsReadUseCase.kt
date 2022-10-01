@@ -13,7 +13,7 @@ open class RatesSettingsReadUseCase @Inject constructor(
     val ratesRepository: RatesRepository
 ) {
 
-    private val exceptionHandler = CoroutineExceptionHandler { context, error ->
+    private val exceptionHandler = CoroutineExceptionHandler { _, error ->
         Log.d(TAG, error.toString())
     }
 

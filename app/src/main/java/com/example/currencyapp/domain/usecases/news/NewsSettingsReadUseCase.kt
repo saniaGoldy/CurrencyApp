@@ -13,7 +13,7 @@ open class NewsSettingsReadUseCase @Inject constructor(
     private val newsRepository: NewsRepository
 ) {
     private var exception: Throwable? = null
-    private val exceptionHandler = CoroutineExceptionHandler { context, error ->
+    private val exceptionHandler = CoroutineExceptionHandler { _, error ->
         Log.d(TAG, error.toString())
         exception = error
     }

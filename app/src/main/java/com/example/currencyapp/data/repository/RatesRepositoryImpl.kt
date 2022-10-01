@@ -45,8 +45,8 @@ class RatesRepositoryImpl @Inject constructor(
         Log.d(TAG, "fetchCurrenciesList IsRatesUpToDate: $isUpToDate")
 
         if (isUpToDate != true || !isRatesIsUpToDateWithBaseCurrency) {
-            return tryToUpdateLocalDB(storedSettings.currencyCode).also {
-                updateRatesSettingsUpToDateStatus(it, storedSettings)
+            return tryToUpdateLocalDB(storedSettings.currencyCode).also { message ->
+                updateRatesSettingsUpToDateStatus(message, storedSettings)
             }
         }
         return null

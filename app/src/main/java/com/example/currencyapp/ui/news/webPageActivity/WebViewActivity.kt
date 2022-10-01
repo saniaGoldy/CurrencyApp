@@ -42,13 +42,16 @@ class WebViewActivity : AppCompatActivity() {
         binding = ActivityWebViewBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        with(binding) {
+        setupObservers()
+    }
 
+    private fun setupObservers() {
+        with(binding) {
             viewModel.networkStatus.observe(this@WebViewActivity) { connectivityStatus ->
                 if (connectivityStatus == Lost) {
                     showToast(getString(R.string.no_internet_connection_error_message))
                     infoTV.text = getString(R.string.no_internet_connection_error_message)
-                    showNoNetSnackBar()
+                    showNoConnectionSnackBar()
                 } else if (!isLoaded && connectivityStatus == Available) {
                     loadWebView()
                 }
@@ -59,7 +62,11 @@ class WebViewActivity : AppCompatActivity() {
     private fun loadWebView() = with(binding) {
         infoTV.text = ""
         webView.loadUrl(args.url)
-        webView.webViewClient = object : WebViewClient() {
+        webView.webViewClient = getWebViewClient()
+    }
+
+    private fun ActivityWebViewBinding.getWebViewClient() =
+        object : WebViewClient() {
             override fun shouldOverrideUrlLoading(
                 view: WebView?,
                 request: WebResourceRequest?
@@ -93,7 +100,6 @@ class WebViewActivity : AppCompatActivity() {
                 super.onReceivedError(view, request, error)
             }
         }
-    }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean = with(binding) {
         if (event.action == KeyEvent.ACTION_DOWN) {
@@ -133,7 +139,7 @@ class WebViewActivity : AppCompatActivity() {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 
-    private fun showNoNetSnackBar() {
+    private fun showNoConnectionSnackBar() {
         val snack =
             Snackbar.make(
                 binding.root,

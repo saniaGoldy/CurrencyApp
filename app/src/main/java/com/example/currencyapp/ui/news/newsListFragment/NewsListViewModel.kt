@@ -32,16 +32,23 @@ class NewsListViewModel @Inject constructor(
         _newsDataState.value = DataState.Loading
 
         viewModelScope.launch {
-            _newsDataState.postValue(
-                interactor.fetchNewsList(settings)
-                    .let {
-                        if (it.isSuccess) {
-                            DataState.Success(it.getOrNull()!!)
-                        } else {
-                            DataState.Failure(it.exceptionOrNull().toString())
-                        }
-                    }
-            )
+            updateNewsDataState(settings)
         }
+    }
+
+    private suspend fun updateNewsDataState(settings: SearchSettings) {
+        _newsDataState.postValue(
+            getDataState(settings)
+        )
+    }
+
+    private suspend fun getDataState(settings: SearchSettings): DataState<List<NewsData>> {
+       interactor.fetchNewsList(settings).let { result ->
+           return if (result.isSuccess) {
+                    DataState.Success(result.getOrNull()!!)
+                } else {
+                    DataState.Failure(result.exceptionOrNull().toString())
+                }
+            }
     }
 }

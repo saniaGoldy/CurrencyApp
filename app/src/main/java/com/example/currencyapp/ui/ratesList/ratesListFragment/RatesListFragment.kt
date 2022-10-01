@@ -46,7 +46,11 @@ class RatesListFragment : Fragment() {
 
         setupCurrenciesList()
         setupSearchView()
+        setupButtons()
+        setupObservers()
+    }
 
+    private fun setupButtons() {
         with(binding) {
 
             ratesSettingsImageButton.setOnClickListener {
@@ -57,8 +61,6 @@ class RatesListFragment : Fragment() {
                 }
             }
         }
-
-        setupObservers()
     }
 
     private fun setupSearchView() {

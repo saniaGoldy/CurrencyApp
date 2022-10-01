@@ -58,9 +58,7 @@ class CurrencyInfoFragment : Fragment() {
                     binding.tvChartTimeStamp.text =
                         viewModel.getFromToLabel(currencyRateStory.keys.toList())
 
-                    binding.rateStoryChart.setContent {
-                        ShowRateStoryChart(currencyRateStory)
-                    }
+                    showRateStoryChart(currencyRateStory = currencyRateStory)
                 }
                 is Failure -> {
                     showErrorMessageToast()
@@ -70,13 +68,14 @@ class CurrencyInfoFragment : Fragment() {
         }
     }
 
-    @Composable
-    private fun ShowRateStoryChart(currencyRateStory: Map<String, Double>) {
-        AppCompatTheme {
-            CurrencyRatesChart(
-                rateStory = currencyRateStory,
-                modifier = Modifier
-            )
+    private fun showRateStoryChart(currencyRateStory: Map<String, Double>) {
+        binding.rateStoryChart.setContent {
+            AppCompatTheme {
+                CurrencyRatesChart(
+                    rateStory = currencyRateStory,
+                    modifier = Modifier
+                )
+            }
         }
     }
 

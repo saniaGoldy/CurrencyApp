@@ -16,6 +16,7 @@ import com.example.currencyapp.TAG
 import com.example.currencyapp.databinding.FragmentNewsListBinding
 import com.example.currencyapp.domain.model.DataState.*
 import com.example.currencyapp.domain.services.ConnectivityObserver
+import com.example.currencyapp.ui.utils.MyOnQueryTextListener
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -49,6 +50,10 @@ class NewsListFragment : Fragment() {
 
         setupObservers()
 
+        setupButtons()
+    }
+
+    private fun setupButtons() {
         binding.settingsImageButton.setOnClickListener {
             binding.root.findNavController()
                 .navigate(NewsListFragmentDirections.actionNavigationNewsToSearchSettingsFragment())
@@ -56,30 +61,25 @@ class NewsListFragment : Fragment() {
     }
 
     private fun setupSearchView() {
-        binding.searchViewNews.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                return false
-            }
+        binding.searchViewNews.setOnQueryTextListener(getOnQueryTextListener())
+    }
 
-            override fun onQueryTextChange(newText: String?): Boolean {
-                filter(newText)
-                return true
+    private fun getOnQueryTextListener(): MyOnQueryTextListener {
+        return MyOnQueryTextListener(object : MyOnQueryTextListener.QueryFilter{
+            override fun filter(keyword: String?) {
+                val cashedListState = viewModel.newsDataState.value
+
+                if (cashedListState is Success) {
+                    adapter.newsList = if (!keyword.isNullOrEmpty())
+                        cashedListState.result.filter {
+                            it.containsKeyword(keyword)
+                        }
+                    else
+                        cashedListState.result
+                }
             }
 
         })
-    }
-
-    fun filter(keyword: String?) {
-        val cashedListState = viewModel.newsDataState.value
-
-        if (cashedListState is Success) {
-            adapter.newsList = if (!keyword.isNullOrEmpty())
-                cashedListState.result.filter {
-                    it.containsKeyword(keyword)
-                }
-            else
-                cashedListState.result
-        }
     }
 
     private fun setupObservers() {
@@ -90,6 +90,7 @@ class NewsListFragment : Fragment() {
 
             newsDataState.observe(viewLifecycleOwner) { dataState ->
                 binding.newsProgressBar.isVisible = dataState is Loading
+
                 when (dataState) {
                     is Success -> {
                         adapter.newsList = dataState.result
