@@ -1,8 +1,9 @@
-package com.example.currencyapp.ui.utils
+package com.example.currencyapp.ui.model
 
 import android.widget.SearchView
 
-class MyOnQueryTextListener(private val queryFilter: QueryFilter): SearchView.OnQueryTextListener {
+class MyOnQueryTextListener(private val queryFilter: QueryFilter) :
+    SearchView.OnQueryTextListener {
     override fun onQueryTextSubmit(query: String?): Boolean {
         queryFilter.filter(query)
         return true
@@ -13,7 +14,7 @@ class MyOnQueryTextListener(private val queryFilter: QueryFilter): SearchView.On
         return true
     }
 
-    interface QueryFilter{
+    interface QueryFilter {
         fun filter(keyword: String?)
     }
 }

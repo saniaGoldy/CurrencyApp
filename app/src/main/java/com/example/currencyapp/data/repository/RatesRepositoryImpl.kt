@@ -5,7 +5,7 @@ import com.example.currencyapp.TAG
 import com.example.currencyapp.data.data_source.local.LocalDBDataSource
 import com.example.currencyapp.data.data_source.preferences.PreferencesDataSource
 import com.example.currencyapp.data.data_source.remote.RemoteDataSource
-import com.example.currencyapp.domain.model.DataWithErrorInfo
+import com.example.currencyapp.domain.model.UpdatableData
 import com.example.currencyapp.domain.model.rates.CurrencyData
 import com.example.currencyapp.domain.model.rates.RatesListSettings
 import com.example.currencyapp.domain.repository.RatesRepository
@@ -20,18 +20,19 @@ class RatesRepositoryImpl @Inject constructor(
 ) : RatesRepository {
 
     override suspend fun fetchCurrenciesList(
-    ): DataWithErrorInfo<List<CurrencyData>> {
-        var message = updateCurrenciesList()
+    ): UpdatableData<List<CurrencyData>> {
+        var isCurrenciesListIsUpdated = updateCurrenciesList()
 
         val data = localDBDataSource.fetchCurrenciesList()
-            .also { if (it.isEmpty()) message = "empty list" }
+            .also { if (it.isEmpty()) isCurrenciesListIsUpdated = false }
 
-        return message?.let { info ->
-            DataWithErrorInfo.SuccessWithErrorInfo(data, info)
-        } ?: DataWithErrorInfo.Success(data)
+        return UpdatableData(data, isCurrenciesListIsUpdated)
     }
 
-    private suspend fun updateCurrenciesList(): String? {
+    /**
+     * @return true if succeeded to update currencies list or if it is already up to date otherwise false
+     */
+    private suspend fun updateCurrenciesList(): Boolean {
         val storedSettings = getStoredSettings()
         val isUpToDate = preferencesDataSource.isRatesUpToDate()
 
@@ -45,18 +46,18 @@ class RatesRepositoryImpl @Inject constructor(
         Log.d(TAG, "fetchCurrenciesList IsRatesUpToDate: $isUpToDate")
 
         if (isUpToDate != true || !isRatesIsUpToDateWithBaseCurrency) {
-            return tryToUpdateLocalDB(storedSettings.currencyCode).also { message ->
-                updateRatesSettingsUpToDateStatus(message, storedSettings)
+            return tryToUpdateLocalDB(storedSettings.currencyCode).also { isSucceeded ->
+                updateRatesSettingsUpToDateStatus(isSucceeded, storedSettings)
             }
         }
-        return null
+        return true
     }
 
     private suspend fun updateRatesSettingsUpToDateStatus(
-        exceptionMessage: String?,
+        isSucceededToUpdate: Boolean,
         storedSettings: RatesListSettings
     ) {
-        if (exceptionMessage == null) {
+        if (isSucceededToUpdate) {
             storedSettings.isRatesIsUpToDateWithSettings = true
             saveRatesListSettings(storedSettings)
         }
@@ -64,18 +65,18 @@ class RatesRepositoryImpl @Inject constructor(
 
     private suspend fun getStoredSettings() = loadRatesListSettings().first()
 
-    private suspend fun tryToUpdateLocalDB(baseCurrency: String): String? {
+    private suspend fun tryToUpdateLocalDB(baseCurrency: String): Boolean {
         return try {
             fetchRatesFromRemote(baseCurrency).let { result ->
                 localDBDataSource.saveCurrenciesList(
                     result
                 )
             }
-            null
+            true
         } catch (e: Exception) {
             val message = "failed to fetch rates data from remote"
             Log.e(TAG, "updateLocalDB: $message")
-            message
+            false
         }
     }
 

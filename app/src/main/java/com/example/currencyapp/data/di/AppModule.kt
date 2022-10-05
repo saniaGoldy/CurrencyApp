@@ -30,22 +30,31 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideCurrencyAPI(): CurrencyAPI {
-        val interceptor = HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
-
-        val clientBuilder =
-            OkHttpClient.Builder()
-                .addInterceptor(interceptor)
-                .addInterceptor { chain ->
-                    APIKeyInterceptor.getInstance(chain).response
-                }
-
+    fun provideCurrencyAPI(clientBuilder: OkHttpClient.Builder): CurrencyAPI {
         return Retrofit.Builder()
             .baseUrl(Constants.API_BASE_URL)
             .client(clientBuilder.build())
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create()
+    }
+
+    @Provides
+    @Singleton
+    fun provideClientBuilder(): OkHttpClient.Builder {
+
+        val interceptor = HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
+
+        return OkHttpClient.Builder()
+            .addInterceptor(interceptor)
+            .addInterceptor { chain ->
+                val request = chain
+                    .request()
+                    .newBuilder()
+                    .addHeader("apikey", "jwTY3ePdZwCZrZ1kP96pLfnUe9qUpOq9")
+                    .build()
+                chain.proceed(request)
+            }
     }
 
     @Provides

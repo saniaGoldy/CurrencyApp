@@ -1,7 +1,7 @@
 package com.example.currencyapp.domain.repository
 
 import com.example.currencyapp.data.data_source.remote.FakeRemoteDataSource
-import com.example.currencyapp.domain.model.DataWithErrorInfo
+import com.example.currencyapp.domain.model.UpdatableData
 import com.example.currencyapp.domain.model.rates.CurrencyData
 import com.example.currencyapp.domain.model.rates.RatesListSettings
 import kotlinx.coroutines.flow.Flow
@@ -26,13 +26,13 @@ class FakeRatesRepository(remoteDataSource: FakeRemoteDataSource = FakeRemoteDat
 
     private var settings = RatesListSettings()
 
-    override suspend fun fetchCurrenciesList(): DataWithErrorInfo<List<CurrencyData>> {
+    override suspend fun fetchCurrenciesList(): UpdatableData<List<CurrencyData>> {
         if (fetchCurrencyListShouldThrowException) {
             throw IOException()
         }
-        return if (fetchCurrencyListShouldReturnEmptyList) DataWithErrorInfo.SuccessWithErrorInfo(
-            listOf(), "empty list"
-        ) else DataWithErrorInfo.Success(currencies)
+        return if (fetchCurrencyListShouldReturnEmptyList) UpdatableData(
+            listOf(), false
+        ) else UpdatableData(currencies, true)
     }
 
     override suspend fun saveRatesListSettings(settings: RatesListSettings) {
