@@ -5,7 +5,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.SearchView
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -14,9 +13,10 @@ import androidx.navigation.findNavController
 import com.example.currencyapp.R
 import com.example.currencyapp.TAG
 import com.example.currencyapp.databinding.FragmentNewsListBinding
+import com.example.currencyapp.domain.model.DataState
 import com.example.currencyapp.domain.model.DataState.*
+import com.example.currencyapp.domain.model.news.NewsData
 import com.example.currencyapp.domain.services.ConnectivityObserver
-import com.example.currencyapp.ui.utils.MyOnQueryTextListener
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -46,8 +46,6 @@ class NewsListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.rvNewsList.adapter = adapter
 
-        setupSearchView()
-
         setupObservers()
 
         setupButtons()
@@ -60,26 +58,8 @@ class NewsListFragment : Fragment() {
         }
     }
 
-    private fun setupSearchView() {
-        binding.searchViewNews.setOnQueryTextListener(getOnQueryTextListener())
-    }
-
-    private fun getOnQueryTextListener(): MyOnQueryTextListener {
-        return MyOnQueryTextListener(object : MyOnQueryTextListener.QueryFilter{
-            override fun filter(keyword: String?) {
-                val cashedListState = viewModel.newsDataState.value
-
-                if (cashedListState is Success) {
-                    adapter.newsList = if (!keyword.isNullOrEmpty())
-                        cashedListState.result.filter {
-                            it.containsKeyword(keyword)
-                        }
-                    else
-                        cashedListState.result
-                }
-            }
-
-        })
+    private fun setupSearchView(cashedListState: DataState<List<NewsData>>?) {
+        binding.searchViewNews.setOnQueryTextListener(adapter.getOnQueryTextListener(cashedListState))
     }
 
     private fun setupObservers() {
@@ -94,6 +74,7 @@ class NewsListFragment : Fragment() {
                 when (dataState) {
                     is Success -> {
                         adapter.newsList = dataState.result
+                        setupSearchView(dataState)
                     }
                     is Failure -> {
                         Log.e(TAG, "NewsStateObserver Failure: ${dataState.errorInfo}")

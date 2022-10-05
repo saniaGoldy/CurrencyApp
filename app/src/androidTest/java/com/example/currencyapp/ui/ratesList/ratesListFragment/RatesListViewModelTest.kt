@@ -6,7 +6,7 @@ import androidx.test.filters.SmallTest
 import androidx.test.platform.app.InstrumentationRegistry
 import com.example.currencyapp.LiveDataTestUtil
 import com.example.currencyapp.domain.model.DataState
-import com.example.currencyapp.domain.model.DataWithErrorInfo
+import com.example.currencyapp.domain.model.UpdatableData
 import com.example.currencyapp.domain.model.rates.CurrencyData
 import com.example.currencyapp.domain.usecases.rates.RatesListUseCase
 import com.google.common.truth.Truth.assertThat
@@ -18,6 +18,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import java.io.IOException
 
 @OptIn(ExperimentalCoroutinesApi::class)
 @RunWith(AndroidJUnit4::class)
@@ -42,8 +43,10 @@ internal class RatesListViewModelTest {
     @Test
     fun updateDataStateReturnsSuccessWhenReceiveResultSuccess() = runTest {
 
-        coEvery { interactorMock.fetchRatesList() } returns DataWithErrorInfo.Success(
-            listOf(CurrencyData("UAH", 1.0, mapOf()))
+        coEvery { interactorMock.fetchRatesList() } returns Result.success(
+            UpdatableData(
+                listOf(CurrencyData("UAH", 1.0, mapOf())), true
+            )
         )
         viewModel.updateDataState()
 
@@ -64,7 +67,8 @@ internal class RatesListViewModelTest {
 
     @Test
     fun updateDataStateReturnsFailureWhenReceiveResultFailure() = runTest {
-        coEvery { interactorMock.fetchRatesList() } returns DataWithErrorInfo.Failure("some error")
+        coEvery { interactorMock.fetchRatesList() } returns Result.failure(IOException())
+
         viewModel.updateDataState()
 
         assertThat(
@@ -83,9 +87,10 @@ internal class RatesListViewModelTest {
 
     @Test
     fun updateDataStateReturnsSuccessWhenReceiveSuccessWithMessage() = runTest {
-        coEvery { interactorMock.fetchRatesList() } returns DataWithErrorInfo.SuccessWithErrorInfo(
-            listOf(CurrencyData("UAH", 1.0, mapOf())),
-            "some error"
+        coEvery { interactorMock.fetchRatesList() } returns Result.success(
+            UpdatableData(
+                listOf(CurrencyData("UAH", 1.0, mapOf())), false
+            )
         )
         viewModel.updateDataState()
 
@@ -105,7 +110,11 @@ internal class RatesListViewModelTest {
 
     @Test
     fun updateDataStateReturnsLoadingImmediatelyAfterLoadCurrencyDataCalled() = runTest {
-        coEvery { interactorMock.fetchRatesList() } returns DataWithErrorInfo.Failure("some error")
+        coEvery { interactorMock.fetchRatesList() } returns Result.success(
+            UpdatableData(
+                listOf(CurrencyData("UAH", 1.0, mapOf())), true
+            )
+        )
 
         viewModel.updateDataState()
 
