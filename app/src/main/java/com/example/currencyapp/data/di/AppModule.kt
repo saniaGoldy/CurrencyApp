@@ -3,11 +3,16 @@ package com.example.currencyapp.data.di
 import android.app.Application
 import androidx.room.Room
 import com.example.currencyapp.data.data_source.local.LocalDBDataSourceImpl
+import com.example.currencyapp.data.data_source.mappers.currencies.CurrenciesRateStoryMapper
+import com.example.currencyapp.data.data_source.mappers.currencies.DataToEntityMapper
+import com.example.currencyapp.data.data_source.mappers.currencies.EntityToDataMapper
+import com.example.currencyapp.data.data_source.mappers.news.NewsDataMapper
 import com.example.currencyapp.data.data_source.preferences.PreferencesDataSourceImpl
 import com.example.currencyapp.data.data_source.remote.RemoteDataSourceImpl
 import com.example.currencyapp.data.local.LocalDB
 import com.example.currencyapp.data.remote.CurrencyAPI
 import com.example.currencyapp.dataStore
+import com.example.currencyapp.other.Constants
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -25,11 +30,9 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideCurrencyAPI(): CurrencyAPI {
-        val interceptor = HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
-        val clientBuilder = OkHttpClient.Builder().addInterceptor(interceptor)
+    fun provideCurrencyAPI(clientBuilder: OkHttpClient.Builder): CurrencyAPI {
         return Retrofit.Builder()
-            .baseUrl("https://api.apilayer.com/")
+            .baseUrl(Constants.API_BASE_URL)
             .client(clientBuilder.build())
             .addConverterFactory(GsonConverterFactory.create())
             .build()
@@ -38,29 +41,44 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideLocalDB(context: Application): LocalDB {
-        return Room.databaseBuilder(
+    fun provideClientBuilder(): OkHttpClient.Builder {
+
+        val interceptor = HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
+
+        return OkHttpClient.Builder()
+            .addInterceptor(interceptor)
+            .addInterceptor { chain ->
+                val request = chain
+                    .request()
+                    .newBuilder()
+                    .addHeader("apikey", "jwTY3ePdZwCZrZ1kP96pLfnUe9qUpOq9")
+                    .build()
+                chain.proceed(request)
+            }
+    }
+
+    @Provides
+    @Singleton
+    fun provideLocalDB(context: Application): LocalDB =
+        Room.databaseBuilder(
             context.applicationContext,
             LocalDB::class.java,
-            "currencyfluctuation"
+            Constants.CURRENCY_LOCAL_DB_NAME
         ).fallbackToDestructiveMigration().build()
-    }
+
 
     @Provides
     @Singleton
-    fun providePreferencesRepository(context: Application): PreferencesDataSourceImpl {
-        return PreferencesDataSourceImpl(context.dataStore)
-    }
+    fun providePreferencesRepository(context: Application): PreferencesDataSourceImpl =
+        PreferencesDataSourceImpl(context.dataStore)
 
     @Provides
     @Singleton
-    fun provideLocalRepository(localDB: LocalDB): LocalDBDataSourceImpl {
-        return LocalDBDataSourceImpl(localDB)
-    }
+    fun provideLocalRepository(localDB: LocalDB): LocalDBDataSourceImpl =
+        LocalDBDataSourceImpl(localDB, EntityToDataMapper(), DataToEntityMapper())
 
     @Provides
     @Singleton
-    fun provideRemoteRepository(currencyAPI: CurrencyAPI): RemoteDataSourceImpl {
-        return RemoteDataSourceImpl(currencyAPI)
-    }
+    fun provideRemoteRepository(currencyAPI: CurrencyAPI): RemoteDataSourceImpl =
+        RemoteDataSourceImpl(currencyAPI, NewsDataMapper(), CurrenciesRateStoryMapper())
 }

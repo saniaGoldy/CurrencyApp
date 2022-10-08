@@ -1,6 +1,6 @@
 package com.example.currencyapp.ui.news.newsListFragment
 
-import android.app.Application
+import android.content.Context
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -12,13 +12,14 @@ import com.example.currencyapp.domain.model.news.NewsData
 import com.example.currencyapp.domain.usecases.news.NewsListUseCase
 import com.example.currencyapp.ui.news.SearchSettingsBaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class NewsListViewModel @Inject constructor(
     private val interactor: NewsListUseCase,
-    context: Application
+    @ApplicationContext context: Context
 ) : SearchSettingsBaseViewModel(interactor, context) {
 
     private val _newsDataState: MutableLiveData<DataState<List<NewsData>>> =
@@ -31,16 +32,23 @@ class NewsListViewModel @Inject constructor(
         _newsDataState.value = DataState.Loading
 
         viewModelScope.launch {
-            _newsDataState.postValue(
-                interactor.fetchNewsList(settings)
-                    .let {
-                        if (it.isSuccess) {
-                            DataState.Success(it.getOrNull()!!)
-                        } else {
-                            DataState.Failure(it.exceptionOrNull().toString())
-                        }
-                    }
-            )
+            updateNewsDataState(settings)
         }
+    }
+
+    private suspend fun updateNewsDataState(settings: SearchSettings) {
+        _newsDataState.postValue(
+            getDataState(settings)
+        )
+    }
+
+    private suspend fun getDataState(settings: SearchSettings): DataState<List<NewsData>> {
+       interactor.fetchNewsList(settings).let { result ->
+           return if (result.isSuccess) {
+                    DataState.Success(result.getOrNull()!!)
+                } else {
+                    DataState.Failure(result.exceptionOrNull().toString())
+                }
+            }
     }
 }

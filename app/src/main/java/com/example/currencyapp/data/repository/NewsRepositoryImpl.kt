@@ -13,7 +13,7 @@ class NewsRepositoryImpl @Inject constructor(
     private val remoteDataSource: RemoteDataSource
 ) : NewsRepository {
 
-    override suspend fun fetchNewsList(settings: SearchSettings): Result<List<NewsData>> {
+    override suspend fun fetchNewsList(settings: SearchSettings): List<NewsData> {
         return remoteDataSource.fetchNewsList(settings)
     }
 

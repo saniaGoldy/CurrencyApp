@@ -23,7 +23,7 @@ class RatesSettingsViewModel @Inject constructor(
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 Log.d(TAG, "updateRatesListSettings: $settings")
-                interactor.saveRatesSettings(settings)
+                interactor.updateSettings(settings)
             }
         }
     }

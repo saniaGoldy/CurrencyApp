@@ -3,12 +3,17 @@ package com.example.currencyapp.ui.ratesList.ratesListFragment
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.SearchView
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.currencyapp.R
 import com.example.currencyapp.databinding.CurrenciesListItemBinding
+import com.example.currencyapp.domain.model.DataState
+import com.example.currencyapp.domain.model.news.NewsData
 import com.example.currencyapp.domain.model.rates.CurrencyData
+import com.example.currencyapp.ui.model.MyOnQueryTextListener
+import com.example.currencyapp.ui.news.newsListFragment.NewsFilter
 
 //private const val roundingFormat: String = "%.3f"
 
@@ -28,7 +33,7 @@ class CurrenciesListAdapter(val onListItemClickedActionCallback: ItemClickedActi
             oldItem: CurrencyData,
             newItem: CurrencyData
         ): Boolean {
-            return oldItem.iso4217Alpha == newItem.iso4217Alpha
+            return oldItem.currency == newItem.currency
         }
 
         override fun areContentsTheSame(
@@ -58,6 +63,14 @@ class CurrenciesListAdapter(val onListItemClickedActionCallback: ItemClickedActi
 
     override fun getItemCount(): Int = currenciesList.size
 
+    fun getOnQueryTextListener(cashedListState: DataState<List<CurrencyData>>?): SearchView.OnQueryTextListener {
+        return MyOnQueryTextListener(object : MyOnQueryTextListener.QueryFilter {
+            override fun filter(keyword: String?) {
+                currenciesList = RatesFilter(cashedListState).filter(keyword)
+            }
+        })
+    }
+
     inner class CurrencyViewHolder(binding: CurrenciesListItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
         private val tvFullName = binding.tvcurrencyFullName
@@ -69,8 +82,8 @@ class CurrenciesListAdapter(val onListItemClickedActionCallback: ItemClickedActi
 
         @SuppressLint("SetTextI18n")
         fun bind(item: CurrencyData) {
-            tvFullName.text = item.fullName
-            tvCode.text = item.iso4217Alpha
+            tvFullName.text = item.currency.fullName
+            tvCode.text = item.currency.name
             tvRate.text = String.format(roundingFormat, item.rate)
 
             val rateDiff = item.getRateDifference()

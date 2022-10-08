@@ -14,6 +14,7 @@ import androidx.navigation.findNavController
 import com.example.currencyapp.R
 import com.example.currencyapp.TAG
 import com.example.currencyapp.databinding.FragmentRatesListBinding
+import com.example.currencyapp.domain.model.DataState
 import com.example.currencyapp.domain.model.DataState.*
 import com.example.currencyapp.domain.model.rates.CurrencyData
 import com.example.currencyapp.domain.model.rates.RatesListSettings
@@ -45,8 +46,11 @@ class RatesListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         setupCurrenciesList()
-        setupSearchView()
+        setupButtons()
+        setupObservers()
+    }
 
+    private fun setupButtons() {
         with(binding) {
 
             ratesSettingsImageButton.setOnClickListener {
@@ -57,39 +61,38 @@ class RatesListFragment : Fragment() {
                 }
             }
         }
-
-        setupObservers()
     }
 
-    private fun setupSearchView() {
-        binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                return false
-            }
-
-            override fun onQueryTextChange(newText: String?): Boolean {
-                filter(newText)
-                return true
-            }
-
-        })
-    }
-
-    fun filter(keyword: String?) {
-        val cashedListState = viewModel.ratesDataState.value
-
-        if (cashedListState is Success) {
-            currenciesListAdapter.currenciesList = if (!keyword.isNullOrEmpty())
-                cashedListState.result.filter {
-                    it.iso4217Alpha.contains(keyword, true) || it.fullName.contains(keyword, true)
-                }
-            else
-                cashedListState.result
-        }
+    private fun setupSearchView(cashedListState: DataState<List<CurrencyData>>?) {
+        binding.searchView.setOnQueryTextListener(currenciesListAdapter.getOnQueryTextListener(cashedListState))
     }
 
     private fun setupObservers() {
+        setupRatesSettingsObserver()
+        setupRatesObserver()
+    }
 
+    private fun setupRatesObserver() {
+        viewModel.ratesDataState.observe(viewLifecycleOwner) { dataState ->
+            binding.progressBar.isVisible = dataState is Loading
+            when (dataState) {
+                is Success -> {
+                    currenciesListAdapter.currenciesList = dataState.result
+                    setupSearchView(dataState)
+
+                    dataState.info?.let { showToast(it) }
+                }
+                is Failure -> {
+                    Log.e(TAG, "dataStateObserver Failure: ${dataState.errorInfo}")
+
+                    showToast()
+                }
+                else -> {}
+            }
+        }
+    }
+
+    private fun setupRatesSettingsObserver() {
         viewModel.ratesSettings.observe(viewLifecycleOwner) { settings ->
             binding.tvRatesTitle.text =
                 getString(R.string.currency_rates_title, settings.currencyCode)
@@ -98,30 +101,19 @@ class RatesListFragment : Fragment() {
             //load rates after settings loaded
             viewModel.updateDataState()
         }
+    }
 
-        viewModel.ratesDataState.observe(viewLifecycleOwner) { dataState ->
-            binding.progressBar.isVisible = dataState is Loading
-            when (dataState) {
-                is Success -> {
-                    currenciesListAdapter.currenciesList = dataState.result
-                }
-                is Failure -> {
-                    Log.e(TAG, "dataStateObserver Failure: ${dataState.errorInfo}")
-
-                    Toast.makeText(
-                        this.requireContext(),
-                        if (viewModel.networkStatus.value == ConnectivityObserver.Status.Available) getString(
-                            R.string.standard_error_message
-                        ) else getString(
-                            R.string.no_internet_connection_error_message
-                        ),
-                        Toast.LENGTH_LONG
-                    ).show()
-                }
-                else -> {}
-            }
-        }
-
+    /** Pass null to [message] to use standard message*/
+    private fun showToast(message: String? = null) {
+        Toast.makeText(
+            this.requireContext(),
+            if (viewModel.networkStatus.value == ConnectivityObserver.Status.Available) {
+                message ?: getString(R.string.standard_error_message)
+            } else {
+                getString(R.string.no_internet_connection_error_message)
+            },
+            Toast.LENGTH_LONG
+        ).show()
     }
 
     private fun setupCurrenciesList() {
@@ -131,7 +123,7 @@ class RatesListFragment : Fragment() {
                     override fun run(currencyData: CurrencyData) {
                         binding.root.findNavController().navigate(
                             RatesListFragmentDirections.actionNavigationCurrenciesToCurrencyInfoFragment(
-                                currencyData.iso4217Alpha,
+                                currencyData.currency.name,
                                 viewModel.ratesSettings.value ?: RatesListSettings()
                             )
                         )

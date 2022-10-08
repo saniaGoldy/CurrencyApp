@@ -11,12 +11,12 @@ interface CurrencyDao {
     @Query("SELECT * FROM currencydataentity WHERE iso4217Alpha LIKE :iso4217Alpha")
     suspend fun findById(iso4217Alpha: String): CurrencyDataEntity
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun insertAll(currenciesList: List<CurrencyDataEntity>)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAll(currenciesList: List<CurrencyDataEntity>)
 
     @Delete
-    fun delete(currencyData: CurrencyDataEntity)
+    suspend fun delete(currencyData: CurrencyDataEntity)
 
     @Update
-    fun update(currenciesList: List<CurrencyDataEntity>)
+    suspend fun update(currenciesList: List<CurrencyDataEntity>)
 }

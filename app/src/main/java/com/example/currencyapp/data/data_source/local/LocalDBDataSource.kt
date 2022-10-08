@@ -8,7 +8,5 @@ interface LocalDBDataSource {
 
     suspend fun saveCurrenciesList(currencies: List<CurrencyData>)
 
-    suspend fun updateCurrenciesList(currencies: List<CurrencyData>)
-
     suspend fun fetchCurrencyDataByCode(code: String): CurrencyData
 }
