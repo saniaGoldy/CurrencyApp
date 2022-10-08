@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/navigation_currencies">
+
+    <fragment
+        android:id="@+id/navigation_currencies"
+        android:name="com.example.currencyapp.ui.ratesList.ratesListFragment.RatesListFragment"
+        android:label="fragment_home"
+        tools:layout="@layout/fragment_rates_list" >
+        <action
+            android:id="@+id/action_homeFragment_to_detailsFragment"
+            app:destination="@id/navigation_news"
+            app:enterAnim="@android:anim/slide_in_left" />
+        <action
+            android:id="@+id/action_navigation_currencies_to_currencyInfoFragment"
+            app:destination="@id/currencyInfoFragment"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:launchSingleTop="true"
+            app:popExitAnim="@android:anim/slide_out_right"
+            app:popUpTo="@id/navigation_currencies" />
+    </fragment>
+    <fragment
+        android:id="@+id/navigation_news"
+        android:name="com.example.currencyapp.ui.news.newsListFragment.NewsListFragment"
+        android:label="fragment_details"
+        tools:layout="@layout/fragment_news_list">
+        <action
+            android:id="@+id/action_detailsFragment_to_homeFragment"
+            app:destination="@id/navigation_currencies"
+            app:enterAnim="@android:anim/slide_out_right" />
+        <action
+            android:id="@+id/action_navigation_news_to_searchSettingsFragment"
+            app:destination="@id/searchSettingsFragment"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@android:anim/slide_out_right"
+            app:launchSingleTop="true"
+            app:popExitAnim="@android:anim/slide_out_right"
+            app:popUpTo="@id/navigation_news" />
+        <action
+            android:id="@+id/action_navigation_news_to_webViewActivity"
+            app:destination="@id/webViewActivity"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:launchSingleTop="true"
+            app:popExitAnim="@android:anim/slide_out_right"
+            app:popUpTo="@id/navigation_news" />
+    </fragment>
+    <fragment
+        android:id="@+id/searchSettingsFragment"
+        android:name="com.example.currencyapp.ui.news.searchSettingsFragment.SearchSettingsFragment"
+        android:label="fragment_search_settings"
+        tools:layout="@layout/fragment_search_settings" />
+    <activity
+        android:id="@+id/webViewActivity"
+        android:name="com.example.currencyapp.ui.news.webPageActivity.WebViewActivity"
+        android:label="activity_web_view"
+        tools:layout="@layout/activity_web_view" >
+        <argument
+            android:name="url"
+            app:argType="string" />
+    </activity>
+    <fragment
+        android:id="@+id/currencyInfoFragment"
+        android:name="com.example.currencyapp.ui.ratesList.currencyInfoFragment.CurrencyInfoFragment"
+        android:label="fragment_currency_info"
+        tools:layout="@layout/fragment_currency_info" >
+        <argument
+            android:name="currencyCode"
+            app:argType="string" />
+        <argument
+            android:name="settings"
+            app:argType="com.example.currencyapp.domain.model.rates.RatesListSettings" />
+    </fragment>
+</navigation>
