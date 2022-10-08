@@ -1,0 +1,46 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "8882d5b931c6e78324c250ee31de2463",
+    "entities": [
+      {
+        "tableName": "CurrencyDataEntity",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`iso4217Alpha` TEXT NOT NULL, `rate` REAL NOT NULL, `rateStory` TEXT NOT NULL, PRIMARY KEY(`iso4217Alpha`))",
+        "fields": [
+          {
+            "fieldPath": "iso4217Alpha",
+            "columnName": "iso4217Alpha",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "rate",
+            "columnName": "rate",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "rateStory",
+            "columnName": "rateStory",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "iso4217Alpha"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '8882d5b931c6e78324c250ee31de2463')"
+    ]
+  }
+}
