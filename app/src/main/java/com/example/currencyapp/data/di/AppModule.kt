@@ -2,7 +2,6 @@ package com.example.currencyapp.data.di
 
 import android.app.Application
 import androidx.room.Room
-import com.example.currencyapp.BuildConfig
 import com.example.currencyapp.data.data_source.local.LocalDBDataSourceImpl
 import com.example.currencyapp.data.data_source.mappers.currencies.CurrenciesRateStoryMapper
 import com.example.currencyapp.data.data_source.mappers.currencies.DataToEntityMapper
@@ -31,12 +30,7 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideCurrencyAPI(): CurrencyAPI {
-        val interceptor = HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
-        val clientBuilder = OkHttpClient.Builder().addInterceptor(interceptor).addInterceptor { chain ->
-            val request = chain.request().newBuilder().addHeader("apikey", BuildConfig.NEWS_API_KEY).build()
-            chain.proceed(request)
-        }
+    fun provideCurrencyAPI(clientBuilder: OkHttpClient.Builder): CurrencyAPI {
         return Retrofit.Builder()
             .baseUrl(Constants.API_BASE_URL)
             .client(clientBuilder.build())
@@ -47,30 +41,44 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideLocalDB(context: Application): LocalDB {
-        return Room.databaseBuilder(
+    fun provideClientBuilder(): OkHttpClient.Builder {
+
+        val interceptor = HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
+
+        return OkHttpClient.Builder()
+            .addInterceptor(interceptor)
+            .addInterceptor { chain ->
+                val request = chain
+                    .request()
+                    .newBuilder()
+                    .addHeader("apikey", "jwTY3ePdZwCZrZ1kP96pLfnUe9qUpOq9")
+                    .build()
+                chain.proceed(request)
+            }
+    }
+
+    @Provides
+    @Singleton
+    fun provideLocalDB(context: Application): LocalDB =
+        Room.databaseBuilder(
             context.applicationContext,
             LocalDB::class.java,
             Constants.CURRENCY_LOCAL_DB_NAME
         ).fallbackToDestructiveMigration().build()
-    }
 
 
     @Provides
     @Singleton
-    fun providePreferencesRepository(context: Application): PreferencesDataSourceImpl {
-        return PreferencesDataSourceImpl(context.dataStore)
-    }
+    fun providePreferencesRepository(context: Application): PreferencesDataSourceImpl =
+        PreferencesDataSourceImpl(context.dataStore)
 
     @Provides
     @Singleton
-    fun provideLocalRepository(localDB: LocalDB): LocalDBDataSourceImpl {
-        return LocalDBDataSourceImpl(localDB,EntityToDataMapper(),DataToEntityMapper())
-    }
+    fun provideLocalRepository(localDB: LocalDB): LocalDBDataSourceImpl =
+        LocalDBDataSourceImpl(localDB, EntityToDataMapper(), DataToEntityMapper())
 
     @Provides
     @Singleton
-    fun provideRemoteRepository(currencyAPI: CurrencyAPI): RemoteDataSourceImpl {
-        return RemoteDataSourceImpl(currencyAPI, NewsDataMapper(), CurrenciesRateStoryMapper())
-    }
+    fun provideRemoteRepository(currencyAPI: CurrencyAPI): RemoteDataSourceImpl =
+        RemoteDataSourceImpl(currencyAPI, NewsDataMapper(), CurrenciesRateStoryMapper())
 }

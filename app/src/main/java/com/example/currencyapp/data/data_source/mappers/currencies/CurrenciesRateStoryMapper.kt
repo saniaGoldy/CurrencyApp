@@ -5,28 +5,50 @@ import com.example.currencyapp.data.remote.entities.currencyRateStory.Currencies
 import com.example.currencyapp.domain.model.rates.Currencies
 import com.example.currencyapp.domain.model.rates.CurrencyData
 
-class CurrenciesRateStoryMapper: Mapper<CurrenciesRateStory, MutableList<CurrencyData>> {
+class CurrenciesRateStoryMapper : Mapper<CurrenciesRateStory, MutableList<CurrencyData>> {
 
     override fun map(from: CurrenciesRateStory): MutableList<CurrencyData> {
-        val currenciesData = mutableListOf<CurrencyData>()
         val rates = from.rates.toList()
+        val currenciesData = getCurrenciesWithoutRateStories(rates)
 
-        rates[0].second.toList().forEach { rate ->
-            currenciesData.add(CurrencyData(Currencies.valueOf(rate.first), 1 / rate.second, null))
-        }
+        currenciesData.fillTheRateStories(rates)
 
-        currenciesData.forEach { currencyData ->
+        return currenciesData
+    }
+
+    private fun MutableList<CurrencyData>.fillTheRateStories(
+        rates: List<Pair<String, Map<String, Double>>>
+    ) {
+        this.forEach { currencyData ->
             val dateToRateMap = mutableMapOf<String, Double>()
 
             rates.forEach { date ->
-                date.second[currencyData.currency.name]?.let { rate ->
-                    dateToRateMap[date.first] = 1 / rate
-                }
+                dateToRateMap.addDateToRateEntry(date, currencyData)
             }
 
             currencyData.rateStory = dateToRateMap
         }
+    }
 
+    private fun MutableMap<String, Double>.addDateToRateEntry(
+        date: Pair<String, Map<String, Double>>,
+        currencyData: CurrencyData,
+    ) {
+        date.second[currencyData.currency.name]?.let { rate ->
+            this[date.first] = 1 / rate
+        }
+    }
+
+    private fun getCurrenciesWithoutRateStories(
+        rates: List<Pair<String, Map<String, Double>>>
+    ): MutableList<CurrencyData> {
+        val currenciesData = mutableListOf<CurrencyData>()
+        rates[0].second.toList().forEach { rate ->
+            currenciesData.add(getCurrencyData(rate))
+        }
         return currenciesData
     }
+
+    private fun getCurrencyData(rate: Pair<String, Double>) =
+        CurrencyData(Currencies.valueOf(rate.first), 1 / rate.second, null)
 }

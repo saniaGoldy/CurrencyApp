@@ -4,7 +4,6 @@ import com.example.currencyapp.data.data_source.mappers.Mapper
 import com.example.currencyapp.data.remote.entities.news.Data
 import com.example.currencyapp.domain.model.news.NewsData
 import com.example.currencyapp.domain.model.news.PublishDate
-import javax.inject.Inject
 
 class NewsDataMapper : Mapper<List<Data>, List<NewsData>> {
     override fun map(from: List<Data>): List<NewsData> {

@@ -6,12 +6,12 @@ import com.google.common.truth.Truth.assertThat
 import org.junit.Before
 import org.junit.Test
 
-internal class DataToEntityMapperTest{
+internal class DataToEntityMapperTest {
 
     private lateinit var mapper: DataToEntityMapper
 
     @Before
-    fun setup(){
+    fun setup() {
         mapper = DataToEntityMapper()
     }
 

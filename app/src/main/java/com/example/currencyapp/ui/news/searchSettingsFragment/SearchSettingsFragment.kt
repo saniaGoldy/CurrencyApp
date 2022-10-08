@@ -45,11 +45,12 @@ class SearchSettingsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        NewsApiRequestOptions.values().forEach { option ->
-            spinnerItems.add(option)
-        }
+        addSpinnerItems()
 
+        setupObservers()
+    }
 
+    private fun setupObservers() {
         viewModel.searchSettings.observe(viewLifecycleOwner) {
             setupDropDownList(it)
 
@@ -61,7 +62,26 @@ class SearchSettingsFragment : Fragment() {
         }
     }
 
+    private fun addSpinnerItems() {
+        NewsApiRequestOptions.values().forEach { option ->
+            spinnerItems.add(option)
+        }
+    }
+
     private fun FragmentSearchSettingsBinding.setupButtons() {
+        setupApplyButton()
+
+        setupCancelButton()
+    }
+
+    private fun FragmentSearchSettingsBinding.setupCancelButton() {
+        buttonCancel.setOnClickListener {
+            root.findNavController()
+                .popBackStack()
+        }
+    }
+
+    private fun FragmentSearchSettingsBinding.setupApplyButton() {
         buttonApply.setOnClickListener {
 
             viewModel.setSearchSettings(
@@ -72,11 +92,6 @@ class SearchSettingsFragment : Fragment() {
                 textInputDateTo.editText?.text.toString()
             )
 
-            root.findNavController()
-                .popBackStack()
-        }
-
-        buttonCancel.setOnClickListener {
             root.findNavController()
                 .popBackStack()
         }
@@ -99,6 +114,7 @@ class SearchSettingsFragment : Fragment() {
                 )
             })
         }
+
         textInputDateFrom.apply {
             setupErrorHandling(
                 Regex(DATE_REGEX),
@@ -107,6 +123,7 @@ class SearchSettingsFragment : Fragment() {
 
             editText?.setText(settings.timeGap.substringBefore(","))
         }
+
         textInputDateTo.apply {
             setupErrorHandling(
                 Regex(DATE_REGEX),
@@ -129,39 +146,42 @@ class SearchSettingsFragment : Fragment() {
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             // Apply the adapter to the spinner
             spinner.adapter = adapter
-            spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(
-                    parent: AdapterView<*>?,
-                    view: View?,
-                    position: Int,
-                    id: Long
-                ) {
-                    Log.d(TAG, "onItemSelected: $position")
-
-                    when (position) {
-                        DATE_INPUT_FROM -> {
-                            textInputDateFrom.isVisible = true
-                        }
-                        DATE_INPUT_FROM_TO -> {
-                            textInputDateFrom.isVisible = true
-                            textInputDateTo.isVisible = true
-                        }
-                        else -> {
-                            textInputDateFrom.isVisible = false
-                            textInputDateTo.isVisible = false
-                        }
-                    }
-                }
-
-                override fun onNothingSelected(parent: AdapterView<*>?) {
-                    Log.d(TAG, "onNothingSelected")
-                }
-            }
+            spinner.onItemSelectedListener = getOnItemSelectedListener()
         }
 
         spinner.setSelection(spinnerItems.indexOf(settings.timeGapMode))
 
     }
+
+    private fun FragmentSearchSettingsBinding.getOnItemSelectedListener() =
+        object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                Log.d(TAG, "onItemSelected: $position")
+
+                when (position) {
+                    DATE_INPUT_FROM -> {
+                        textInputDateFrom.isVisible = true
+                    }
+                    DATE_INPUT_FROM_TO -> {
+                        textInputDateFrom.isVisible = true
+                        textInputDateTo.isVisible = true
+                    }
+                    else -> {
+                        textInputDateFrom.isVisible = false
+                        textInputDateTo.isVisible = false
+                    }
+                }
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                Log.d(TAG, "onNothingSelected")
+            }
+        }
 
     private fun TextInputLayout.setupErrorHandling(regex: Regex, errorMessage: String) {
         editText?.addTextChangedListener {

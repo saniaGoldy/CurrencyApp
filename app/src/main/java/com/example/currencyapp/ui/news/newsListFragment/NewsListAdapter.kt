@@ -2,13 +2,15 @@ package com.example.currencyapp.ui.news.newsListFragment
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.SearchView
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.currencyapp.databinding.NewsListItemBinding
+import com.example.currencyapp.domain.model.DataState
 import com.example.currencyapp.domain.model.news.NewsData
-
+import com.example.currencyapp.ui.model.MyOnQueryTextListener
 
 class NewsListAdapter :
     RecyclerView.Adapter<NewsListAdapter.NewsViewHolder>() {
@@ -42,6 +44,14 @@ class NewsListAdapter :
         holder.bind(newsList[position])
 
     override fun getItemCount(): Int = newsList.size
+
+    fun getOnQueryTextListener(cashedListState: DataState<List<NewsData>>?): SearchView.OnQueryTextListener {
+        return MyOnQueryTextListener(object : MyOnQueryTextListener.QueryFilter {
+            override fun filter(keyword: String?) {
+                newsList = NewsFilter(cashedListState).filter(keyword)
+            }
+        })
+    }
 
     inner class NewsViewHolder(private val binding: NewsListItemBinding) :
         RecyclerView.ViewHolder(binding.root) {

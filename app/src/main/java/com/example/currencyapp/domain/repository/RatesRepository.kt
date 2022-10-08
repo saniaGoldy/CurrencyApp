@@ -1,13 +1,13 @@
 package com.example.currencyapp.domain.repository
 
-import com.example.currencyapp.domain.model.InconsistentData
+import com.example.currencyapp.domain.model.UpdatableData
 import com.example.currencyapp.domain.model.rates.CurrencyData
 import com.example.currencyapp.domain.model.rates.RatesListSettings
 import kotlinx.coroutines.flow.Flow
 
 interface RatesRepository {
 
-    suspend fun fetchCurrenciesList(): InconsistentData<List<CurrencyData>>
+    suspend fun fetchCurrenciesList(): UpdatableData<List<CurrencyData>>
 
     suspend fun saveRatesListSettings(settings: RatesListSettings)
 

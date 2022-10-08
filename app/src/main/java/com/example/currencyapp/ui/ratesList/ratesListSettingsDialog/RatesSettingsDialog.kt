@@ -55,39 +55,45 @@ class RatesSettingsDialog : DialogFragment() {
 
     private fun setupSettingsSpinners() {
         with(binding) {
+            setupBaseCurrencySpinner()
+            setupRateDiffPrecisionSpinner()
+        }
+    }
+
+    private fun AlertDialogRatesTabSettingsBinding.setupRateDiffPrecisionSpinner() {
+        spinnerRateDifferencePrecision.apply {
             ArrayAdapter.createFromResource(
                 requireContext(),
-                R.array.currency_three_letter_codes,
+                R.array.precision_options,
                 android.R.layout.simple_spinner_item
             ).also { arrayAdapter ->
                 arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-                spinnerBaseCurrency.adapter = arrayAdapter
+                this.adapter = arrayAdapter
             }
-
-            spinnerBaseCurrency.setSelection(
-                baseCurrencyOptions.indexOf(
-                    settings.currencyCode
-                )
-            )
-
-
-            spinnerRateDifferencePrecision.apply {
-                ArrayAdapter.createFromResource(
-                    requireContext(),
-                    R.array.precision_options,
-                    android.R.layout.simple_spinner_item
-                ).also { arrayAdapter ->
-                    arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-                    this.adapter = arrayAdapter
-                }
-            }
-
-            spinnerRateDifferencePrecision.setSelection(
-                precisionOptions.indexOf(
-                    settings.precision
-                )
-            )
         }
+
+        spinnerRateDifferencePrecision.setSelection(
+            precisionOptions.indexOf(
+                settings.precision
+            )
+        )
+    }
+
+    private fun AlertDialogRatesTabSettingsBinding.setupBaseCurrencySpinner() {
+        ArrayAdapter.createFromResource(
+            requireContext(),
+            R.array.currency_three_letter_codes,
+            android.R.layout.simple_spinner_item
+        ).also { arrayAdapter ->
+            arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            spinnerBaseCurrency.adapter = arrayAdapter
+        }
+
+        spinnerBaseCurrency.setSelection(
+            baseCurrencyOptions.indexOf(
+                settings.currencyCode
+            )
+        )
     }
 
     private fun setupButtons() {

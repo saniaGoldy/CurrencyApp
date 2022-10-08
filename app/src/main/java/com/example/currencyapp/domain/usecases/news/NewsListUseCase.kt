@@ -14,7 +14,7 @@ class NewsListUseCase @Inject constructor(
     suspend fun fetchNewsList(settings: SearchSettings): Result<List<NewsData>> {
 
         return withContext(Dispatchers.IO) {
-            kotlin.runCatching { newsRepository.fetchNewsList(settings) }
+            runCatching { newsRepository.fetchNewsList(settings) }
         }
     }
 }

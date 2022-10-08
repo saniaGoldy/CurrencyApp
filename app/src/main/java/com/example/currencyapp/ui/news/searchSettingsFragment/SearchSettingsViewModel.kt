@@ -27,11 +27,7 @@ class SearchSettingsViewModel @Inject constructor(
         val settings = SearchSettings(
             keywords,
             tags,
-            when (timeGapMode) {
-                NewsApiRequestOptions.DateFrom -> from
-                NewsApiRequestOptions.DateFromTo -> "$from,$to"
-                else -> timeGapMode.queryParam
-            }
+            getTimeGap(timeGapMode, from, to)
         )
 
         settings.timeGapMode = timeGapMode
@@ -39,5 +35,15 @@ class SearchSettingsViewModel @Inject constructor(
         if (searchSettings.value != settings) {
             viewModelScope.launch { interactor.saveNewsSettings(settings) }
         }
+    }
+
+    private fun getTimeGap(
+        timeGapMode: NewsApiRequestOptions,
+        from: String,
+        to: String
+    ) = when (timeGapMode) {
+        NewsApiRequestOptions.DateFrom -> from
+        NewsApiRequestOptions.DateFromTo -> "$from,$to"
+        else -> timeGapMode.queryParam
     }
 }

@@ -64,11 +64,11 @@ class PreferencesDataSourceImpl(private val dataStore: DataStore<Preferences>) :
 
 
     override suspend fun saveRatesListSettings(settings: RatesListSettings) {
-        Log.d(TAG, "saveRatesSettings")
+        Log.d(TAG, "updateRates")
 
         dataStore.edit {
             it[RATES_SETTINGS_PREF_KEY] = gson.toJson(settings)
-            Log.d(TAG, "saveRatesSettings: ${it[RATES_SETTINGS_PREF_KEY]}")
+            Log.d(TAG, "updateRates: ${it[RATES_SETTINGS_PREF_KEY]}")
         }
     }
 
