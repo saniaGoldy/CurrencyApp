@@ -32,6 +32,8 @@ class SearchSettingsViewModel @Inject constructor(
 
         settings.timeGapMode = timeGapMode
 
+        //We don`t want to write settings if they has not changed
+        //(User opened settings dialog and clicked OK without actually changing settings)
         if (searchSettings.value != settings) {
             viewModelScope.launch { interactor.saveNewsSettings(settings) }
         }

@@ -80,6 +80,12 @@ class CurrenciesListAdapter(val onListItemClickedActionCallback: ItemClickedActi
         private val indicatorImage = binding.imageViewArrowIndicator
         private val container = binding.itemContainer
 
+        init {
+            container.setOnClickListener {
+                onListItemClickedActionCallback.run(currenciesList[bindingAdapterPosition])
+            }
+        }
+
         @SuppressLint("SetTextI18n")
         fun bind(item: CurrencyData) {
             tvFullName.text = item.currency.fullName
@@ -95,10 +101,6 @@ class CurrenciesListAdapter(val onListItemClickedActionCallback: ItemClickedActi
             } else {
                 tvDifference.text = rateDiffText
                 R.drawable.decrease
-            }
-
-            container.setOnClickListener {
-                onListItemClickedActionCallback.run(item)
             }
         }
     }

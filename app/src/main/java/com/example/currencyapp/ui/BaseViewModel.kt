@@ -7,10 +7,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.currencyapp.domain.services.ConnectivityObserver
 import com.example.currencyapp.domain.services.NetworkConnectivityObserver
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
-open class BaseViewModel(context: Context) : ViewModel() {
+open class BaseViewModel(@ApplicationContext context: Context) : ViewModel() {
     private val _networkStatus = MutableLiveData(ConnectivityObserver.Status.Unavailable)
 
     val networkStatus: LiveData<ConnectivityObserver.Status>

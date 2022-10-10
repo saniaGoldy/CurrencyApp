@@ -20,7 +20,7 @@ import com.example.currencyapp.domain.services.ConnectivityObserver
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class NewsListFragment : Fragment() {
+class NewsListFragment : Fragment(), NewsListAdapter.ItemOnClickListener {
 
     companion object {
         fun newInstance() = NewsListFragment()
@@ -28,7 +28,7 @@ class NewsListFragment : Fragment() {
 
     private val viewModel: NewsListViewModel by activityViewModels()
 
-    private val adapter = NewsListAdapter()
+    private val adapter = NewsListAdapter(this)
 
     private var _binding: FragmentNewsListBinding? = null
     private val binding get() = _binding!!
@@ -93,5 +93,11 @@ class NewsListFragment : Fragment() {
                 }
             }
         }
+    }
+
+    override fun invoke(url: String) {
+        binding.root.findNavController().navigate(
+            NewsListFragmentDirections.actionNavigationNewsToWebViewActivity(url)
+        )
     }
 }
