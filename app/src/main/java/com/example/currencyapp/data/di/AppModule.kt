@@ -1,7 +1,10 @@
 package com.example.currencyapp.data.di
 
 import android.app.Application
+import android.content.Context
 import androidx.room.Room
+import com.chuckerteam.chucker.api.ChuckerCollector
+import com.chuckerteam.chucker.api.ChuckerInterceptor
 import com.example.currencyapp.data.data_source.local.LocalDBDataSourceImpl
 import com.example.currencyapp.data.data_source.mappers.currencies.CurrenciesRateStoryMapper
 import com.example.currencyapp.data.data_source.mappers.currencies.DataToEntityMapper
@@ -16,6 +19,7 @@ import com.example.currencyapp.other.Constants
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -41,9 +45,14 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideClientBuilder(): OkHttpClient.Builder {
+    fun provideClientBuilder(@ApplicationContext context: Context): OkHttpClient.Builder {
 
-        val interceptor = HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
+        val interceptor = ChuckerInterceptor.Builder(context)
+            .collector(ChuckerCollector(context))
+            .maxContentLength(250000L)
+            .redactHeaders(emptySet())
+            .alwaysReadResponseBody(false)
+            .build()
 
         return OkHttpClient.Builder()
             .addInterceptor(interceptor)
