@@ -1,10 +1,8 @@
 package com.example.currencyapp.data.remote.entities.news
 
-
 import com.google.gson.annotations.SerializedName
 
-
-data class Data(
+class Data(
     @SerializedName("description")
     val description: String,
     @SerializedName("published_at")

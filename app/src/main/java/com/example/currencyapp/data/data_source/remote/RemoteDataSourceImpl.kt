@@ -6,7 +6,7 @@ import com.example.currencyapp.data.data_source.mappers.Mapper
 import com.example.currencyapp.data.remote.CurrencyAPI
 import com.example.currencyapp.data.remote.entities.currencyRateStory.CurrenciesRateStory
 import com.example.currencyapp.data.remote.entities.news.Data
-import com.example.currencyapp.data.remote.entities.news.SearchSettings
+import com.example.currencyapp.domain.model.news.SearchSettings
 import com.example.currencyapp.domain.CurrentDateData
 import com.example.currencyapp.domain.model.news.NewsData
 import com.example.currencyapp.domain.model.rates.CurrencyData

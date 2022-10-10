@@ -1,4 +1,6 @@
-package com.example.currencyapp.data.remote.entities.news
+package com.example.currencyapp.domain.model.news
+
+import com.example.currencyapp.data.remote.entities.news.NewsApiRequestOptions
 
 data class SearchSettings(
     var keywords: String = "exchange rates",

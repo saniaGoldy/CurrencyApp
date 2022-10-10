@@ -1,6 +1,6 @@
 package com.example.currencyapp.domain.usecases.news
 
-import com.example.currencyapp.data.remote.entities.news.SearchSettings
+import com.example.currencyapp.domain.model.news.SearchSettings
 import com.example.currencyapp.domain.repository.FakeNewsRepository
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.runBlocking

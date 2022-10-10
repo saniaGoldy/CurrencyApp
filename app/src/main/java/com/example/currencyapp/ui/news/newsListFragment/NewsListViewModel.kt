@@ -6,7 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.currencyapp.TAG
-import com.example.currencyapp.data.remote.entities.news.SearchSettings
+import com.example.currencyapp.domain.model.news.SearchSettings
 import com.example.currencyapp.domain.model.DataState
 import com.example.currencyapp.domain.model.news.NewsData
 import com.example.currencyapp.domain.usecases.news.NewsListUseCase

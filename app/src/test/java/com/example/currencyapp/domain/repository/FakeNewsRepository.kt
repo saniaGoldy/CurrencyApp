@@ -1,7 +1,7 @@
 package com.example.currencyapp.domain.repository
 
 import com.example.currencyapp.data.data_source.remote.FakeRemoteDataSource
-import com.example.currencyapp.data.remote.entities.news.SearchSettings
+import com.example.currencyapp.domain.model.news.SearchSettings
 import com.example.currencyapp.domain.model.news.NewsData
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf

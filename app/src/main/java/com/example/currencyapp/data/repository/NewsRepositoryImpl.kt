@@ -2,7 +2,7 @@ package com.example.currencyapp.data.repository
 
 import com.example.currencyapp.data.data_source.preferences.PreferencesDataSource
 import com.example.currencyapp.data.data_source.remote.RemoteDataSource
-import com.example.currencyapp.data.remote.entities.news.SearchSettings
+import com.example.currencyapp.domain.model.news.SearchSettings
 import com.example.currencyapp.domain.model.news.NewsData
 import com.example.currencyapp.domain.repository.NewsRepository
 import kotlinx.coroutines.flow.Flow

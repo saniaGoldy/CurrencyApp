@@ -5,7 +5,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.SmallTest
 import androidx.test.platform.app.InstrumentationRegistry
 import com.example.currencyapp.LiveDataTestUtil
-import com.example.currencyapp.data.remote.entities.news.SearchSettings
+import com.example.currencyapp.domain.model.news.SearchSettings
 import com.example.currencyapp.domain.model.DataState
 import com.example.currencyapp.domain.model.news.NewsData
 import com.example.currencyapp.domain.usecases.news.NewsListUseCase
