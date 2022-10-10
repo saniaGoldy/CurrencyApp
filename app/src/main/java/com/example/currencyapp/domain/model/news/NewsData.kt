@@ -1,17 +1,11 @@
 package com.example.currencyapp.domain.model.news
 
 data class NewsData(
-
     val description: String,
-
     val publishedAt: PublishDate,
-
     val source: String,
-
     val tags: List<String>,
-
     val title: String,
-
     val url: String
 ) {
     fun containsKeyword(keyword: String, ignoreCase: Boolean = true): Boolean {

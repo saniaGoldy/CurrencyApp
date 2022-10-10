@@ -12,9 +12,9 @@ class DataToEntityMapper : Mapper<List<CurrencyData>, List<CurrencyDataEntity>> 
 
     private fun CurrencyData.toEntity(): CurrencyDataEntity {
         return CurrencyDataEntity(
-            this.currency.name,
-            this.rate,
-            this.rateStory ?: mapOf()
+            currency.name,
+            rate,
+            rateStory ?: mapOf()
         )
     }
 }
