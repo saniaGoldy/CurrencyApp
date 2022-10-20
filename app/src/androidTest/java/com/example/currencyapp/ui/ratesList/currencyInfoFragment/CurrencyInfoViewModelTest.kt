@@ -7,6 +7,7 @@ import androidx.test.platform.app.InstrumentationRegistry
 import com.example.currencyapp.LiveDataTestUtil
 import com.example.currencyapp.domain.model.DataState
 import com.example.currencyapp.domain.model.rates.CurrencyData
+import com.example.currencyapp.domain.services.NetworkConnectivityObserver
 import com.example.currencyapp.domain.usecases.rates.RatesCurrencyInfoUseCase
 import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
@@ -18,6 +19,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import java.io.IOException
+import javax.inject.Inject
 
 @OptIn(ExperimentalCoroutinesApi::class)
 @RunWith(AndroidJUnit4::class)
@@ -26,16 +28,19 @@ internal class CurrencyInfoViewModelTest {
     @get:Rule
     var instantTaskExecutorRule = InstantTaskExecutorRule()
 
+    lateinit var networkConnectivityObserver: NetworkConnectivityObserver
+
     private lateinit var viewModel: CurrencyInfoViewModel
     private lateinit var interactorMock: RatesCurrencyInfoUseCase
 
     @Before
     fun setup() {
         interactorMock = mockk(relaxed = true)
+        networkConnectivityObserver = NetworkConnectivityObserver(InstrumentationRegistry.getInstrumentation().targetContext)
 
         viewModel = CurrencyInfoViewModel(
             interactorMock,
-            InstrumentationRegistry.getInstrumentation().targetContext
+            networkConnectivityObserver
         )
     }
 
