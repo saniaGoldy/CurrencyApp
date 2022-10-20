@@ -1,8 +1,9 @@
 package com.example.currencyapp.domain.usecases.news
 
-import com.example.currencyapp.data.remote.entities.news.SearchSettings
+import com.example.currencyapp.domain.model.news.SearchSettings
 import com.example.currencyapp.domain.repository.FakeNewsRepository
 import com.google.common.truth.Truth.assertThat
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Test
@@ -14,7 +15,7 @@ internal class NewsListUseCaseTest {
     @Before
     fun setup() {
         repository = FakeNewsRepository()
-        useCase = NewsListUseCase(repository)
+        useCase = NewsListUseCase(repository, Dispatchers.IO)
     }
 
     @Test

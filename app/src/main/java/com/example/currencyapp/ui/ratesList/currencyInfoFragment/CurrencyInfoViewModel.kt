@@ -8,6 +8,7 @@ import com.example.currencyapp.R
 import com.example.currencyapp.domain.model.DataState
 import com.example.currencyapp.domain.model.rates.Currencies
 import com.example.currencyapp.domain.model.rates.CurrencyData
+import com.example.currencyapp.domain.services.NetworkConnectivityObserver
 import com.example.currencyapp.domain.usecases.rates.RatesCurrencyInfoUseCase
 import com.example.currencyapp.ui.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -18,8 +19,8 @@ import javax.inject.Inject
 @HiltViewModel
 class CurrencyInfoViewModel @Inject constructor(
     private val interactor: RatesCurrencyInfoUseCase,
-    @ApplicationContext private val context: Context
-) : BaseViewModel(context) {
+    networkConnectivityObserver: NetworkConnectivityObserver
+) : BaseViewModel(networkConnectivityObserver) {
 
     private val _currency = MutableLiveData<DataState<CurrencyData>>(DataState.Default)
     val currency: LiveData<DataState<CurrencyData>>
@@ -41,27 +42,4 @@ class CurrencyInfoViewModel @Inject constructor(
 
         }
     }
-
-    fun getTvChartFragmentTitle(code: String): String {
-        val currency = Currencies.valueOf(code)
-
-        return context.getString(
-            R.string.title_rates_chart_for,
-            currency.fullName
-        )
-    }
-
-    fun getTvChartFragmentDetails(baseCurrencyCode: String): String {
-        val currency = Currencies.valueOf(baseCurrencyCode)
-
-        return context.getString(
-            R.string.based_on_detailes,
-            currency.fullName
-        )
-    }
-
-    fun getFromToLabel(dates: List<String>): String {
-        return context.getString(R.string.from_to, dates[0], dates[dates.lastIndex])
-    }
-
 }

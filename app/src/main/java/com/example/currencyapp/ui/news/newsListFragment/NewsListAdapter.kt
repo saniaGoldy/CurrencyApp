@@ -12,7 +12,8 @@ import com.example.currencyapp.domain.model.DataState
 import com.example.currencyapp.domain.model.news.NewsData
 import com.example.currencyapp.ui.model.MyOnQueryTextListener
 
-class NewsListAdapter :
+/** @param [onClickListener] string parameter of listener is url*/
+class NewsListAdapter(private val onClickListener: ItemOnClickListener) :
     RecyclerView.Adapter<NewsListAdapter.NewsViewHolder>() {
 
     private val diffCallback = object : DiffUtil.ItemCallback<NewsData>() {
@@ -24,7 +25,6 @@ class NewsListAdapter :
         override fun areContentsTheSame(oldItem: NewsData, newItem: NewsData): Boolean {
             return oldItem == newItem
         }
-
     }
 
     private val differ = AsyncListDiffer(this, diffCallback)
@@ -56,6 +56,11 @@ class NewsListAdapter :
     inner class NewsViewHolder(private val binding: NewsListItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
+        init {
+            binding.itemContainer.setOnClickListener {
+                onClickListener.invoke(newsList[bindingAdapterPosition].url)
+            }
+        }
 
         fun bind(item: NewsData) {
             with(binding) {
@@ -74,5 +79,9 @@ class NewsListAdapter :
                 }
             }
         }
+    }
+
+    interface ItemOnClickListener{
+        fun invoke(url: String)
     }
 }

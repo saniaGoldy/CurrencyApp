@@ -2,6 +2,7 @@ package com.example.currencyapp.domain.usecases.rates
 
 import com.example.currencyapp.domain.repository.FakeRatesRepository
 import com.google.common.truth.Truth.assertThat
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Test
@@ -14,7 +15,7 @@ internal class RatesCurrencyInfoUseCaseTest {
     @Before
     fun setup() {
         repository = FakeRatesRepository()
-        useCase = RatesCurrencyInfoUseCase(repository)
+        useCase = RatesCurrencyInfoUseCase(repository, Dispatchers.IO)
     }
 
     @Test

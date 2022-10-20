@@ -1,7 +1,10 @@
 package com.example.currencyapp.data.di
 
 import android.app.Application
+import android.content.Context
 import androidx.room.Room
+import com.chuckerteam.chucker.api.ChuckerCollector
+import com.chuckerteam.chucker.api.ChuckerInterceptor
 import com.example.currencyapp.data.data_source.local.LocalDBDataSourceImpl
 import com.example.currencyapp.data.data_source.mappers.currencies.CurrenciesRateStoryMapper
 import com.example.currencyapp.data.data_source.mappers.currencies.DataToEntityMapper
@@ -12,13 +15,17 @@ import com.example.currencyapp.data.data_source.remote.RemoteDataSourceImpl
 import com.example.currencyapp.data.local.LocalDB
 import com.example.currencyapp.data.remote.CurrencyAPI
 import com.example.currencyapp.dataStore
-import com.example.currencyapp.other.Constants
+import com.example.currencyapp.domain.services.ConnectivityObserver
+import com.example.currencyapp.domain.services.NetworkConnectivityObserver
+import com.example.currencyapp.util.Constants
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.create
@@ -41,9 +48,14 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideClientBuilder(): OkHttpClient.Builder {
+    fun provideClientBuilder(@ApplicationContext context: Context): OkHttpClient.Builder {
 
-        val interceptor = HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
+        val interceptor = ChuckerInterceptor.Builder(context)
+            .collector(ChuckerCollector(context))
+            .maxContentLength(250000L)
+            .redactHeaders(emptySet())
+            .alwaysReadResponseBody(false)
+            .build()
 
         return OkHttpClient.Builder()
             .addInterceptor(interceptor)
@@ -66,7 +78,6 @@ object AppModule {
             Constants.CURRENCY_LOCAL_DB_NAME
         ).fallbackToDestructiveMigration().build()
 
-
     @Provides
     @Singleton
     fun providePreferencesRepository(context: Application): PreferencesDataSourceImpl =
@@ -81,4 +92,15 @@ object AppModule {
     @Singleton
     fun provideRemoteRepository(currencyAPI: CurrencyAPI): RemoteDataSourceImpl =
         RemoteDataSourceImpl(currencyAPI, NewsDataMapper(), CurrenciesRateStoryMapper())
+
+    @Provides
+    @Singleton
+    fun provideNetworkConnectivityObserver(@ApplicationContext context: Context): NetworkConnectivityObserver {
+        return NetworkConnectivityObserver(context)
+    }
+
+    @Provides
+    fun provideIODispatcher(): CoroutineDispatcher {
+        return Dispatchers.IO
+    }
 }

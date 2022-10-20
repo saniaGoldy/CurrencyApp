@@ -1,4 +1,4 @@
-package com.example.currencyapp.other
+package com.example.currencyapp.util
 
 object Constants {
     const val API_BASE_URL = "https://api.apilayer.com/"

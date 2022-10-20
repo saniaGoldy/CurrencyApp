@@ -1,6 +1,6 @@
 package com.example.currencyapp.data.data_source.remote
 
-import com.example.currencyapp.data.remote.entities.news.SearchSettings
+import com.example.currencyapp.domain.model.news.SearchSettings
 import com.example.currencyapp.domain.model.news.NewsData
 import com.example.currencyapp.domain.model.rates.CurrencyData
 

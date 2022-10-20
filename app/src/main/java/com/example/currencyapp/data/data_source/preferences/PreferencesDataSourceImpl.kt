@@ -6,7 +6,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.example.currencyapp.TAG
-import com.example.currencyapp.data.remote.entities.news.SearchSettings
+import com.example.currencyapp.domain.model.news.SearchSettings
 import com.example.currencyapp.domain.CurrentDateData
 import com.example.currencyapp.domain.model.rates.RatesListSettings
 import com.google.gson.Gson

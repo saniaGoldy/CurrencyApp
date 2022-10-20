@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -16,14 +15,18 @@ import com.example.currencyapp.databinding.FragmentCurrencyInfoBinding
 import com.example.currencyapp.domain.model.DataState
 import com.example.currencyapp.domain.model.DataState.Failure
 import com.example.currencyapp.domain.model.DataState.Success
+import com.example.currencyapp.ui.model.CurrencyInfoResourceProvider
 import com.google.accompanist.appcompattheme.AppCompatTheme
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class CurrencyInfoFragment : Fragment() {
 
     private val viewModel: CurrencyInfoViewModel by activityViewModels()
 
+    @Inject
+    lateinit var resourceProvider: CurrencyInfoResourceProvider
     private var _binding: FragmentCurrencyInfoBinding? = null
     private val binding get() = _binding!!
 
@@ -44,8 +47,9 @@ class CurrencyInfoFragment : Fragment() {
     }
 
     private fun setupTVs() = with(binding) {
-        tvChartFragmentTitle.text = viewModel.getTvChartFragmentTitle(args.currencyCode)
-        tvChartFragmentDetails.text = viewModel.getTvChartFragmentDetails(args.settings.currencyCode)
+        tvChartFragmentTitle.text = resourceProvider.getTvChartFragmentTitle(args.currencyCode)
+        tvChartFragmentDetails.text =
+            resourceProvider.getTvChartFragmentDetails(args.settings.currencyCode)
     }
 
     private fun setupObservers() {
@@ -56,7 +60,7 @@ class CurrencyInfoFragment : Fragment() {
                     val currencyRateStory = dataState.result.rateStory ?: mapOf()
 
                     binding.tvChartTimeStamp.text =
-                        viewModel.getFromToLabel(currencyRateStory.keys.toList())
+                        resourceProvider.getFromToLabel(currencyRateStory.keys.toList())
 
                     showRateStoryChart(currencyRateStory = currencyRateStory)
                 }

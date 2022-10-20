@@ -15,7 +15,7 @@ import androidx.navigation.findNavController
 import com.example.currencyapp.R
 import com.example.currencyapp.TAG
 import com.example.currencyapp.data.remote.entities.news.NewsApiRequestOptions
-import com.example.currencyapp.data.remote.entities.news.SearchSettings
+import com.example.currencyapp.domain.model.news.SearchSettings
 import com.example.currencyapp.databinding.FragmentSearchSettingsBinding
 import com.google.android.material.textfield.TextInputLayout
 import dagger.hilt.android.AndroidEntryPoint

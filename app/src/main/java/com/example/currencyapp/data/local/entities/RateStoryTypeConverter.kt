@@ -8,13 +8,13 @@ import java.lang.reflect.Type
 
 class RateStoryTypeConverter {
 
+    private val gson = Gson()
+
     @TypeConverter
     fun fromStoredString(storedStringJson: String): Map<String, Double> {
         val mapType: Type = object : TypeToken<Map<String, Double>>() {}.type
-        return Gson().fromJson(storedStringJson, mapType)
+        return gson.fromJson(storedStringJson, mapType)
     }
-
-    private val gson = Gson()
 
     @TypeConverter()
     fun fromMap(value: Map<String, Double>): String {
