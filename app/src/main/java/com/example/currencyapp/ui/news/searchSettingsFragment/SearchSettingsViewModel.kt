@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.lifecycle.viewModelScope
 import com.example.currencyapp.data.remote.entities.news.NewsApiRequestOptions
 import com.example.currencyapp.domain.model.news.SearchSettings
+import com.example.currencyapp.domain.services.NetworkConnectivityObserver
 import com.example.currencyapp.domain.usecases.news.NewsSettingsEditUseCase
 import com.example.currencyapp.ui.news.SearchSettingsBaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -14,8 +15,8 @@ import javax.inject.Inject
 @HiltViewModel
 class SearchSettingsViewModel @Inject constructor(
     private val interactor: NewsSettingsEditUseCase,
-    @ApplicationContext context: Context
-) : SearchSettingsBaseViewModel(interactor, context) {
+    networkConnectivityObserver: NetworkConnectivityObserver
+) : SearchSettingsBaseViewModel(interactor, networkConnectivityObserver) {
 
     fun setSearchSettings(
         keywords: String,

@@ -11,6 +11,7 @@ import com.example.currencyapp.domain.model.DataState
 import com.example.currencyapp.domain.model.UpdatableData
 import com.example.currencyapp.domain.model.rates.CurrencyData
 import com.example.currencyapp.domain.model.rates.RatesListSettings
+import com.example.currencyapp.domain.services.NetworkConnectivityObserver
 import com.example.currencyapp.domain.usecases.rates.RatesListUseCase
 import com.example.currencyapp.ui.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,8 +22,8 @@ import javax.inject.Inject
 @HiltViewModel
 class RatesListViewModel @Inject constructor(
     private val interactor: RatesListUseCase,
-    @ApplicationContext val context: Context
-) : BaseViewModel(context) {
+    networkConnectivityObserver: NetworkConnectivityObserver
+) : BaseViewModel(networkConnectivityObserver) {
 
     val ratesSettings: LiveData<RatesListSettings> = interactor.fetchRatesSettings()
 
