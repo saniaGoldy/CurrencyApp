@@ -1,21 +1,17 @@
 package com.example.currencyapp.ui.ratesList.ratesListFragment
 
-import android.content.Context
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.example.currencyapp.R
 import com.example.currencyapp.TAG
 import com.example.currencyapp.domain.model.DataState
-import com.example.currencyapp.domain.model.UpdatableData
 import com.example.currencyapp.domain.model.rates.CurrencyData
 import com.example.currencyapp.domain.model.rates.RatesListSettings
 import com.example.currencyapp.domain.services.NetworkConnectivityObserver
 import com.example.currencyapp.domain.usecases.rates.RatesListUseCase
 import com.example.currencyapp.ui.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -40,15 +36,15 @@ class RatesListViewModel @Inject constructor(
             val result = interactor.fetchRatesList()
 
             _ratesDataState.postValue(
-                if (result.isSuccess){
+                if (result.isSuccess) {
                     result.getOrNull()?.let {
-                        if (it.isUpToDate){
+                        if (it.isUpToDate) {
                             DataState.Success(it.data)
-                        }else{
+                        } else {
                             DataState.Success(it.data, "Rates are not up to date")
                         }
                     }
-                }else{
+                } else {
                     DataState.Failure(result.exceptionOrNull().toString())
                 }
             )

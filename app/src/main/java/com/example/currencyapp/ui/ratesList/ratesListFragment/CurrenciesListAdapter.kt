@@ -10,12 +10,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.currencyapp.R
 import com.example.currencyapp.databinding.CurrenciesListItemBinding
 import com.example.currencyapp.domain.model.DataState
-import com.example.currencyapp.domain.model.news.NewsData
 import com.example.currencyapp.domain.model.rates.CurrencyData
 import com.example.currencyapp.ui.model.MyOnQueryTextListener
-import com.example.currencyapp.ui.news.newsListFragment.NewsFilter
-
-//private const val roundingFormat: String = "%.3f"
 
 class CurrenciesListAdapter(val onListItemClickedActionCallback: ItemClickedAction) :
     RecyclerView.Adapter<CurrenciesListAdapter.CurrencyViewHolder>() {

@@ -15,7 +15,6 @@ import com.example.currencyapp.data.data_source.remote.RemoteDataSourceImpl
 import com.example.currencyapp.data.local.LocalDB
 import com.example.currencyapp.data.remote.CurrencyAPI
 import com.example.currencyapp.dataStore
-import com.example.currencyapp.domain.services.ConnectivityObserver
 import com.example.currencyapp.domain.services.NetworkConnectivityObserver
 import com.example.currencyapp.util.Constants
 import dagger.Module
