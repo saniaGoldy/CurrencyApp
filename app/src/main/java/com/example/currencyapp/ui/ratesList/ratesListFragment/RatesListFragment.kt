@@ -101,7 +101,7 @@ class RatesListFragment : Fragment() {
                 getString(R.string.currency_rates_title, settings.currencyCode)
             currenciesListAdapter.setRoundingFormat(settings.precision)
 
-            //load rates after settings loaded
+            // load rates after settings loaded
             viewModel.updateDataState()
         }
     }
@@ -125,6 +125,7 @@ class RatesListFragment : Fragment() {
                 object : CurrenciesListAdapter.ItemClickedAction {
                     override fun run(currencyData: CurrencyData) {
                         binding.root.findNavController().navigate(
+
                             RatesListFragmentDirections.actionNavigationCurrenciesToCurrencyInfoFragment(
                                 currencyData.currency.name,
                                 viewModel.ratesSettings.value ?: RatesListSettings()
@@ -136,5 +137,4 @@ class RatesListFragment : Fragment() {
 
         binding.rvCurrenciesList.adapter = currenciesListAdapter
     }
-
 }

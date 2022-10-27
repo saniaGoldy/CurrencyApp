@@ -1,7 +1,7 @@
 package com.example.currencyapp.domain.repository
 
-import com.example.currencyapp.domain.model.news.SearchSettings
 import com.example.currencyapp.domain.model.news.NewsData
+import com.example.currencyapp.domain.model.news.SearchSettings
 import kotlinx.coroutines.flow.Flow
 
 interface NewsRepository {

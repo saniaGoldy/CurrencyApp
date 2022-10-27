@@ -28,11 +28,11 @@ internal class CurrenciesRateStoryMapperTest {
         val firstCurrencyRateAtDate2 = 1.5
         val secondCurrencyRateAtDate2 = 0.3
 
-
         assertThat(
             mapper.map(
                 CurrenciesRateStory(
-                    "", "", mapOf(
+                    "", "",
+                    mapOf(
                         firstDate to mapOf(
                             firstCurrency to firstCurrencyRateAtDate1,
                             secondCurrency to secondCurrencyRateAtDate1
@@ -41,7 +41,8 @@ internal class CurrenciesRateStoryMapperTest {
                             firstCurrency to firstCurrencyRateAtDate2,
                             secondCurrency to secondCurrencyRateAtDate2
                         )
-                    ), "",
+                    ),
+                    "",
                     success = true,
                     timeSeries = true
                 )
@@ -83,7 +84,8 @@ internal class CurrenciesRateStoryMapperTest {
                         firstDate to mapOf(
                             firstCurrency to firstCurrencyRateAtDate1
                         )
-                    ), "",
+                    ),
+                    "",
                     success = true,
                     timeSeries = true
                 )

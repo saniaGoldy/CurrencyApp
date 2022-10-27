@@ -33,7 +33,8 @@ class CurrencyInfoFragment : Fragment() {
     private val args: CurrencyInfoFragmentArgs by navArgs()
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentCurrencyInfoBinding.inflate(inflater, container, false)
@@ -90,5 +91,4 @@ class CurrencyInfoFragment : Fragment() {
             Toast.LENGTH_SHORT
         ).show()
     }
-
 }

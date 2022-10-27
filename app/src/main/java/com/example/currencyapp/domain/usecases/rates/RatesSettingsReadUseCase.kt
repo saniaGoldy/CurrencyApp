@@ -6,8 +6,8 @@ import androidx.lifecycle.asLiveData
 import com.example.currencyapp.TAG
 import com.example.currencyapp.domain.model.rates.RatesListSettings
 import com.example.currencyapp.domain.repository.RatesRepository
-import kotlinx.coroutines.CoroutineExceptionHandler
 import javax.inject.Inject
+import kotlinx.coroutines.CoroutineExceptionHandler
 
 open class RatesSettingsReadUseCase @Inject constructor(
     val ratesRepository: RatesRepository

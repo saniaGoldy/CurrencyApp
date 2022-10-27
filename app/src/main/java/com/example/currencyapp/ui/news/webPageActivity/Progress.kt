@@ -43,6 +43,5 @@ class Progress constructor(
     }
 
     fun setProgressDialogVisibility(isVisible: Boolean) {
-
     }
 }

@@ -6,8 +6,8 @@ import androidx.lifecycle.asLiveData
 import com.example.currencyapp.TAG
 import com.example.currencyapp.domain.model.news.SearchSettings
 import com.example.currencyapp.domain.repository.NewsRepository
-import kotlinx.coroutines.CoroutineExceptionHandler
 import javax.inject.Inject
+import kotlinx.coroutines.CoroutineExceptionHandler
 
 open class NewsSettingsReadUseCase @Inject constructor(
     private val newsRepository: NewsRepository

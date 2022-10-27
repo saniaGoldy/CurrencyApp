@@ -3,11 +3,13 @@ package com.example.currencyapp.domain.repository
 import com.example.currencyapp.data.data_source.remote.FakeRemoteDataSource
 import com.example.currencyapp.domain.model.news.NewsData
 import com.example.currencyapp.domain.model.news.SearchSettings
+import java.io.IOException
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
-import java.io.IOException
 
-class FakeNewsRepository(private val remoteDataSource: FakeRemoteDataSource = FakeRemoteDataSource()) :
+class FakeNewsRepository(
+    private val remoteDataSource: FakeRemoteDataSource = FakeRemoteDataSource()
+) :
     NewsRepository {
 
     private var fetchNewsListShouldThrowException = false

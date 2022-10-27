@@ -9,7 +9,6 @@ import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Test
 
-
 internal class RatesListUseCaseTest {
 
     private lateinit var useCase: RatesListUseCase

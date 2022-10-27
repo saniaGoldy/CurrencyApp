@@ -38,7 +38,6 @@ class CurrenciesListAdapter(val onListItemClickedActionCallback: ItemClickedActi
         ): Boolean {
             return oldItem == newItem
         }
-
     }
 
     private val differ = AsyncListDiffer(this, diffCallback)

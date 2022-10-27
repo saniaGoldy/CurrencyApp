@@ -25,7 +25,6 @@ class LocalDBDataSourceImpl(
         return currencies
     }
 
-
     override suspend fun saveCurrenciesList(currencies: List<CurrencyData>) {
         localDB.currencyDao().insertAll(currencyDataToEntityMapper.map(currencies)).also {
             Log.d(

@@ -25,7 +25,6 @@ object CurrentDateData {
             return dataFormat.format(calendar.time)
         }
 
-
     /**
      * @param date in format "yyyy-MM-dd"
      * @return date in format "dd.MM"

@@ -15,8 +15,8 @@ import androidx.navigation.findNavController
 import com.example.currencyapp.R
 import com.example.currencyapp.TAG
 import com.example.currencyapp.data.remote.entities.news.NewsApiRequestOptions
-import com.example.currencyapp.domain.model.news.SearchSettings
 import com.example.currencyapp.databinding.FragmentSearchSettingsBinding
+import com.example.currencyapp.domain.model.news.SearchSettings
 import com.google.android.material.textfield.TextInputLayout
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -107,12 +107,14 @@ class SearchSettingsFragment : Fragment() {
                 getString(R.string.edit_text_error_message)
             )
 
-            editText?.setText(viewModel.searchSettings.value?.tags.also {
-                Log.d(
-                    TAG,
-                    "setupInputTextFieldsSetup: $it"
-                )
-            })
+            editText?.setText(
+                viewModel.searchSettings.value?.tags.also {
+                    Log.d(
+                        TAG,
+                        "setupInputTextFieldsSetup: $it"
+                    )
+                }
+            )
         }
 
         textInputDateFrom.apply {
@@ -134,7 +136,6 @@ class SearchSettingsFragment : Fragment() {
         }
     }
 
-
     private fun setupDropDownList(settings: SearchSettings) = with(binding) {
 
         ArrayAdapter.createFromResource(
@@ -150,7 +151,6 @@ class SearchSettingsFragment : Fragment() {
         }
 
         spinner.setSelection(spinnerItems.indexOf(settings.timeGapMode))
-
     }
 
     private fun FragmentSearchSettingsBinding.getOnItemSelectedListener() =
@@ -193,7 +193,6 @@ class SearchSettingsFragment : Fragment() {
             }
         }
     }
-
 
     companion object {
         private const val DATE_INPUT_FROM = 7

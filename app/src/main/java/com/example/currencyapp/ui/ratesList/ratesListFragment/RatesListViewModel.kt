@@ -12,8 +12,8 @@ import com.example.currencyapp.domain.services.NetworkConnectivityObserver
 import com.example.currencyapp.domain.usecases.rates.RatesListUseCase
 import com.example.currencyapp.ui.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlinx.coroutines.launch
 
 @HiltViewModel
 class RatesListViewModel @Inject constructor(
@@ -48,7 +48,6 @@ class RatesListViewModel @Inject constructor(
                     DataState.Failure(result.exceptionOrNull().toString())
                 }
             )
-
         }
     }
 }

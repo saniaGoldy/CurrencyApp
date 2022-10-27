@@ -4,7 +4,7 @@ import com.example.currencyapp.domain.model.DataState
 import com.example.currencyapp.domain.model.news.NewsData
 import com.example.currencyapp.ui.model.Filter
 
-class NewsFilter(private val cashedListState: DataState<List<NewsData>>?): Filter<NewsData> {
+class NewsFilter(private val cashedListState: DataState<List<NewsData>>?) : Filter<NewsData> {
     override fun filter(keyword: String?): List<NewsData> {
         return if (cashedListState is DataState.Success) {
             if (!keyword.isNullOrEmpty())

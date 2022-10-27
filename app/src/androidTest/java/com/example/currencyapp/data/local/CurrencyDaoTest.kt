@@ -5,14 +5,14 @@ import com.example.currencyapp.data.local.entities.CurrencyDataEntity
 import com.google.common.truth.Truth.assertThat
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
+import javax.inject.Inject
+import javax.inject.Named
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import javax.inject.Inject
-import javax.inject.Named
 
 @OptIn(ExperimentalCoroutinesApi::class)
 @SmallTest
@@ -65,6 +65,7 @@ class CurrencyDaoTest {
 
         dao.update(listOf(currencyDataEntityNew))
 
-        assertThat(dao.findById(currencyDataEntityOld.iso4217Alpha)).isEqualTo(currencyDataEntityNew)
+        assertThat(dao.findById(currencyDataEntityOld.iso4217Alpha))
+            .isEqualTo(currencyDataEntityNew)
     }
 }

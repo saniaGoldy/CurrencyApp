@@ -12,14 +12,13 @@ import com.example.currencyapp.domain.usecases.rates.RatesCurrencyInfoUseCase
 import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
 import io.mockk.mockk
+import java.io.IOException
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import java.io.IOException
-import javax.inject.Inject
 
 @OptIn(ExperimentalCoroutinesApi::class)
 @RunWith(AndroidJUnit4::class)
@@ -36,7 +35,8 @@ internal class CurrencyInfoViewModelTest {
     @Before
     fun setup() {
         interactorMock = mockk(relaxed = true)
-        networkConnectivityObserver = NetworkConnectivityObserver(InstrumentationRegistry.getInstrumentation().targetContext)
+        networkConnectivityObserver =
+            NetworkConnectivityObserver(InstrumentationRegistry.getInstrumentation().targetContext)
 
         viewModel = CurrencyInfoViewModel(
             interactorMock,
@@ -53,19 +53,21 @@ internal class CurrencyInfoViewModelTest {
         )
         viewModel.loadCurrencyData("UAH")
 
-
         assertThat(
             with(LiveDataTestUtil<DataState<CurrencyData>>()) {
-                viewModel.currency.isValueGetsEmitted(emissionChecker = object :
-                    LiveDataTestUtil.EmissionChecker {
-                    override fun <T> check(value: T?): Boolean {
-                        return value?.let {
-                            val emission = value as DataState<CurrencyData>
-                            emission is DataState.Success<CurrencyData>
-                        } ?: false
+                viewModel.currency.isValueGetsEmitted(
+                    emissionChecker = object :
+                        LiveDataTestUtil.EmissionChecker {
+                        override fun <T> check(value: T?): Boolean {
+                            return value?.let {
+                                val emission = value as DataState<CurrencyData>
+                                emission is DataState.Success<CurrencyData>
+                            } ?: false
+                        }
                     }
-                })
-            }).isTrue()
+                )
+            }
+        ).isTrue()
     }
 
     @Test
@@ -77,16 +79,19 @@ internal class CurrencyInfoViewModelTest {
 
         assertThat(
             with(LiveDataTestUtil<DataState<CurrencyData>>()) {
-                viewModel.currency.isValueGetsEmitted(emissionChecker = object :
-                    LiveDataTestUtil.EmissionChecker {
-                    override fun <T> check(value: T?): Boolean {
-                        return value?.let {
-                            val emission = value as DataState<CurrencyData>
-                            emission is DataState.Failure
-                        } ?: false
+                viewModel.currency.isValueGetsEmitted(
+                    emissionChecker = object :
+                        LiveDataTestUtil.EmissionChecker {
+                        override fun <T> check(value: T?): Boolean {
+                            return value?.let {
+                                val emission = value as DataState<CurrencyData>
+                                emission is DataState.Failure
+                            } ?: false
+                        }
                     }
-                })
-            }).isTrue()
+                )
+            }
+        ).isTrue()
     }
 
     @Test
@@ -97,15 +102,18 @@ internal class CurrencyInfoViewModelTest {
 
         assertThat(
             with(LiveDataTestUtil<DataState<CurrencyData>>()) {
-                viewModel.currency.isValueGetsEmitted(emissionChecker = object :
-                    LiveDataTestUtil.EmissionChecker {
-                    override fun <T> check(value: T?): Boolean {
-                        return value?.let {
-                            val emission = value as DataState<CurrencyData>
-                            emission is DataState.Loading
-                        } ?: false
+                viewModel.currency.isValueGetsEmitted(
+                    emissionChecker = object :
+                        LiveDataTestUtil.EmissionChecker {
+                        override fun <T> check(value: T?): Boolean {
+                            return value?.let {
+                                val emission = value as DataState<CurrencyData>
+                                emission is DataState.Loading
+                            } ?: false
+                        }
                     }
-                })
-            }).isTrue()
+                )
+            }
+        ).isTrue()
     }
 }

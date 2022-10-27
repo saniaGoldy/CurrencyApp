@@ -9,9 +9,9 @@ import com.example.currencyapp.domain.model.UpdatableData
 import com.example.currencyapp.domain.model.rates.CurrencyData
 import com.example.currencyapp.domain.model.rates.RatesListSettings
 import com.example.currencyapp.domain.repository.RatesRepository
+import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
-import javax.inject.Inject
 
 class RatesRepositoryImpl @Inject constructor(
     private val localDBDataSource: LocalDBDataSource,
@@ -19,8 +19,7 @@ class RatesRepositoryImpl @Inject constructor(
     private val remoteDataSource: RemoteDataSource
 ) : RatesRepository {
 
-    override suspend fun fetchCurrenciesList(
-    ): UpdatableData<List<CurrencyData>> {
+    override suspend fun fetchCurrenciesList(): UpdatableData<List<CurrencyData>> {
         var isCurrenciesListIsUpdated = updateCurrenciesList()
 
         val data = localDBDataSource.fetchCurrenciesList()
@@ -37,7 +36,6 @@ class RatesRepositoryImpl @Inject constructor(
         val isUpToDate = preferencesDataSource.isRatesUpToDate()
 
         val isRatesIsUpToDateWithBaseCurrency = storedSettings.isRatesIsUpToDateWithSettings
-
 
         Log.d(
             TAG,

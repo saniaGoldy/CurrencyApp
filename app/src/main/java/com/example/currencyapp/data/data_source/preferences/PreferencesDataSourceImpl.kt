@@ -6,8 +6,8 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.example.currencyapp.TAG
-import com.example.currencyapp.domain.model.news.SearchSettings
 import com.example.currencyapp.domain.CurrentDateData
+import com.example.currencyapp.domain.model.news.SearchSettings
 import com.example.currencyapp.domain.model.rates.RatesListSettings
 import com.google.gson.Gson
 import kotlinx.coroutines.flow.Flow
@@ -29,7 +29,6 @@ class PreferencesDataSourceImpl(private val dataStore: DataStore<Preferences>) :
         }
     }
 
-
     override suspend fun saveNewsSettings(settings: SearchSettings) {
         Log.d(TAG, "saveNewsSettings")
         dataStore.edit {
@@ -40,7 +39,9 @@ class PreferencesDataSourceImpl(private val dataStore: DataStore<Preferences>) :
 
     override suspend fun isRatesUpToDate(): Boolean? {
         Log.d(TAG, "isRatesUpToDate")
-        return dataStore.data.first()[LAST_RATES_UPDATE_DATE_KEY]?.let { it == CurrentDateData.currentDate }
+        return dataStore.data
+            .first()[LAST_RATES_UPDATE_DATE_KEY]
+            ?.let { it == CurrentDateData.currentDate }
     }
 
     override suspend fun saveRatesUpdateDate() {
@@ -61,7 +62,6 @@ class PreferencesDataSourceImpl(private val dataStore: DataStore<Preferences>) :
             } ?: RatesListSettings().also { Log.d(TAG, "loadRatesListSettings: default settings") }
         }
     }
-
 
     override suspend fun saveRatesListSettings(settings: RatesListSettings) {
         Log.d(TAG, "updateRates")

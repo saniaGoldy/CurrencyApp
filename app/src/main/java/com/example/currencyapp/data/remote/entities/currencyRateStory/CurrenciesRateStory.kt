@@ -1,6 +1,5 @@
 package com.example.currencyapp.data.remote.entities.currencyRateStory
 
-
 import com.google.gson.annotations.SerializedName
 
 data class CurrenciesRateStory(

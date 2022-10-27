@@ -13,14 +13,13 @@ import androidx.compose.ui.unit.sp
 import com.example.currencyapp.domain.CurrentDateData
 import java.math.RoundingMode
 
-
 /**
  * call [TEXT_SIZE].sp.toPx()
  */
 private const val TEXT_SIZE = 12
 private const val SPACING = 100f
 
-//constants for chart
+// constants for chart
 private const val RATES_SCALE = 3
 private const val GRAPH_GRADIENT_TOP_COLOR_ALPHA = 0.5f
 private const val Y_AXIS_BOTTOM_MARGIN = 5
@@ -36,7 +35,6 @@ fun CurrencyRatesChart(
     modifier: Modifier,
     graphColor: Color = Color.Green
 ) {
-
 
     val transparentGraphColor = remember {
         graphColor.copy(alpha = GRAPH_GRADIENT_TOP_COLOR_ALPHA)
@@ -64,11 +62,11 @@ fun CurrencyRatesChart(
     Canvas(modifier = modifier) {
         val chartBottom = size.height - SPACING
 
-        //draw Y axis values(Dates)
+        // draw Y axis values(Dates)
         val spacePerDate = (size.width - SPACING) / rateStory.size
         rateStory.keys.forEachIndexed { id, date ->
             val simpleDate = CurrentDateData.formatToSimpleDate(date)
-            //?.toBigDecimal()?.setScale(4, RoundingMode.HALF_EVEN)
+            // ?.toBigDecimal()?.setScale(4, RoundingMode.HALF_EVEN)
             drawContext.canvas.nativeCanvas.apply {
                 drawText(
                     simpleDate,
@@ -79,7 +77,7 @@ fun CurrencyRatesChart(
             }
         }
 
-        //draw X axis values (rates)
+        // draw X axis values (rates)
         val rateStep = (upperValue - lowerValue) / X_AXIS_VALUES_NUMBER.toFloat()
         (0..X_AXIS_VALUES_NUMBER).forEach { i ->
             drawContext.canvas.nativeCanvas.apply {
@@ -95,7 +93,7 @@ fun CurrencyRatesChart(
             }
         }
 
-        //setup chart path
+        // setup chart path
         var lastX = 0f
         val strokePath = Path().apply {
             val rates = rateStory.values.toList()
@@ -124,15 +122,15 @@ fun CurrencyRatesChart(
             }
         }
 
-        //setup chart gradient
+        // setup chart gradient
         val fillPath = android.graphics.Path(strokePath.asAndroidPath()).asComposePath().apply {
             lineTo(lastX, chartBottom)
-            //spacing here refers to x coordinate of the first point in chart
+            // spacing here refers to x coordinate of the first point in chart
             lineTo(SPACING, chartBottom)
             close()
         }
 
-        //draw chart
+        // draw chart
         drawPath(
             path = fillPath,
             brush = Brush.verticalGradient(

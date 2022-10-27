@@ -37,5 +37,4 @@ class LiveDataTestUtil<T> {
     interface EmissionChecker {
         fun <T> check(value: T?): Boolean
     }
-
 }

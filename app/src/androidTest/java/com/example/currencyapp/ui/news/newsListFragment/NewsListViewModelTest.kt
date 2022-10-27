@@ -13,15 +13,13 @@ import com.example.currencyapp.domain.usecases.news.NewsListUseCase
 import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
 import io.mockk.mockk
+import java.io.IOException
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import java.io.IOException
-import javax.inject.Inject
-import javax.inject.Named
 
 @OptIn(ExperimentalCoroutinesApi::class)
 @RunWith(AndroidJUnit4::class)
@@ -40,7 +38,8 @@ internal class NewsListViewModelTest {
     fun setup() {
         interactorMock = mockk(relaxed = true)
         searchSettings = SearchSettings()
-        networkConnectivityObserver = NetworkConnectivityObserver(InstrumentationRegistry.getInstrumentation().targetContext)
+        networkConnectivityObserver =
+            NetworkConnectivityObserver(InstrumentationRegistry.getInstrumentation().targetContext)
 
         viewModel = NewsListViewModel(
             interactorMock,
@@ -56,20 +55,21 @@ internal class NewsListViewModelTest {
         )
         viewModel.fetchNews(searchSettings)
 
-
-
         assertThat(
             with(LiveDataTestUtil<DataState<List<NewsData>>>()) {
-                viewModel.newsDataState.isValueGetsEmitted(emissionChecker = object :
-                    LiveDataTestUtil.EmissionChecker {
-                    override fun <T> check(value: T?): Boolean {
-                        return value?.let {
-                            val emission = value as DataState<List<NewsData>>
-                            emission is DataState.Success<List<NewsData>>
-                        } ?: false
+                viewModel.newsDataState.isValueGetsEmitted(
+                    emissionChecker = object :
+                        LiveDataTestUtil.EmissionChecker {
+                        override fun <T> check(value: T?): Boolean {
+                            return value?.let {
+                                val emission = value as DataState<List<NewsData>>
+                                emission is DataState.Success<List<NewsData>>
+                            } ?: false
+                        }
                     }
-                })
-            }).isTrue()
+                )
+            }
+        ).isTrue()
     }
 
     @Test
@@ -82,16 +82,19 @@ internal class NewsListViewModelTest {
 
         assertThat(
             with(LiveDataTestUtil<DataState<List<NewsData>>>()) {
-                viewModel.newsDataState.isValueGetsEmitted(emissionChecker = object :
-                    LiveDataTestUtil.EmissionChecker {
-                    override fun <T> check(value: T?): Boolean {
-                        return value?.let {
-                            val emission = value as DataState<List<NewsData>>
-                            emission is DataState.Failure
-                        } ?: false
+                viewModel.newsDataState.isValueGetsEmitted(
+                    emissionChecker = object :
+                        LiveDataTestUtil.EmissionChecker {
+                        override fun <T> check(value: T?): Boolean {
+                            return value?.let {
+                                val emission = value as DataState<List<NewsData>>
+                                emission is DataState.Failure
+                            } ?: false
+                        }
                     }
-                })
-            }).isTrue()
+                )
+            }
+        ).isTrue()
     }
 
     @Test
@@ -102,15 +105,18 @@ internal class NewsListViewModelTest {
 
         assertThat(
             with(LiveDataTestUtil<DataState<List<NewsData>>>()) {
-                viewModel.newsDataState.isValueGetsEmitted(emissionChecker = object :
-                    LiveDataTestUtil.EmissionChecker {
-                    override fun <T> check(value: T?): Boolean {
-                        return value?.let {
-                            val emission = value as DataState<List<NewsData>>
-                            emission is DataState.Loading
-                        } ?: false
+                viewModel.newsDataState.isValueGetsEmitted(
+                    emissionChecker = object :
+                        LiveDataTestUtil.EmissionChecker {
+                        override fun <T> check(value: T?): Boolean {
+                            return value?.let {
+                                val emission = value as DataState<List<NewsData>>
+                                emission is DataState.Loading
+                            } ?: false
+                        }
                     }
-                })
-            }).isTrue()
+                )
+            }
+        ).isTrue()
     }
 }

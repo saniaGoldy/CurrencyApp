@@ -9,12 +9,12 @@ data class NewsData(
     val url: String
 ) {
     fun containsKeyword(keyword: String, ignoreCase: Boolean = true): Boolean {
-        return description.contains(keyword, ignoreCase)
-                || publishedAt.publishDate.contains(keyword, ignoreCase)
-                || publishedAt.publishTime.contains(keyword, ignoreCase)
-                || source.contains(keyword, ignoreCase)
-                || tags.firstNotNullOfOrNull { it.contains(keyword, ignoreCase) } ?: false
-                || title.contains(keyword, ignoreCase)
+        return description.contains(keyword, ignoreCase) ||
+            publishedAt.publishDate.contains(keyword, ignoreCase) ||
+            publishedAt.publishTime.contains(keyword, ignoreCase) ||
+            source.contains(keyword, ignoreCase) ||
+            tags.firstNotNullOfOrNull { it.contains(keyword, ignoreCase) } ?: false ||
+            title.contains(keyword, ignoreCase)
     }
 
     fun getTagsAsString(): String {

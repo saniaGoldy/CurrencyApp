@@ -174,4 +174,3 @@ enum class Currencies(val fullName: String) {
         return this.name
     }
 }
-

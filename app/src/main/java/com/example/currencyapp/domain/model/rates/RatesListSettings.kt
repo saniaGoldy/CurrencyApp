@@ -8,5 +8,4 @@ data class RatesListSettings(
     val currencyCode: String = Currencies.UAH.name,
     val precision: Int = 3,
     var isRatesIsUpToDateWithSettings: Boolean = true
-) : Parcelable {
-}
+) : Parcelable

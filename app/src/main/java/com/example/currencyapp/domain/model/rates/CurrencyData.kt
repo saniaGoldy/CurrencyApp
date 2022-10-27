@@ -20,5 +20,4 @@ data class CurrencyData(
             endRate - startRate
         } else 0.0
     }
-
 }

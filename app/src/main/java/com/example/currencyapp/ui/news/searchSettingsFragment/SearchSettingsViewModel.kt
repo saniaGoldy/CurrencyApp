@@ -1,6 +1,5 @@
 package com.example.currencyapp.ui.news.searchSettingsFragment
 
-import android.content.Context
 import androidx.lifecycle.viewModelScope
 import com.example.currencyapp.data.remote.entities.news.NewsApiRequestOptions
 import com.example.currencyapp.domain.model.news.SearchSettings
@@ -8,9 +7,8 @@ import com.example.currencyapp.domain.services.NetworkConnectivityObserver
 import com.example.currencyapp.domain.usecases.news.NewsSettingsEditUseCase
 import com.example.currencyapp.ui.news.SearchSettingsBaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlinx.coroutines.launch
 
 @HiltViewModel
 class SearchSettingsViewModel @Inject constructor(
@@ -33,8 +31,8 @@ class SearchSettingsViewModel @Inject constructor(
 
         settings.timeGapMode = timeGapMode
 
-        //We don`t want to write settings if they has not changed
-        //(User opened settings dialog and clicked OK without actually changing settings)
+        // We don`t want to write settings if they has not changed
+        // (User opened settings dialog and clicked OK without actually changing settings)
         if (searchSettings.value != settings) {
             viewModelScope.launch { interactor.saveNewsSettings(settings) }
         }

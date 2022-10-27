@@ -13,14 +13,13 @@ import com.example.currencyapp.domain.usecases.rates.RatesListUseCase
 import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
 import io.mockk.mockk
+import java.io.IOException
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import java.io.IOException
-import javax.inject.Inject
 
 @OptIn(ExperimentalCoroutinesApi::class)
 @RunWith(AndroidJUnit4::class)
@@ -29,7 +28,6 @@ internal class RatesListViewModelTest {
     @get:Rule
     var instantTaskExecutorRule = InstantTaskExecutorRule()
 
-
     lateinit var networkConnectivityObserver: NetworkConnectivityObserver
     private lateinit var viewModel: RatesListViewModel
     private lateinit var interactorMock: RatesListUseCase
@@ -37,7 +35,8 @@ internal class RatesListViewModelTest {
     @Before
     fun setup() {
         interactorMock = mockk(relaxed = true)
-        networkConnectivityObserver = NetworkConnectivityObserver(InstrumentationRegistry.getInstrumentation().targetContext)
+        networkConnectivityObserver =
+            NetworkConnectivityObserver(InstrumentationRegistry.getInstrumentation().targetContext)
 
         viewModel = RatesListViewModel(
             interactorMock,
@@ -57,17 +56,19 @@ internal class RatesListViewModelTest {
 
         assertThat(
             with(LiveDataTestUtil<DataState<List<CurrencyData>>>()) {
-                viewModel.ratesDataState.isValueGetsEmitted(emissionChecker = object :
-                    LiveDataTestUtil.EmissionChecker {
-                    override fun <T> check(value: T?): Boolean {
-                        return value?.let {
-                            val emission = value as DataState<List<CurrencyData>>
-                            emission is DataState.Success<List<CurrencyData>>
-                        } ?: false
+                viewModel.ratesDataState.isValueGetsEmitted(
+                    emissionChecker = object :
+                        LiveDataTestUtil.EmissionChecker {
+                        override fun <T> check(value: T?): Boolean {
+                            return value?.let {
+                                val emission = value as DataState<List<CurrencyData>>
+                                emission is DataState.Success<List<CurrencyData>>
+                            } ?: false
+                        }
                     }
-                })
-            }).isTrue()
-
+                )
+            }
+        ).isTrue()
     }
 
     @Test
@@ -78,16 +79,19 @@ internal class RatesListViewModelTest {
 
         assertThat(
             with(LiveDataTestUtil<DataState<List<CurrencyData>>>()) {
-                viewModel.ratesDataState.isValueGetsEmitted(emissionChecker = object :
-                    LiveDataTestUtil.EmissionChecker {
-                    override fun <T> check(value: T?): Boolean {
-                        return value?.let {
-                            val emission = value as DataState<List<CurrencyData>>
-                            emission is DataState.Failure
-                        } ?: false
+                viewModel.ratesDataState.isValueGetsEmitted(
+                    emissionChecker = object :
+                        LiveDataTestUtil.EmissionChecker {
+                        override fun <T> check(value: T?): Boolean {
+                            return value?.let {
+                                val emission = value as DataState<List<CurrencyData>>
+                                emission is DataState.Failure
+                            } ?: false
+                        }
                     }
-                })
-            }).isTrue()
+                )
+            }
+        ).isTrue()
     }
 
     @Test
@@ -101,16 +105,19 @@ internal class RatesListViewModelTest {
 
         assertThat(
             with(LiveDataTestUtil<DataState<List<CurrencyData>>>()) {
-                viewModel.ratesDataState.isValueGetsEmitted(emissionChecker = object :
-                    LiveDataTestUtil.EmissionChecker {
-                    override fun <T> check(value: T?): Boolean {
-                        return value?.let {
-                            val emission = value as DataState<List<CurrencyData>>
-                            emission is DataState.Success
-                        } ?: false
+                viewModel.ratesDataState.isValueGetsEmitted(
+                    emissionChecker = object :
+                        LiveDataTestUtil.EmissionChecker {
+                        override fun <T> check(value: T?): Boolean {
+                            return value?.let {
+                                val emission = value as DataState<List<CurrencyData>>
+                                emission is DataState.Success
+                            } ?: false
+                        }
                     }
-                })
-            }).isTrue()
+                )
+            }
+        ).isTrue()
     }
 
     @Test
@@ -125,16 +132,18 @@ internal class RatesListViewModelTest {
 
         assertThat(
             with(LiveDataTestUtil<DataState<List<CurrencyData>>>()) {
-                viewModel.ratesDataState.isValueGetsEmitted(emissionChecker = object :
-                    LiveDataTestUtil.EmissionChecker {
-                    override fun <T> check(value: T?): Boolean {
-                        return value?.let {
-                            val emission = value as DataState<List<CurrencyData>>
-                            emission is DataState.Loading
-                        } ?: false
+                viewModel.ratesDataState.isValueGetsEmitted(
+                    emissionChecker = object :
+                        LiveDataTestUtil.EmissionChecker {
+                        override fun <T> check(value: T?): Boolean {
+                            return value?.let {
+                                val emission = value as DataState<List<CurrencyData>>
+                                emission is DataState.Loading
+                            } ?: false
+                        }
                     }
-                })
-            }).isTrue()
+                )
+            }
+        ).isTrue()
     }
-
 }

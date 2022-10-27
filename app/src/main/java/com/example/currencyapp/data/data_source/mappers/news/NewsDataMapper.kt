@@ -10,16 +10,18 @@ class NewsDataMapper : Mapper<List<Data>, List<NewsData>> {
         return from.map {
             val publishedAt =
                 it.publishedAt.substringBefore(Data.DATE_TIME_DELIMITER) to
-                        it.publishedAt.substringAfter(Data.DATE_TIME_DELIMITER)
+                    it.publishedAt.substringAfter(Data.DATE_TIME_DELIMITER)
 
-            (NewsData(
-                it.description,
-                PublishDate(publishedAt.first, publishedAt.second),
-                it.source,
-                it.tags,
-                it.title,
-                it.url
-            ))
+            (
+                NewsData(
+                    it.description,
+                    PublishDate(publishedAt.first, publishedAt.second),
+                    it.source,
+                    it.tags,
+                    it.title,
+                    it.url
+                )
+                )
         }
     }
 }

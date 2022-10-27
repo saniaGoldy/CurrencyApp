@@ -4,9 +4,9 @@ import com.example.currencyapp.data.data_source.remote.FakeRemoteDataSource
 import com.example.currencyapp.domain.model.UpdatableData
 import com.example.currencyapp.domain.model.rates.CurrencyData
 import com.example.currencyapp.domain.model.rates.RatesListSettings
+import java.io.IOException
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
-import java.io.IOException
 
 class FakeRatesRepository(remoteDataSource: FakeRemoteDataSource = FakeRemoteDataSource()) :
     RatesRepository {

@@ -81,7 +81,7 @@ class NewsListAdapter(private val onClickListener: ItemOnClickListener) :
         }
     }
 
-    interface ItemOnClickListener{
+    interface ItemOnClickListener {
         fun invoke(url: String)
     }
 }

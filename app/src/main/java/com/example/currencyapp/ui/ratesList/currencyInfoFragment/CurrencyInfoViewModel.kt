@@ -1,20 +1,16 @@
 package com.example.currencyapp.ui.ratesList.currencyInfoFragment
 
-import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.example.currencyapp.R
 import com.example.currencyapp.domain.model.DataState
-import com.example.currencyapp.domain.model.rates.Currencies
 import com.example.currencyapp.domain.model.rates.CurrencyData
 import com.example.currencyapp.domain.services.NetworkConnectivityObserver
 import com.example.currencyapp.domain.usecases.rates.RatesCurrencyInfoUseCase
 import com.example.currencyapp.ui.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlinx.coroutines.launch
 
 @HiltViewModel
 class CurrencyInfoViewModel @Inject constructor(
@@ -39,7 +35,6 @@ class CurrencyInfoViewModel @Inject constructor(
                     }
                 }
             )
-
         }
     }
 }

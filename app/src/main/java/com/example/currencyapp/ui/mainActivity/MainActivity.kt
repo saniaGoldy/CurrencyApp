@@ -60,10 +60,9 @@ class MainActivity : AppCompatActivity() {
     )
 
     private fun getNavController(): NavController {
-        //Need this approach to get navController when using FragmentContainerView as nav_host_fragment
+        // Need this approach to get navController when using FragmentContainerView as nav_host_fragment
         val navHostFragment = supportFragmentManager
             .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         return navHostFragment.navController
     }
-
 }

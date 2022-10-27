@@ -2,10 +2,9 @@ package com.example.currencyapp.domain.usecases.rates
 
 import com.example.currencyapp.domain.model.rates.RatesListSettings
 import com.example.currencyapp.domain.repository.RatesRepository
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.withContext
 
 class RatesSettingsEditUseCase @Inject constructor(
     ratesRepository: RatesRepository,
