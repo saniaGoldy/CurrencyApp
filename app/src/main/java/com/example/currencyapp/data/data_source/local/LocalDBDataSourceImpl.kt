@@ -16,8 +16,7 @@ class LocalDBDataSourceImpl(
 
     override suspend fun fetchCurrenciesList(): List<CurrencyData> {
         val currencies = entityToCurrencyDataMapper.map(
-            localDB
-                .currencyDao().getAll()
+            localDB.currencyDao().getAll()
         )
 
         Log.d(TAG, "fetchCurrenciesList FromLocalDB: $currencies")

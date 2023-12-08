@@ -9,8 +9,7 @@ import kotlinx.coroutines.flow.flowOf
 
 class FakeNewsRepository(
     private val remoteDataSource: FakeRemoteDataSource = FakeRemoteDataSource()
-) :
-    NewsRepository {
+) : NewsRepository {
 
     private var fetchNewsListShouldThrowException = false
 

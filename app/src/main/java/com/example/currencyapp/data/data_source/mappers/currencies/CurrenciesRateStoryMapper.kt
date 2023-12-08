@@ -1,5 +1,7 @@
 package com.example.currencyapp.data.data_source.mappers.currencies
 
+import android.util.Log
+import com.example.currencyapp.TAG
 import com.example.currencyapp.data.data_source.mappers.Mapper
 import com.example.currencyapp.data.remote.entities.currencyRateStory.CurrenciesRateStory
 import com.example.currencyapp.domain.model.rates.Currencies
@@ -44,7 +46,16 @@ class CurrenciesRateStoryMapper : Mapper<CurrenciesRateStory, MutableList<Curren
     ): MutableList<CurrencyData> {
         val currenciesData = mutableListOf<CurrencyData>()
         rates[0].second.toList().forEach { rate ->
-            currenciesData.add(getCurrencyData(rate))
+            kotlin.runCatching { getCurrencyData(rate) }.also {
+                it.exceptionOrNull()?.let {
+                    Log.e(
+                        TAG,
+                        "failed to parse currency type: ${it.message}",
+                    )
+                }
+            }.getOrNull()?.let {
+                currenciesData.add(it)
+            }
         }
         return currenciesData
     }
